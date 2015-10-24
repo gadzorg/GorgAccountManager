@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   get 'static_pages/index'
   get 'recovery' => 'users#recovery'
   post 'recovery_step2' => 'users#recovery_step2'
+  get 'password_reset/:token', to: "users#password_reset", as: :password_change
+  post 'password_reset/:token'=>"users#password_change"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

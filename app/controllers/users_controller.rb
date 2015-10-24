@@ -22,7 +22,7 @@ class UsersController < ApplicationController
 
 		end
 
-		#ok bon on l'a trouve, maintenant on liste ses adresses mail
+		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
 		user_from_gram = GramAccount.find(@hruid)
 
 		# TODO mettres des if not nil
@@ -33,7 +33,47 @@ class UsersController < ApplicationController
 
 		@list_emails = @list_emails.flatten.uniq
 
+		#generation d'un token
+		recovery_link = Uniqlink.new
+		recovery_link.generate_token
+		recovery_link.hruid = @hruid
+		recovery_link.used = false
+		recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
+		recovery_link.save
 
+		@r="http://localhost:3000/password_reset/" + recovery_link.token
+
+
+
+	end
+
+	def password_reset
+		token = params[:token]
+		recovery_link = Uniqlink.find_by(token: token)
+		@hruid = recovery_link.hruid
+
+		@user = User.new
+	end
+
+	def password_change
+		token = params[:token]
+		recovery_link = Uniqlink.find_by(token: token)
+		@hruid = recovery_link.hruid
+		user_from_gram = GramAccount.find(@hruid)
+
+		passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
+        user_from_gram.password = passwd_hash
+        
+
+        respond_to do |format|
+        	if user_from_gram.save
+	          format.html { redirect_to root_path, notice: 'mot de passe changé' }
+
+        	else
+	          format.html { redirect_to password_reset_path, notice: 'erreur lors de la maj du mot de passe' }
+	
+        	end
+        end
 	end
 
     
