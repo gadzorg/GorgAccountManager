@@ -36,3 +36,22 @@ production:
   database: gorg_prod_imelavi
   username: gorg_prod_imelavi
   password: password
+
+# soceDB
+soce_development:
+  adapter: mysql2
+  encoding: utf8
+  database: 
+  username: 
+  password: 
+  host:
+  port:
+
+soce_production:
+  adapter: mysql2
+  encoding: utf8
+  database: 
+  username: 
+  password: 
+  port:
+

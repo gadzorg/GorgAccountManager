@@ -19,4 +19,12 @@ class Uniqlink < ActiveRecord::Base
 		return "http://localhost:3000/password_reset/" + self.token
 	end
 
+	def usable?
+		if !self.used? && self.expire_date >= DateTime.now
+			return true
+		else
+			return false
+		end
+	end
+
 end
