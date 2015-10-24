@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  hruid: MyString
+  token: MyString
+  used: false
+  expire_date: 2015-10-24 22:12:46
+
+two:
+  hruid: MyString
+  token: MyString
+  used: false
+  expire_date: 2015-10-24 22:12:46
