@@ -41,8 +41,9 @@ class UsersController < ApplicationController
 		recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
 		recovery_link.save
 
-		@r="http://localhost:3000/password_reset/" + recovery_link.token
+		@r= recovery_link.get_url
 
+		Recoverymailer.recovery_email("testemain@test.test", recovery_link.get_url, @hruid ).deliver_now
 
 
 	end

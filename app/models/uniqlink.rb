@@ -15,4 +15,8 @@ class Uniqlink < ActiveRecord::Base
 		self.used
 	end
 
+	def get_url
+		return "http://localhost:3000/password_reset/" + self.token
+	end
+
 end
