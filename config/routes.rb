@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   post 'recovery_step2' => 'users#recovery_step2'
   get 'password_reset/:token', to: "users#password_reset", as: :password_change
   post 'password_reset/:token'=>"users#password_change"
+  post 'create_sms/:hruid', to: 'users#create_sms', as: :create_sms
+  get 'validate_sms/:token', to: 'users#validate_sms', as: :validate_sms
+  post 'validate_sms' => 'users#validate_sms'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -1,7 +1,7 @@
-class Uniqsm < ActiveRecord::Base
+class Uniqsms < ActiveRecord::Base
 	def generate_token
 		self.token = loop do
-			random_token = .random_number.to_s[4..10]
+			random_token = SecureRandom.random_number.to_s[4..10]
 			break random_token unless Uniqsms.exists?(token: random_token)
 		end
 	end

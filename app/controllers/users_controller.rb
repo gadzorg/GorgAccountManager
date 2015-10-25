@@ -1,9 +1,11 @@
 class UsersController < ApplicationController
 	def recovery
 		@user = User.new
+		render :layout => 'recovery'
 	end
 
 	def recovery_step2
+
 		a = params[:user][:hruid].to_s
 
 		#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
@@ -40,7 +42,8 @@ class UsersController < ApplicationController
 		@list_emails = @list_emails.flatten.uniq
 
 		# cherche le numéro de téléhpone sur le site soce
-		@phone = soce_user.tel_mobile
+		phone = soce_user.tel_mobile
+		@phone_hidden = "xx xx xx x" + phone.gsub("."," ").split(//).last(4).join
 
 		#generation d'un token
 		recovery_link = Uniqlink.new
@@ -52,18 +55,32 @@ class UsersController < ApplicationController
 
 		@r= recovery_link.get_url
 
-		@list_emails.each do |email|
-			Recoverymailer.recovery_email(email, recovery_link.get_url, @hruid ).deliver_now
+		@list_emails.each do |email|	
+			# Recoverymailer.recovery_email(email, recovery_link.get_url, @hruid ).deliver_now
 		end
+
+
+		#a supprimer
+		hruid = params[:user][:hruid]
+		recovery_sms = Uniqsms.new
+		recovery_sms.generate_token
+		recovery_sms.hruid = @hruid
+		recovery_sms.used = false
+		recovery_sms.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
+		recovery_sms.save
+
+
+		render :layout => 'recovery'
 
 	end
 
 	def password_reset
 		token = params[:token]
 		recovery_link = Uniqlink.find_by(token: token)
-		if recovery_link.usable?
+		if !recovery_link.nil? && recovery_link.usable?
 			@hruid = recovery_link.hruid
 			@user = User.new
+			render :layout => 'recovery'
 		else
 	    	respond_to do |format|
 	    		format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
@@ -89,7 +106,7 @@ class UsersController < ApplicationController
 		          format.html { redirect_to root_path, notice: 'mot de passe changé' }
 
 	        	else
-		          format.html { redirect_to password_reset_path, notice: 'erreur lors de la maj du mot de passe' }
+		          format.html { redirect_to password_reset_path, notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
 		
 	        	end
 	        end
@@ -98,6 +115,35 @@ class UsersController < ApplicationController
 	    		format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
 	    	end
 	    end
+	end
+
+	def create_sms
+		hruid = params[:user][:hruid]
+		recovery_link = Uniqsms.new
+		recovery_link.generate_token
+		recovery_link.hruid = hruid
+		recovery_link.used = false
+		recovery_link.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
+		recovery_link.save
+
+	end
+
+	def validate_sms
+		#on récupere le mini token du sms et si il est bon, 
+		#on prend le token du mail pour aller à la page de changement de mdp
+		token_sms = params[:token]
+		sms_uniq = Uniqsms.find_by(token: token_sms)
+		if sms_uniq.usable?
+			hruid = sms_uniq.hruid
+			token = Uniqlink.where(hruid: hruid).where(used: false).last.token
+			sms_uniq.set_used
+			sms_uniq.save
+			respond_to do |format|
+	    		format.html { redirect_to password_change_path(:token => token) }
+	    	end
+	    end
+
+
 	end
 
     

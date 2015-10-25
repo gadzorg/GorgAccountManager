@@ -1,13 +1,11 @@
 %section.pam
-  %h1 Titre
-
-
-  .grid-2-small-1
+  .w500p.center
     .box.shadow-1.mtm
       .box-top.pam
-        Récupérer mot de passe
+        Retrouvez votre compte
       .box-bottom.pam
-        %p yo
-        =form_for  [@user], :url=> recovery_step2_path()  do |f|
-          =f.text_field :hruid, :placeholder => "login, email, num SOCE", :size => 30
-          =f.submit 'Recuperer',:class => "bouton bouton_bleu"
+        %p Entrez votre login, votre adresse @gadz.org, votre numéro de sociétaire ou l'email où vous recevez les communications de la SOCE / Gadz.org. 
+        .mtm 
+          =form_for  [@user], :url=> recovery_step2_path()  do |f|
+            =f.text_field :hruid, :placeholder => "login, email, num SOCE", :size => 30
+            =f.submit 'Recuperer',:class => "bouton bouton_bleu"
