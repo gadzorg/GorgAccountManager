@@ -2,26 +2,13 @@
   .w500p.center
     .box.shadow-1.mtm
       .box-top.pam
-        On a retrouvé votre compte!
+        Email de récupération envoyé!
       .box-bottom.pam
         %p
-          Un mail vous a été envoyé aux adresses suivantes:
+          Un mail avec les instructions pour récupérer ton comtpe t'as été envoyé aux adresses suivantes:
           %ul
-            -@list_emails.each do |e|
+            -@list_emails_to_display.each do |e|
               %li=e.to_s
-          (il faut en masquer une partie)
+        %p (les "x" sont là pour ne pas rendre publique tes adresses mails)
 
-        %P
-          Si vous n'y avez plus accès, on peut vous envoyer un sms au:
-          =@phone_hidden
-          / = link_to create_sms_path(:hruid => @hruid), :remote=>true , :methode=> :post, title: "Envoyer un sms", rel: 'tooltip'do
-          /   Envoyer un sms
-
-          = form_tag(validate_sms_path(), :method => 'post') do
-            = label_tag :token, 'Code:'
-            = text_field_tag :token
-            = submit_tag
-
-
-        %p=@r
 

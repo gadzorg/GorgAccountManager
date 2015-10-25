@@ -3,11 +3,16 @@ Rails.application.routes.draw do
   get 'static_pages/index'
   get 'recovery' => 'users#recovery'
   post 'recovery_step2' => 'users#recovery_step2'
+  post 'create_recovery_session' => 'users#create_recovery_session'
+  get 'recovery_step1/:token_session', to: "users#recovery_step1", as: :recovery_step1
   get 'password_reset/:token', to: "users#password_reset", as: :password_change
   post 'password_reset/:token'=>"users#password_change"
-  post 'create_sms/:hruid', to: 'users#create_sms', as: :create_sms
-  get 'validate_sms/:token', to: 'users#validate_sms', as: :validate_sms
+  post 'create_sms' => 'users#create_sms'
+  #get 'validate_sms/:token', to: 'users#validate_sms', as: :validate_sms
   post 'validate_sms' => 'users#validate_sms'
+  get 'recovery_final' => "users#recovery_final"
+  get 'recovery_support' => "users#recovery_support"
+  post 'recovery_support_mail' => "users#recovery_support_mail"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
