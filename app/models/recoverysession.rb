@@ -14,4 +14,10 @@ class Recoverysession < ActiveRecord::Base
 		end
 	end
 
+	def add_sms_check
+		sms=Uniqsms.where(hruid: self.hruid).select{|e| e.usable?}
+		sms.map{|s| s.check_count +=1; s.save}
+	end
+
+
 end

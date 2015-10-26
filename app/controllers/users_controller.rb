@@ -100,9 +100,6 @@ class UsersController < ApplicationController
 
 		@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"x")[1..c.length-3]+c[c.length-2..c.length-1]}
 
-		# cherche le numéro de téléhpone sur le site soce
-		phone = soce_user.tel_mobile
-		@phone_hidden = "xx xx xx x" + phone.gsub("."," ").split(//).last(4).join
 
 		#generation d'un token
 		recovery_link = gen_uniq_link(@hruid)
@@ -182,25 +179,55 @@ class UsersController < ApplicationController
 
 		#ici code envoi sms
 
-
+		respond_to do |format|
+	    	format.html { redirect_to recovery_sms_path(:token_session => session_token) }
+	    end
 	end
 
 	def validate_sms
 		#on récupere le mini token du sms et si il est bon, 
 		#on prend le token du mail pour aller à la page de changement de mdp
 		token_sms = params[:token]
+		token_session = params[:token_session]
 		sms_uniq = Uniqsms.find_by(token: token_sms)
-		if sms_uniq.usable?
-			hruid = sms_uniq.hruid
-			token = Uniqlink.where(hruid: hruid).where(used: false).last.token
-			sms_uniq.set_used
-			sms_uniq.save
-			respond_to do |format|
-	    		format.html { redirect_to password_change_path(:token => token) }
-	    	end
+		session = Recoverysession.find_by(token: token_session)
+
+		respond_to do |format|
+			if !sms_uniq.nil? && sms_uniq.usable? && !session.nil? && session.usable?
+				if sms_uniq.check_count < 4 #nombre max de verifications add_check ajoute et renvoie le nombre de verif
+					hruid = sms_uniq.hruid
+					token = Uniqlink.where(hruid: hruid).where(used: false).last.token
+					sms_uniq.set_used
+					sms_uniq.save
+
+				
+		    		format.html { redirect_to password_change_path(:token => token) }
+		    	else
+		    		# nombre max de verif atteint
+		    		format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
+		    	end
+		    else
+		    	session.add_sms_check
+		    	# code invalide
+		    	format.html { redirect_to recovery_sms_path(:token_session => token_session), alert: 'Code invalide' }
+		    end
 	    end
 
 
+	end
+	def recovery_sms
+		session_token = params[:token_session]
+		# on recupère l'hruid à partir du token de session
+		session = Recoverysession.find_by(token: session_token)
+		@hruid = session.hruid
+		@session_token = session_token
+
+		#on recupere l'utilisateur dans le site soce
+		soce_user = Usersoce.where(hruid: @hruid).take
+		phone = soce_user.tel_mobile
+		@phone_hidden = phone.gsub("."," ").split(//)[0..2].join + " xx xx xx " + phone.gsub("."," ").split(//).last(2).join
+
+		render :layout => 'recovery'
 	end
 
 	def recovery_final

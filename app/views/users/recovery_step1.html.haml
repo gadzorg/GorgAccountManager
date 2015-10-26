@@ -6,18 +6,19 @@
       .box-bottom.pam
         %p Si tu as accès à ton adresse @gadz.org où à l'email que tu as renseigné sur le site de la SOCE, on peut t'envoyer un email de recuperation.
         %p
-          =link_to recovery_step2_path(:token_session => @session_token), :method=> :post, title: "Envoyer un mail", :class => "bouton bouton_bleu" do
-            Envoyer un mail
+          =link_to recovery_step2_path(:token_session => @session_token), :method=> :post, title: "Envoie-moi un mail", :class => "bouton bouton_bleu" do
+            Envoie-moi un mail
 
         -if @have_phone
-          %P 
-            Si tu n'y as plus accès, tu peux demander une code par SMS, nous te l'enverons au numro #{@phone_hidden}
-            = button_to create_sms_path(:token_session => @session_token), :remote=>true , :method=> :post, title: "Envoyer un sms", :class => "bouton bouton_bleu", rel: 'tooltip'do
-              Envoyer un sms
-          %p
-            = form_tag(validate_sms_path(), :method => 'post') do
-              = label_tag :token, 'Code SMS:'
-              = text_field_tag :token
-              = submit_tag 'Vérifier',:class => "bouton bouton_bleu"
+          %p.mtm 
+            Si tu n'y as plus accès, tu peux demander une code par SMS, nous te l'enverons au numéro #{@phone_hidden}
+          %p  
+            = link_to create_sms_path(:token_session => @session_token) , :method=> :post, title: "Envoie-moi un sms", :class => "bouton bouton_bleu" do
+              Envoie-moi un sms
+          / %p
+          /   = form_tag(validate_sms_path(), :method => 'post') do
+          /     = label_tag :token, 'Code SMS:'
+          /     = text_field_tag :token
+          /     = submit_tag 'Vérifier',:class => "bouton bouton_bleu"
         -else
           %p Tu n'as pas renseigné de numéro de téléhpone portable, nous ne pouvons pas te proposer de récupérer ton compte par SMS.

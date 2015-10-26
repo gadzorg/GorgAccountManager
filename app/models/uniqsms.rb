@@ -1,4 +1,9 @@
 class Uniqsms < ActiveRecord::Base
+	before_save :default_values
+	def default_values
+	    self.check_count ||= 0
+	end
+
 	def generate_token
 		self.token = loop do
 			random_token = SecureRandom.random_number.to_s[4..10]
@@ -26,4 +31,5 @@ class Uniqsms < ActiveRecord::Base
 			return false
 		end
 	end
+
 end
