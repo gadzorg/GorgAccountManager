@@ -38,14 +38,17 @@ production:
   password: password
 
 # soceDB
-soce_development:
+gorg: &gorg
   adapter: mysql2
   encoding: utf8
+  host: 
+  port: 3306
+
+soce_development:
+  <<: *gorg
   database: 
   username: 
   password: 
-  host:
-  port:
 
 soce_production:
   adapter: mysql2
@@ -55,3 +58,14 @@ soce_production:
   password: 
   port:
 
+platal_development:
+  <<: *gorg
+  database: 
+  username: 
+  password: 
+
+platal_production:
+  <<: *gorg
+  database: 
+  username: 
+  password: 

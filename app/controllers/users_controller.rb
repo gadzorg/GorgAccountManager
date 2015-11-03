@@ -1,6 +1,8 @@
 class UsersController < ApplicationController
 	require 'net/http'
 
+	before_action :set_user, only: [:show, :edit, :update, :destroy, :dashboard]
+
 	def recovery
 		@user = User.new
 		render :layout => 'recovery'
@@ -22,7 +24,14 @@ class UsersController < ApplicationController
 					rescue #ActiveResource::ServerError
 						#@hruid = "on t'as pas trouvé :-("
 						
+						#Si on ne trouve rien, on cherche dans platal l'adresse mail
+						redirect = Redirectplatal.where(redirect: a).take
+						if !redirect.nil?
+							@hruid = Userplatal.find(redirect.uid).hruid
+						else
 			    			format.html { redirect_to recovery_support_path() }
+						end
+
 			    		
 					end
 				end
@@ -250,12 +259,20 @@ class UsersController < ApplicationController
 		#TODO template mail
 	end
 
+	def dashboard
+		hruid = @user.hruid
+		@user_from_gram = GramAccount.find(hruid)
+		@user_from_soce = Usersoce.where(hruid: hruid).take
+		@user_from_platal = Userplatal.where(hruid: hruid).take
+
+	end
+
     
 	private
 
 		    # Use callbacks to share common setup or constraints between actions.
 	    def set_user
-	      @user =(params[:id] ?  User.find(params[:id]) : current_user)
+	      @user =(params[:user_id] ?  User.find(params[:user_id]) : current_user)
 	    end
 	    # Never trust parameters from the scary internet, only allow the white list through.
 		def user_params_pub

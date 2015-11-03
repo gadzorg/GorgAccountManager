@@ -15,6 +15,10 @@ Rails.application.routes.draw do
   post 'recovery_support_mail' => "users#recovery_support_mail"
   get 'recovery_sms' => "users#recovery_sms"
 
+  resources :users do
+    get "dashboard"
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
