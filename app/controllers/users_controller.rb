@@ -5,6 +5,13 @@ class UsersController < ApplicationController
 
 	def recovery
 		@user = User.new
+		re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
+
+		if !re_try.nil? || re_try == true 
+			@first_attempt = false
+		else
+			@first_attempt = true
+		end	 		
 		render :layout => 'recovery'
 	end
 
@@ -29,7 +36,8 @@ class UsersController < ApplicationController
 						if !redirect.nil?
 							@hruid = Userplatal.find(redirect.uid).hruid
 						else
-			    			format.html { redirect_to recovery_support_path() }
+			    			# format.html { redirect_to recovery_support_path() }
+			    			format.html { redirect_to recovery_path(:retry => true) }
 						end
 
 			    		

@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
   get 'static_pages/index'
   get 'recovery' => 'users#recovery'
+  post 'recovery' => 'users#recovery'
   post 'recovery_step2' => 'users#recovery_step2'
   post 'create_recovery_session' => 'users#create_recovery_session'
   get 'recovery_step1/:token_session', to: "users#recovery_step1", as: :recovery_step1

@@ -2,17 +2,10 @@
   .w500p.center
     .box.shadow-1.mtm
       .box-top.pam
-        Nous n'avons pas pu t'identifier :-(
-      .box-bottom.pam
-        %p Tu peux réessayer:
-        .mtm 
-          =form_for  [@user], :url=> create_recovery_session_path()  do |f|
-            =f.text_field :hruid, :placeholder => "login, email, num SOCE", :size => 30
-            =f.submit 'Recuperer',:class => "bouton bouton_bleu"
-        %p.small Entre ton login, ton adresse @gadz.org, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org. 
-      .box-bottom.border-top
+        On va devoir faire ça à l'ancienne...
+      .box-bottom
         .pam
-          %p.mtm Ou nous contacter:
+          %p.mtm Laisse-nous quelques informations pour t'identifier et décris-nous ton problème.
           = form_tag(recovery_support_mail_path(), :method => 'post') do
             -#= label_tag :nom
             = text_field_tag :nom,"", :placeholder => "Nom", :size => 30
@@ -23,4 +16,4 @@
             -#= label_tag :telephone
             = text_field_tag :telephone,"", :placeholder => "Téléphone", :size => 30
             = text_area_tag :issue,"", :placeholder => "Déscription du problème", :cols => 29
-            %p.mtm= submit_tag 'Contacter le support',:class => "bouton bouton_bleu"
+            %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"
