@@ -2,16 +2,16 @@
   .w500p.center
     .box.shadow-1.mtm
       .box-top.pam
-        On a retrouvé ton compte!
+        Nous avons retrouvé ton compte!
       .box-bottom.pam
-        %p Si tu as accès à ton adresse @gadz.org où à l'email que tu as renseigné sur le site de la SOCE, on peut t'envoyer un email de recuperation.
+        %p Si tu as accès à ton adresse @gadz.org où à l'email que tu as renseigné sur le site de la SOCE, nous pouvons t'envoyer un email de récupération.
         %p
           =link_to recovery_step2_path(:token_session => @session_token), :method=> :post, title: "Envoie-moi un mail", :class => "bouton bouton_bleu" do
             Envoie-moi un mail
 
         -if @have_phone
           %p.mtm 
-            Si tu n'y as plus accès, tu peux demander une code par SMS, nous te l'enverons au numéro #{@phone_hidden}
+            Si tu n'y as plus accès, nous pouvons t'envoyer un SMS au numéro #{@phone_hidden}
           %p  
             = link_to create_sms_path(:token_session => @session_token) , :method=> :post, title: "Envoie-moi un sms", :class => "bouton bouton_bleu" do
               Envoie-moi un sms
