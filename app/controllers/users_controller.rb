@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+	require 'net/http'
+
 	def recovery
 		@user = User.new
 		render :layout => 'recovery'
@@ -11,13 +13,13 @@ class UsersController < ApplicationController
 			#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
 			begin
 				@hruid = GramEmail.find(a).hruid
-			rescue ArgumentError ||  ActiveResource::ResourceNotFound
+			rescue #ArgumentError ||  ActiveResource::ResourceNotFound
 				begin
 					@hruid = GramAccount.find(a).hruid
-				rescue ActiveResource::ResourceNotFound || ArgumentError
+				rescue #ActiveResource::ResourceNotFound || ArgumentError
 					begin
 						@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
-					rescue ActiveResource::ServerError
+					rescue #ActiveResource::ServerError
 						#@hruid = "on t'as pas trouvé :-("
 						
 			    			format.html { redirect_to recovery_support_path() }
@@ -51,7 +53,7 @@ class UsersController < ApplicationController
 			# cherche le numéro de téléhpone sur le site soce
 			phone = soce_user.tel_mobile
 			if !phone.nil?
-				@phone_hidden = phone.gsub("."," ").split(//)[0..2].join + " xx xx xx " + phone.gsub("."," ").split(//).last(2).join
+				@phone_hidden = hide_phone(phone)
 				@have_phone = true
 			else
 				@have_phone = false
@@ -165,6 +167,8 @@ class UsersController < ApplicationController
 		# on recupère l'hruid à partir du token de session
 		session = Recoverysession.find_by(token: session_token)
 		hruid = session.hruid
+		soce_user = Usersoce.where(hruid: hruid).take
+		phone = soce_user.tel_mobile
 
 		#on genere un code pour le sms
 		recovery_sms = Uniqsms.new
@@ -179,6 +183,9 @@ class UsersController < ApplicationController
 		recovery_link = gen_uniq_link(hruid)
 
 		#ici code envoi sms
+		#On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
+		internat_phone = phone_parse(phone)
+		send_sms(internat_phone.to_s,recovery_sms.token.to_s)
 
 		respond_to do |format|
 	    	format.html { redirect_to recovery_sms_path(:token_session => session_token) }
@@ -226,7 +233,7 @@ class UsersController < ApplicationController
 		#on recupere l'utilisateur dans le site soce
 		soce_user = Usersoce.where(hruid: @hruid).take
 		phone = soce_user.tel_mobile
-		@phone_hidden = phone.gsub("."," ").split(//)[0..2].join + " xx xx xx " + phone.gsub("."," ").split(//).last(2).join
+		@phone_hidden = hide_phone(phone)
 
 		render :layout => 'recovery'
 	end
@@ -263,6 +270,45 @@ class UsersController < ApplicationController
 			recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
 			recovery_link.save
 			return recovery_link
+	    end
+
+	    def send_sms(phone_number,code)
+	    	base_url = "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?"
+	    	account = Rails.application.secrets.ovh_sms_account
+  			login = Rails.application.secrets.ovh_sms_login
+  			password = Rails.application.secrets.ovh_sms_password
+  			from = Rails.application.secrets.ovh_sms_from
+  			message = "Ton code de validation Gadz.org est: " + code
+
+  			full_url = base_url + "account=" + account + "&login=" + login + "&password=" + password + "&from=" + from + "&to=" + phone_number + "&message=" + message + "&noStop=1"
+
+  			# on envoie la requete get en https 
+  			# TODO il serait bien de regarder le code de réponse
+  			encoded_url = URI.encode(full_url)
+  			uri = URI.parse(encoded_url)
+
+			http = Net::HTTP.new(uri.host, uri.port)
+			http.use_ssl = true if uri.scheme == 'https'
+
+			http.start do |h|
+			  h.request Net::HTTP::Get.new(uri.request_uri)
+			  logger.info "#--------------------------------------------------------------------URL"
+			  logger.info(h)
+			end
+	    end
+
+	    def phone_parse(phone)
+	    	if phone.length == 14 #10 et les points
+	    		internat_phone = "0033"+phone.gsub(".","").split(//).join[1..9]
+	    	elsif phone.length > 15 # pour les numeros de tel étranger 0033.123.456.789 avec la possibilité d'avoir un indicatif à 3 chiffres et des point tous les 2 chiffre
+	    		internat_phone = phone.gsub(".","")
+	    	end
+	    	return internat_phone
+	    end
+
+	    def hide_phone(phone)
+	    	internat_phone = phone_parse(phone)
+	    	hiden_phone = "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
 	    end
 
 end
