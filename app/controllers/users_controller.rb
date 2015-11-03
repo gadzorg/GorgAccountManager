@@ -98,7 +98,8 @@ class UsersController < ApplicationController
 		# je l'ai commenté parce que les emails du gram ne sont pas forcement à jour
 		#@list_emails = @list_emails.drop_while{|e| /gadz.org/.match(e)}
 
-		@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"x")[1..c.length-3]+c[c.length-2..c.length-1]}
+		#@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"*")[1..c.length-3]+c[c.length-2..c.length-1]}
+		@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
 
 
 		#generation d'un token
