@@ -2,7 +2,7 @@
   .w500p.center
     .box.shadow-1.mtm
       .box-top.pam
-        On n'a pas réussi à t'identifier
+        Nous n'avons pas pu t'identifier :-(
       .box-bottom.pam
         %p Tu peux réessayer:
         .mtm 
@@ -10,15 +10,17 @@
             =f.text_field :hruid, :placeholder => "login, email, num SOCE", :size => 30
             =f.submit 'Recuperer',:class => "bouton bouton_bleu"
         %p.small Entre ton login, ton adresse @gadz.org, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org. 
-
-        %p.mtm Ou nous contacter:
-        = form_tag(recovery_support_mail_path(), :method => 'post') do
-          = label_tag :nom
-          = text_field_tag :nom
-          = label_tag :prenom
-          = text_field_tag :prenom
-          = label_tag :email, "Email où nous pourrons te contacter"
-          = text_field_tag :email
-          = label_tag :telephone
-          = text_field_tag :telephone
-          = submit_tag 'Contacter le support',:class => "bouton bouton_bleu"
+      .box-bottom.border-top
+        .pam
+          %p.mtm Ou nous contacter:
+          = form_tag(recovery_support_mail_path(), :method => 'post') do
+            -#= label_tag :nom
+            = text_field_tag :nom,"", :placeholder => "Nom", :size => 30
+            -#= label_tag :prenom
+            = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 30
+            -#= label_tag :email, "Email où nous pourrons te contacter"
+            = text_field_tag :email,"", :placeholder => "Email où nous pouvons te contacter", :size => 30
+            -#= label_tag :telephone
+            = text_field_tag :telephone,"", :placeholder => "Téléphone", :size => 30
+            = text_area_tag :issue,"", :placeholder => "Déscription du problème", :cols => 29
+            %p.mtm= submit_tag 'Contacter le support',:class => "bouton bouton_bleu"
