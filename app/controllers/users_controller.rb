@@ -264,7 +264,17 @@ class UsersController < ApplicationController
 	end
 
 	def recovery_support_mail
-		#TODO template mail
+		# TODO recuperer les params du port et les mettre dans les mailer
+		name  = params[:nom]
+		firstname = params[:prenom]
+		email = params[:email]
+		birthdate = params[:ddn][:day] + "/" + params[:ddn][:month] + "/" + params[:ddn][:year]
+		phone = params[:telephone]
+		desc = params[:issue]
+
+				    		#format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
+
+		Supportmailer.support_email(name,firstname,email,birthdate,phone,desc).deliver_now
 	end
 
 	def dashboard

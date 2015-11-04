@@ -6,14 +6,17 @@
       .box-bottom
         .pam
           %p.mtm Laisse-nous quelques informations pour t'identifier et décris-nous ton problème.
-          = form_tag(recovery_support_mail_path(), :method => 'post') do
+          = form_tag(recovery_support_mail_path(), :method => :post) do
             -#= label_tag :nom
-            = text_field_tag :nom,"", :placeholder => "Nom", :size => 30
+            = text_field_tag :nom,"", :placeholder => "Nom", :size => 33
             -#= label_tag :prenom
-            = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 30
+            = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 33
             -#= label_tag :email, "Email où nous pourrons te contacter"
-            = text_field_tag :email,"", :placeholder => "Email où nous pouvons te contacter", :size => 30
+            = text_field_tag :email,"", :placeholder => "Email où nous pouvons te contacter", :size => 33
             -#= label_tag :telephone
-            = text_field_tag :telephone,"", :placeholder => "Téléphone", :size => 30
-            = text_area_tag :issue,"", :placeholder => "Déscription du problème", :cols => 29
+            = text_field_tag :telephone,"", :placeholder => "Téléphone", :size => 33
+            -#= text_field_tag :ddn,"", :placeholder => "Date de naissance", :size => 30
+            =label_tag "Date de naissance"
+            = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn'}, html_options = {})
+            = text_area_tag :issue,"", :placeholder => "Déscription du problème", :cols => 32
             %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"
