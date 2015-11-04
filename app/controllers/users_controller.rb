@@ -19,30 +19,36 @@ class UsersController < ApplicationController
 		#on genere ici un token de session pour povoir tranmettre les info d'un page à une autre sans exposer l'hrui à l'utilisateur
 		a = params[:user][:hruid].to_s
 		respond_to do |format|
-			#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
-			begin
-				@hruid = GramEmail.find(a).hruid
-			rescue #ArgumentError ||  ActiveResource::ResourceNotFound
-				begin
-					@hruid = GramAccount.find(a).hruid
-				rescue #ActiveResource::ResourceNotFound || ArgumentError
-					begin
-						@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
-					rescue #ActiveResource::ServerError
-						#@hruid = "on t'as pas trouvé :-("
-						
-						#Si on ne trouve rien, on cherche dans platal l'adresse mail
-						redirect = Redirectplatal.where(redirect: a).take
-						if !redirect.nil?
-							@hruid = Userplatal.find(redirect.uid).hruid
-						else
-			    			# format.html { redirect_to recovery_support_path() }
-			    			format.html { redirect_to recovery_path(:retry => true) }
-						end
 
-			    		
+			if verify_recaptcha
+			#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
+				begin
+					@hruid = GramEmail.find(a).hruid
+				rescue #ArgumentError ||  ActiveResource::ResourceNotFound
+					begin
+						@hruid = GramAccount.find(a).hruid
+					rescue #ActiveResource::ResourceNotFound || ArgumentError
+						begin
+							@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
+						rescue #ActiveResource::ServerError
+							#@hruid = "on t'as pas trouvé :-("
+							
+							#Si on ne trouve rien, on cherche dans platal l'adresse mail
+							redirect = Redirectplatal.where(redirect: a).take
+							if !redirect.nil?
+								@hruid = Userplatal.find(redirect.uid).hruid
+							else
+				    			# format.html { redirect_to recovery_support_path() }
+				    			format.html { redirect_to recovery_path(:retry => true) }
+							end
+
+				    		
+						end
 					end
+
 				end
+			else
+				format.html { redirect_to recovery_path, notice: "Nous n'acceptons pas les robots ici!"}
 
 			end
 

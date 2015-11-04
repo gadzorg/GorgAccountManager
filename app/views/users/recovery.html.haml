@@ -15,7 +15,8 @@
           %p Tu peux essayer à nouveau:
         .mtm 
           =form_for  [@user], :url=> create_recovery_session_path()  do |f|
-            =f.text_field :hruid, :placeholder => "identifiant, email, numéro sociétaire", :size => 30
+            =f.text_field :hruid, :placeholder => "identifiant, email, numéro sociétaire", :class => "w100"
+            .w100.ptm.pbm=recaptcha_tags
             =f.submit 'Recuperer',:class => "bouton bouton_bleu"
         %p.small Entre ton adresse @gadz.org, ton indentifiant, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org.
         %p.small Ton identifiant est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext pour les non-gadzarts.

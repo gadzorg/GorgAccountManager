@@ -77,6 +77,9 @@ gem 'bootstrap-tooltip-rails'
 # to avoid issue with protected attributes
 gem 'safe_attributes'
 
+# recapcha gem
+gem "recaptcha", :require => "recaptcha/rails"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
