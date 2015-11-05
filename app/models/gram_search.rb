@@ -14,6 +14,9 @@ class GramSearch < ActiveResource::Base
   self.user = Rails.application.secrets.gram_api_user
   self.password = Rails.application.secrets.gram_api_password
   self.collection_name = "search/uniq"
+  unless Rails.application.secrets.proxy
+    self.proxy = Rails.application.secrets.proxy
+  end
 
 
   #Overwrite find_single from ActiveResource::Base to be able to use gram api (/accounts suffix)
