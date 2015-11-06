@@ -11,7 +11,7 @@
           = form_tag(validate_sms_path(), :method => 'post') do
             = hidden_field_tag :token_session, @session_token
             = label_tag :token, 'Saisis ce code ici:'
-            = text_field_tag :token,"",  :size => 7
+            = text_field_tag :token,"",  :size => 7, :autofocus => true
             %p.small.grey
               Le code de validation est un numéro à 6 chiffres. Assure-toi de ne pas saisir ton numéro de mobile ni le numéro du téléphone qui a envoyé le SMS
             = submit_tag 'Continuer',:class => "bouton bouton_bleu mtm"

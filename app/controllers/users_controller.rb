@@ -20,45 +20,49 @@ class UsersController < ApplicationController
 		a = params[:user][:hruid].to_s
 		respond_to do |format|
 
-			if verify_recaptcha
-			#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
-				begin
-					@hruid = GramEmail.find(a).hruid
-				rescue #ArgumentError ||  ActiveResource::ResourceNotFound
+			if !a.nil? && a != "" # on verifie si la recherche n'est pas vide
+				if verify_recaptcha
+				#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
 					begin
-						@hruid = GramAccount.find(a).hruid
-					rescue #ActiveResource::ResourceNotFound || ArgumentError
+						@hruid = GramEmail.find(a).hruid
+					rescue #ArgumentError ||  ActiveResource::ResourceNotFound
 						begin
-							@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
-						rescue #ActiveResource::ServerError
-							#@hruid = "on t'as pas trouvé :-("
-							
-							#Si on ne trouve rien, on cherche dans platal l'adresse mail
-							redirect = Redirectplatal.where(redirect: a).take
-							if !redirect.nil?
-								@hruid = Userplatal.find(redirect.uid).hruid
-							else
-				    			# format.html { redirect_to recovery_support_path() }
-				    			format.html { redirect_to recovery_path(:retry => true) }
-							end
+							@hruid = GramAccount.find(a).hruid
+						rescue #ActiveResource::ResourceNotFound || ArgumentError
+							begin
+								@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
+							rescue #ActiveResource::ServerError
+								#@hruid = "on t'as pas trouvé :-("
+								
+								#Si on ne trouve rien, on cherche dans platal l'adresse mail
+								redirect = Redirectplatal.where(redirect: a).take
+								if !redirect.nil?
+									@hruid = Userplatal.find(redirect.uid).hruid
+								else
+					    			# format.html { redirect_to recovery_support_path() }
+					    			format.html { redirect_to recovery_path(:retry => true) }
+								end
 
-				    		
+					    		
+							end
 						end
+
 					end
+				else
+					format.html { redirect_to recovery_path, notice: "Nous n'acceptons pas les robots ici!"}
 
 				end
-			else
-				format.html { redirect_to recovery_path, notice: "Nous n'acceptons pas les robots ici!"}
 
-			end
+				session = Recoverysession.new
+				session.generate_token
+				session.hruid = @hruid
+				session.expire_date = DateTime.now + 15.minute # on definit la durée de vie d'un token à 15 minutes
+				session.save
 
-			session = Recoverysession.new
-			session.generate_token
-			session.hruid = @hruid
-			session.expire_date = DateTime.now + 15.minute # on definit la durée de vie d'un token à 15 minutes
-			session.save
-
-	    		format.html { redirect_to recovery_step1_path(:token_session => session.token) }
+		    	format.html { redirect_to recovery_step1_path(:token_session => session.token) }
+		    else
+		    	format.html { redirect_to recovery_path, notice: "Tu dois rentrer un identifiant, email ou numéro de sociétaire pour que nous puissions t'identifier!"}
+	    	end
 	    end
 
 	end
@@ -160,23 +164,31 @@ class UsersController < ApplicationController
 		token = params[:token]
 		recovery_link = Uniqlink.find_by(token: token)
 		if recovery_link.usable?
-			@hruid = recovery_link.hruid
-			user_from_gram = GramAccount.find(@hruid)
+			respond_to do |format|
 
-			passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
-	        user_from_gram.password = passwd_hash
-	        
+				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
+				if params[:user][:password] != params[:user][:password_confirm] 
+				   format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
+				else
 
-	        respond_to do |format|
-	        	if user_from_gram.save
-	        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
-	        	  recovery_link.set_used
-		          format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+					@hruid = recovery_link.hruid
+					user_from_gram = GramAccount.find(@hruid)
 
-	        	else
-		          format.html { redirect_to password_reset_path, notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
-		
-	        	end
+					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
+			        user_from_gram.password = passwd_hash
+		        
+
+		        
+		        	if user_from_gram.save
+		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
+		        	  recovery_link.set_used
+			          format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+
+		        	else
+			          format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+			
+		        	end
+		        end
 	        end
 	    else
 	    	respond_to do |format|

@@ -8,7 +8,7 @@
           %p.mtm Laisse-nous quelques informations pour t'identifier et décris-nous ton problème.
           = form_tag(recovery_support_mail_path(), :method => :post) do
             -#= label_tag :nom
-            = text_field_tag :nom,"", :placeholder => "Nom", :size => 33
+            = text_field_tag :nom,"", :placeholder => "Nom", :size => 33, :autofocus => true
             -#= label_tag :prenom
             = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 33
             -#= label_tag :email, "Email où nous pourrons te contacter"
