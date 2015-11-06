@@ -78,7 +78,7 @@ class UsersController < ApplicationController
 			soce_user = Usersoce.where(hruid: session.hruid).take
 
 			# cherche le numéro de téléhpone sur le site soce
-			phone = soce_user.tel_mobile
+			!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
 			if !phone.nil?
 				@phone_hidden = hide_phone(phone)
 				@have_phone = true
@@ -167,7 +167,7 @@ class UsersController < ApplicationController
 			respond_to do |format|
 
 				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
-				if params[:user][:password] != params[:user][:password_confirm] 
+				if params[:user][:password] != params[:user][:password_confirmation] 
 				   format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
 				else
 
