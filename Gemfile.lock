@@ -62,6 +62,7 @@ GEM
       activerecord (>= 3.2, <= 4.3)
       rake (~> 10.4)
     arel (6.0.0)
+    awesome_print (1.6.1)
     bcrypt (3.1.10)
     better_errors (2.1.1)
       coderay (>= 1.0.0)
@@ -247,6 +248,7 @@ PLATFORMS
 DEPENDENCIES
   activeresource
   annotate (~> 2.6.6)
+  awesome_print
   better_errors
   bootstrap-tooltip-rails
   byebug

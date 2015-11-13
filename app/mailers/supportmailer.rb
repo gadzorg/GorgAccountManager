@@ -1,5 +1,6 @@
 class Supportmailer < ApplicationMailer
 
+
 	# mailer pour les demandes au support qui sont envoyées à jira
 	# il faudra réécrire le from pour que ce ne soit pas celui assocoé au smtp de la boite mail.
 	# ou trouver une autre solution pour que l'utilisateur soit rensigné comme sender dans jira.

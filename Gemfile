@@ -80,6 +80,9 @@ gem 'safe_attributes'
 # recapcha gem
 gem "recaptcha", :require => "recaptcha/rails"
 
+# pretty hash print in console
+gem 'awesome_print'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 

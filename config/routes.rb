@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   post 'validate_sms' => 'users#validate_sms'
   get 'recovery_final' => "users#recovery_final"
   get 'recovery_support' => "users#recovery_support"
-  post 'recovery_support_mail' => "users#recovery_support_mail"
+  post 'recovery_support_final' => "users#recovery_support_final"
   get 'recovery_sms' => "users#recovery_sms"
 
   resources :users do

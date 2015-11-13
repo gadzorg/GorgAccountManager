@@ -291,7 +291,7 @@ f
 		render :layout => 'recovery'
 	end
 
-	def recovery_support_mail
+	def recovery_support_final
 		# TODO recuperer les params du port et les mettre dans les mailer
 		name  = params[:nom]
 		firstname = params[:prenom]
@@ -302,7 +302,10 @@ f
 
 				    		#format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
 
-		Supportmailer.support_email(name,firstname,email,birthdate,phone,desc).deliver_now
+		#Supportmailer.support_email(name,firstname,email,birthdate,phone,desc).deliver_now
+		message = support_message(name,firstname,email,birthdate,phone,desc)
+		create_jira_ticket(email,message,email)
+		render :layout => 'recovery'
 	end
 
 	def dashboard
@@ -373,5 +376,29 @@ f
 	    	internat_phone = phone_parse(phone)
 	    	hiden_phone = "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
 	    end
+
+	    def create_jira_ticket(user, description, sender)
+	    	newjira = JiraIssue.new(
+	    		fields: { 
+	    			project: { id: "10001" }, 
+	    			summary: "L'utilisateur #{user} signale ne pas arriver à se connecter", 
+	    			description: description, 
+	    			customfield_10000: sender , 
+	    			issuetype: { id: "1" }, 
+	    			labels: [ "mdp" ] 
+	    			})
+			newjira.save
+	    end
+
+	    def support_message(name,firstname,email,birthdate,phone,desc)
+		    message = (
+		    	"Nom: " + name +
+			 	"\nPrenom: " + firstname +
+			 	"\nEmail: " + email +
+			 	"\nDate de naissance: " + birthdate +
+			 	"\nTéléphone: " + phone +
+			 	"\n\n" + desc )
+		end
+	
 
 end
