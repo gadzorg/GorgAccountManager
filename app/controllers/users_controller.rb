@@ -119,7 +119,7 @@ class UsersController < ApplicationController
 		@list_emails.push(user_from_gram.email)
 		@list_emails.push(user_from_gram.email_forge)
 		#email du site soce
-		@list_emails.push(soce_user.emails_valides)
+		@list_emails.push(soce_user.emails_valides) unless soce_user.nil?
 
 		@list_emails = @list_emails.flatten.uniq
 		
@@ -165,7 +165,7 @@ class UsersController < ApplicationController
 		recovery_link = Uniqlink.find_by(token: token)
 		if recovery_link.usable?
 			respond_to do |format|
-
+f
 				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 				if params[:user][:password] != params[:user][:password_confirmation] 
 				   format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
