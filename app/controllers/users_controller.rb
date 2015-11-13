@@ -137,10 +137,10 @@ class UsersController < ApplicationController
 
 		@r= recovery_link.get_url
 
+		# on envoir les mails
 		@list_emails.each do |email|	
 			Recoverymailer.recovery_email(email, recovery_link.get_url, @hruid ).deliver_now
 		end
-
 
 		render :layout => 'recovery'
 
@@ -205,25 +205,35 @@ f
 		soce_user = Usersoce.where(hruid: hruid).take
 		phone = soce_user.tel_mobile
 
-		#on genere un code pour le sms
-		recovery_sms = Uniqsms.new
-		recovery_sms.generate_token
-		recovery_sms.hruid = hruid
-		recovery_sms.used = false
-		recovery_sms.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
-		recovery_sms.save
-
-		#generation d'un token parce qu'on va en avoir besoin 
-		# quand on sera redirigé sur la pase de changement de mdp
-		recovery_link = gen_uniq_link(hruid)
-
-		#ici code envoi sms
-		#On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
-		internat_phone = phone_parse(phone)
-		send_sms(internat_phone.to_s,recovery_sms.token.to_s)
-
 		respond_to do |format|
-	    	format.html { redirect_to recovery_sms_path(:token_session => session_token) }
+			if session.sms_count.nil? || session.sms_count < 3
+
+				#on genere un code pour le sms
+				recovery_sms = Uniqsms.new
+				recovery_sms.generate_token
+				recovery_sms.hruid = hruid
+				recovery_sms.used = false
+				recovery_sms.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
+				recovery_sms.save
+
+				#generation d'un token parce qu'on va en avoir besoin 
+				# quand on sera redirigé sur la pase de changement de mdp
+				recovery_link = gen_uniq_link(hruid)
+
+				#ici code envoi sms
+				#On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
+				internat_phone = phone_parse(phone)
+				send_sms(internat_phone.to_s,recovery_sms.token.to_s)
+
+				# ou ajoute un au compteur
+				session.sms_count.nil? ? session.sms_count = 1 : session.sms_count +=1
+				session.save
+
+		    	format.html { redirect_to recovery_sms_path(:token_session => session_token) }
+		    else
+			    format.html { redirect_to recovery_path, notice: 'Nombre maximun de sms atteint pour cette session' }
+
+		    end
 	    end
 	end
 
@@ -236,7 +246,7 @@ f
 		session = Recoverysession.find_by(token: token_session)
 
 		respond_to do |format|
-			if !sms_uniq.nil? && sms_uniq.usable? && !session.nil? && session.usable?
+			if !sms_uniq.nil? && sms_uniq.usable? && !session.nil? && session.usable? && session.hruid == sms_uniq.hruid
 				if sms_uniq.check_count < 4 #nombre max de verifications add_check ajoute et renvoie le nombre de verif
 					hruid = sms_uniq.hruid
 					token = Uniqlink.where(hruid: hruid).where(used: false).last.token
