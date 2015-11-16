@@ -9,4 +9,7 @@ class JiraIssue < ActiveResource::Base
   self.collection_name = "issue"
   self.user = Rails.application.secrets.jira_user
   self.password = Rails.application.secrets.jira_password
+  unless Rails.application.secrets.proxy
+    self.proxy = Rails.application.secrets.proxy
+  end
 end
