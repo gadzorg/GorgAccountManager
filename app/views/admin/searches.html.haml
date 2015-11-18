@@ -1,0 +1,14 @@
+%section.pam
+  %h1 Recherches
+
+  .w100
+    .box.shadow-1.mtm
+      .box-bottom.pam
+        %table.alternate
+          %thead
+
+            -@searches.each do |t|
+              %tr
+                %td=t.term
+                %td=t.term_type
+                %td=t.created_at

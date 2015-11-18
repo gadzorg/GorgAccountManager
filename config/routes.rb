@@ -20,6 +20,7 @@ Rails.application.routes.draw do
 
 
   get 'admin/stats' => "admin#stats"
+  get 'admin/searches' => "admin#searches"
   resources :users do
     get "dashboard"
   end
