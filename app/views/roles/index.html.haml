@@ -1,0 +1,11 @@
+%h1 Liste de Roles
+
+- @roles.each do |role|
+
+  %h2= role.name.capitalize
+  %table
+    - role.users.each do |u|
+      %tr
+        %td= u.fullname
+        -if can? :destroy, role
+          %td= link_to "Supprimer", user_role_path(u,role.name), :method => :delete, :data => { :confirm => 'Are you sure ?'}

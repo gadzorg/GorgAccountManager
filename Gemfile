@@ -8,7 +8,8 @@ gem 'rails', '4.2.3'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use mysql2 as the database for Active Record
-gem 'mysql2'
+#gem 'mysql2'
+gem 'mysql2', '~> 0.3.20'
 
 # Use 'foreigner' to add foreign_key constraints on database layer !
 # https://github.com/matthuhiggins/foreigner
@@ -42,8 +43,7 @@ gem 'omniauth'
 gem "omniauth-cas", :git => "https://github.com/loocla/omniauth-cas.git", :branch => 'saml'
 
 # Authorisation
-gem 'cancancan', '~> 1.10'
-gem 'rolify', '~> 4.1.1'
+gem 'cancancan'
 
 # API GRAM
 gem 'activeresource'
@@ -114,5 +114,16 @@ group :development, :test do
 
   # export db en yaml
   gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
+
+  gem 'rspec-rails'
+
+  gem 'factory_girl_rails'
+
 end
 
+group :test do
+  gem 'faker'
+  gem 'capybara'
+  gem 'guard-rspec'
+  gem 'launchy'
+end
