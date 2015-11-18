@@ -95,6 +95,8 @@ class UsersController < ApplicationController
 	def create_recovery_session
 		#on genere ici un token de session pour povoir tranmettre les info d'un page à une autre sans exposer l'hrui à l'utilisateur
 		a = params[:user][:hruid].to_s
+		#on enregistre les recherches pour les stats
+		search = Search.new(term: a)
 		respond_to do |format|
 
 			if !a.nil? && a != "" # on verifie si la recherche n'est pas vide
@@ -102,12 +104,18 @@ class UsersController < ApplicationController
 				#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
 				begin
 					@hruid = GramEmail.find(a).hruid
+					search.term_type = "Email GrAM"
+					search.save
 					rescue #ArgumentError ||  ActiveResource::ResourceNotFound
 						begin
 							@hruid = GramAccount.find(a).hruid
+							search.term_type = "Hruid"
+							search.save
 						rescue #ActiveResource::ResourceNotFound || ArgumentError
 							begin
 								@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
+								search.term_type = "idSoce"
+								search.save
 							rescue #ActiveResource::ServerError
 								#@hruid = "on t'as pas trouvé :-("
 
@@ -115,8 +123,12 @@ class UsersController < ApplicationController
 								redirect = Redirectplatal.where(redirect: a).take
 								if !redirect.nil?
 									@hruid = Userplatal.find(redirect.uid).hruid
+									search.term_type = "Email Platal"
+									search.save
 								else
 					    			# format.html { redirect_to recovery_support_path() }
+					    			search.term_type = "Non trouvé"
+									search.save
 					    			format.html { redirect_to recovery_path(:retry => true) }
 					    		end
 
@@ -138,6 +150,8 @@ class UsersController < ApplicationController
 
 				format.html { redirect_to recovery_step1_path(:token_session => session.token) }
 			else
+				search.term_type = "Recherche vide"
+				search.save
 				format.html { redirect_to recovery_path, notice: "Tu dois rentrer un identifiant, email ou numéro de sociétaire pour que nous puissions t'identifier!"}
 			end
 		end

@@ -1,5 +1,5 @@
 %section.pam
-  %h1 Metriques
+  %h1 Métriques
 
 
   .grid-2-small-1
@@ -31,3 +31,12 @@
                 %tr
                   %td=hruid[0]
                   %td=hruid[1]
+        %p
+          Type de recheches
+          %table.alternate
+            %thead
+
+              -@search_term_type.each do |t|
+                %tr
+                  %td=t[0]
+                  %td=t[1]
