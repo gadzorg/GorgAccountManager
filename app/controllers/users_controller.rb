@@ -6,82 +6,82 @@ class UsersController < ApplicationController
 # GET /users
   # GET /users.json
   def index
-    @users = User.accessible_by(current_ability)
-    authorize! :read, User
+  	@users = User.accessible_by(current_ability)
+  	authorize! :read, User
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    authorize! :read, @user
+  	authorize! :read, @user
   end
 
   # GET /users/new
   def new
-    @user = User.new
-    authorize! :create, @user
-    @roles=Role.accessible_by(current_ability)
+  	@user = User.new
+  	authorize! :create, @user
+  	@roles=Role.accessible_by(current_ability)
   end
 
   # GET /users/1/edit
   def edit
-    authorize! :update, @user
-    @roles=Role.accessible_by(current_ability)
+  	authorize! :update, @user
+  	@roles=Role.accessible_by(current_ability)
   end
 
   # POST /users
   # POST /users.json
   def create
-    @user = User.new(user_params)
-    authorize! :create, @user
-    authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
+  	@user = User.new(user_params)
+  	authorize! :create, @user
+  	authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
 
-    respond_to do |format|
-      if @user.save
-        format.html { redirect_to @user, notice: 'User was successfully created.' }
-        format.json { render :show, status: :created, location: @user }
-      else
-        format.html { render :new }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
+  	respond_to do |format|
+  		if @user.save
+  			format.html { redirect_to @user, notice: 'User was successfully created.' }
+  			format.json { render :show, status: :created, location: @user }
+  		else
+  			format.html { render :new }
+  			format.json { render json: @user.errors, status: :unprocessable_entity }
+  		end
+  	end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-    authorize! :update, @user
-    authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
+  	authorize! :update, @user
+  	authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
 
-    respond_to do |format|
-      if @user.update(user_params)
-        format.html { redirect_to @user, notice: 'User was successfully updated.' }
-        format.json { render :show, status: :ok, location: @user }
-      else
-        format.html { render :edit }
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
-    end
+  	respond_to do |format|
+  		if @user.update(user_params)
+  			format.html { redirect_to @user, notice: 'User was successfully updated.' }
+  			format.json { render :show, status: :ok, location: @user }
+  		else
+  			format.html { render :edit }
+  			format.json { render json: @user.errors, status: :unprocessable_entity }
+  		end
+  	end
   end
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-    authorize! :destroy, @user
-    @user.destroy
-    respond_to do |format|
-      format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+  	authorize! :destroy, @user
+  	@user.destroy
+  	respond_to do |format|
+  		format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
+  		format.json { head :no_content }
+  	end
   end
 
 
   def search_by_id
-    redirect_to user_path(params[:id])
+  	redirect_to user_path(params[:id])
   end
 
-	def recovery
-		@user = User.new
+  def recovery
+  	@user = User.new
 		re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
 
 		if !re_try.nil? || re_try == true 
@@ -100,8 +100,8 @@ class UsersController < ApplicationController
 			if !a.nil? && a != "" # on verifie si la recherche n'est pas vide
 				if verify_recaptcha
 				#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
-					begin
-						@hruid = GramEmail.find(a).hruid
+				begin
+					@hruid = GramEmail.find(a).hruid
 					rescue #ArgumentError ||  ActiveResource::ResourceNotFound
 						begin
 							@hruid = GramAccount.find(a).hruid
@@ -110,7 +110,7 @@ class UsersController < ApplicationController
 								@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
 							rescue #ActiveResource::ServerError
 								#@hruid = "on t'as pas trouvé :-("
-								
+
 								#Si on ne trouve rien, on cherche dans platal l'adresse mail
 								redirect = Redirectplatal.where(redirect: a).take
 								if !redirect.nil?
@@ -118,11 +118,11 @@ class UsersController < ApplicationController
 								else
 					    			# format.html { redirect_to recovery_support_path() }
 					    			format.html { redirect_to recovery_path(:retry => true) }
-								end
+					    		end
 
 					    		
-							end
-						end
+					    	end
+					    end
 
 					end
 				else
@@ -136,11 +136,11 @@ class UsersController < ApplicationController
 				session.expire_date = DateTime.now + 15.minute # on definit la durée de vie d'un token à 15 minutes
 				session.save
 
-		    	format.html { redirect_to recovery_step1_path(:token_session => session.token) }
-		    else
-		    	format.html { redirect_to recovery_path, notice: "Tu dois rentrer un identifiant, email ou numéro de sociétaire pour que nous puissions t'identifier!"}
-	    	end
-	    end
+				format.html { redirect_to recovery_step1_path(:token_session => session.token) }
+			else
+				format.html { redirect_to recovery_path, notice: "Tu dois rentrer un identifiant, email ou numéro de sociétaire pour que nous puissions t'identifier!"}
+			end
+		end
 
 	end
 
@@ -167,8 +167,8 @@ class UsersController < ApplicationController
 			render :layout => 'recovery'
 		else
 			respond_to do |format|
-	    		format.html { redirect_to root_path, notice: 'Délais dépassé' }
-	    	end
+				format.html { redirect_to root_path, notice: 'Délais dépassé' }
+			end
 		end
 
 
@@ -231,10 +231,10 @@ class UsersController < ApplicationController
 			@user = User.new
 			render :layout => 'recovery'
 		else
-	    	respond_to do |format|
-	    		format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
-	    	end
-	    end
+			respond_to do |format|
+				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
+			end
+		end
 	end
 
 	def password_change
@@ -245,33 +245,33 @@ class UsersController < ApplicationController
 
 				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 				if params[:user][:password] != params[:user][:password_confirmation] 
-				   format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
+					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
 				else
 
 					@hruid = recovery_link.hruid
 					user_from_gram = GramAccount.find(@hruid)
 
 					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
-			        user_from_gram.password = passwd_hash
-		        
+					user_from_gram.password = passwd_hash
 
-		        
-		        	if user_from_gram.save
+
+
+					if user_from_gram.save
 		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
 		        	  recovery_link.set_used
-			          format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+		        	  format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
 
 		        	else
-			          format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
-			
+		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+
 		        	end
 		        end
-	        end
-	    else
-	    	respond_to do |format|
-	    		format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
-	    	end
-	    end
+		    end
+		else
+			respond_to do |format|
+				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
+			end
+		end
 	end
 
 	def create_sms
@@ -306,12 +306,12 @@ class UsersController < ApplicationController
 				session.sms_count.nil? ? session.sms_count = 1 : session.sms_count +=1
 				session.save
 
-		    	format.html { redirect_to recovery_sms_path(:token_session => session_token) }
-		    else
-			    format.html { redirect_to recovery_path, notice: 'Nombre maximun de sms atteint pour cette session' }
+				format.html { redirect_to recovery_sms_path(:token_session => session_token) }
+			else
+				format.html { redirect_to recovery_path, notice: 'Nombre maximun de sms atteint pour cette session' }
 
-		    end
-	    end
+			end
+		end
 	end
 
 	def validate_sms
@@ -330,9 +330,9 @@ class UsersController < ApplicationController
 					sms_uniq.set_used
 					sms_uniq.save
 
-				
-		    		format.html { redirect_to password_change_path(:token => token) }
-		    	else
+
+					format.html { redirect_to password_change_path(:token => token) }
+				else
 		    		# nombre max de verif atteint
 		    		format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
 		    	end
@@ -341,7 +341,7 @@ class UsersController < ApplicationController
 		    	# code invalide
 		    	format.html { redirect_to recovery_sms_path(:token_session => token_session), alert: 'Code invalide' }
 		    end
-	    end
+		end
 
 
 	end
@@ -386,6 +386,7 @@ class UsersController < ApplicationController
 	end
 
 	def dashboard
+		authorize! :read, @user
 		hruid = @user.hruid
 		@user_from_gram = GramAccount.find(hruid)
 		@user_from_soce = Usersoce.where(hruid: hruid).take
@@ -393,54 +394,54 @@ class UsersController < ApplicationController
 
 	end
 
-    
+
 	private
 
 		    # Use callbacks to share common setup or constraints between actions.
-	    def set_user
-	      @user =(params[:user_id] ?  User.find(params[:user_id]) : current_user)
-	    end
+		    def set_user
+		    	@user =(params[:user_id] ?  User.find(params[:user_id]) : current_user)
+		    end
 	    # Never trust parameters from the scary internet, only allow the white list through.
-		def user_params_pub
-	      params[:user].permit(:hruid)
+	    def user_params_pub
+	    	params[:user].permit(:hruid)
 	    end
 
 	    def gen_uniq_link(hruid)
-		    recovery_link = Uniqlink.new
-			recovery_link.generate_token
-			recovery_link.hruid = hruid
-			recovery_link.used = false
+	    	recovery_link = Uniqlink.new
+	    	recovery_link.generate_token
+	    	recovery_link.hruid = hruid
+	    	recovery_link.used = false
 			recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
 			recovery_link.save
 			return recovery_link
-	    end
+		end
 
-	    def send_sms(phone_number,code)
-	    	base_url = "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?"
-	    	account = Rails.application.secrets.ovh_sms_account
-  			login = Rails.application.secrets.ovh_sms_login
-  			password = Rails.application.secrets.ovh_sms_password
-  			from = Rails.application.secrets.ovh_sms_from
-  			message = "Ton code de validation Gadz.org est: " + code
+		def send_sms(phone_number,code)
+			base_url = "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?"
+			account = Rails.application.secrets.ovh_sms_account
+			login = Rails.application.secrets.ovh_sms_login
+			password = Rails.application.secrets.ovh_sms_password
+			from = Rails.application.secrets.ovh_sms_from
+			message = "Ton code de validation Gadz.org est: " + code
 
-  			full_url = base_url + "account=" + account + "&login=" + login + "&password=" + password + "&from=" + from + "&to=" + phone_number + "&message=" + message + "&noStop=1"
+			full_url = base_url + "account=" + account + "&login=" + login + "&password=" + password + "&from=" + from + "&to=" + phone_number + "&message=" + message + "&noStop=1"
 
   			# on envoie la requete get en https 
   			# TODO il serait bien de regarder le code de réponse
   			encoded_url = URI.encode(full_url)
   			uri = URI.parse(encoded_url)
 
-			http = Net::HTTP.new(uri.host, uri.port)
-			http.use_ssl = true if uri.scheme == 'https'
+  			http = Net::HTTP.new(uri.host, uri.port)
+  			http.use_ssl = true if uri.scheme == 'https'
 
-			http.start do |h|
-			  h.request Net::HTTP::Get.new(uri.request_uri)
-			  logger.info "#--------------------------------------------------------------------URL"
-			  logger.info(h)
-			end
-	    end
+  			http.start do |h|
+  				h.request Net::HTTP::Get.new(uri.request_uri)
+  				logger.info "#--------------------------------------------------------------------URL"
+  				logger.info(h)
+  			end
+  		end
 
-	    def phone_parse(phone)
+  		def phone_parse(phone)
 	    	if phone.length == 14 || phone.length == 10 #10 et les points ou sans
 	    		internat_phone = "0033"+phone.gsub(".","").split(//).join[1..9] 
 	    	elsif phone.length > 15 # pour les numeros de tel étranger 0033.123.456.789 avec la possibilité d'avoir un indicatif à 3 chiffres et des point tous les 2 chiffre
@@ -464,23 +465,23 @@ class UsersController < ApplicationController
 	    			issuetype: { id: "1" }, 
 	    			labels: [ "mdp" ] 
 	    			})
-			newjira.save
+	    	newjira.save
 	    end
 
 	    def support_message(name,firstname,email,birthdate,phone,desc)
-		    message = (
-		    	"Nom: " + name +
-			 	"\nPrenom: " + firstname +
-			 	"\nEmail: " + email +
-			 	"\nDate de naissance: " + birthdate +
-			 	"\nTéléphone: " + phone +
-			 	"\n\n" + desc )
-		end
-	
+	    	message = (
+	    		"Nom: " + name +
+	    		"\nPrenom: " + firstname +
+	    		"\nEmail: " + email +
+	    		"\nDate de naissance: " + birthdate +
+	    		"\nTéléphone: " + phone +
+	    		"\n\n" + desc )
+	    end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :firstname, :lastname, :hruid, :id, :role_id)
+    	params.require(:user).permit(:email, :firstname, :lastname, :hruid, :id, :role_id)
     end
 
 end
