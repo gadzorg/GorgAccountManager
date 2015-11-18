@@ -16,3 +16,8 @@
         %i.zmdi.zmdi-key
         %div.small-inbl
           Roles
+    - if can? :manage, :admin
+      =link_to admin_stats_path, class:'box shadow-1 mtm bouton bouton-light'  do
+        %i.zmdi.zmdi-chart
+        %div.small-inbl
+          Stats
