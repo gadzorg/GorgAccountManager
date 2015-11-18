@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   post 'recovery_support_final' => "users#recovery_support_final"
   get 'recovery_sms' => "users#recovery_sms"
 
+
+  get 'admin/stats' => "admin#stats"
   resources :users do
     get "dashboard"
   end
