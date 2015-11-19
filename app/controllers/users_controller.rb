@@ -191,9 +191,9 @@ class UsersController < ApplicationController
 
 
 	def recovery_step2
-		session_token = params[:token_session]
+		@session_token = params[:token_session]
 		# on recupère l'hruid à partir du token de session
-		session = Recoverysession.find_by(token: session_token)
+		session = Recoverysession.find_by(token: @session_token)
 		@hruid = session.hruid
 
 		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
@@ -360,9 +360,9 @@ class UsersController < ApplicationController
 
 	end
 	def recovery_sms
-		session_token = params[:token_session]
+		@session_token = params[:token_session]
 		# on recupère l'hruid à partir du token de session
-		session = Recoverysession.find_by(token: session_token)
+		session = Recoverysession.find_by(token: @session_token)
 		@hruid = session.hruid
 		@session_token = session_token
 
