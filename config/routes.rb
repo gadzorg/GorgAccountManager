@@ -19,6 +19,9 @@ Rails.application.routes.draw do
   get 'recovery_sms' => "users#recovery_sms"
 
 
+  get 'charts_term_type' => 'charts#term_type'
+  get 'charts_sessions_dates' => 'charts#sessions_dates'
+
   get 'admin/stats' => "admin#stats"
   get 'admin/searches' => "admin#searches"
   resources :users do

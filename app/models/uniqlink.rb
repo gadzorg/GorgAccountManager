@@ -16,7 +16,7 @@ class Uniqlink < ActiveRecord::Base
 	end
 
 	def get_url
-		return "http://localhost:3000/password_reset/" + self.token
+		return Configurable[:site_url] + "password_reset/" + self.token
 	end
 
 	def usable?

@@ -1,3 +1,4 @@
+= javascript_include_tag "//www.google.com/jsapi", "chartkick"
 %section.pam
   %h1 Métriques
 
@@ -33,10 +34,17 @@
                   %td=hruid[1]
         %p
           Type de recheches
-          %table.alternate
-            %thead
+        %span= column_chart charts_term_type_path
+        
+        %table.alternate
+          %thead
 
-              -@search_term_type.each do |t|
-                %tr
-                  %td=t[0]
-                  %td=t[1]
+            -@search_term_type.each do |t|
+              %tr
+                %td=t[0]
+                %td=t[1]
+    .box.shadow-1.mtm
+      .box-top.pam
+        Fréquence
+      .box-bottom.pam
+        %span= column_chart charts_sessions_dates_path
