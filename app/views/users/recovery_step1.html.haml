@@ -6,8 +6,12 @@
       .box-bottom.pam
         %p Si tu as accès à ton adresse @gadz.org où à l'email que tu as renseigné sur le site de la SOCE, nous pouvons t'envoyer un email de récupération.
         %p
-          =link_to recovery_step2_path(:token_session => @session_token), :method=> :post, title: "Envoie-moi un mail", :class => "bouton bouton_bleu" do
+          =link_to recovery_step2_path(:token_session => @session_token), :method=> :post, title: "Envoie-moi un mail", :class => "bouton bouton_bleu", :id => "button_loading" do
             Envoie-moi un mail
+
+          %span#loading
+            =image_tag "Preloader_3.gif"
+            Envoi en cours...
 
         -if @have_phone
           %p.mtm 

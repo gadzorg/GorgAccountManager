@@ -5,7 +5,12 @@ class ChartsController < ApplicationController
   end
 
   def sessions_dates
-    s_d = Recoverysession.all.map { |e|  e.created_at.to_date}.each_with_object(Hash.new(0)) { |tt,counts| counts[tt] += 1 }.sort_by{|tt,count| count}
+    s_d = Recoverysession.all.map { |e|  e.created_at.to_date}.each_with_object(Hash.new(0)) { |tt,counts| counts[tt] += 1 }
+    render :json => s_d
+  end
+
+  def used_link
+    s_d = Recoverysession.all.map { |e|  [e.created_at.to_date]}.each_with_object(Hash.new(0)) { |tt,counts| counts[tt] += 1 }
     render :json => s_d
   end
 end

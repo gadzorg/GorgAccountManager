@@ -21,6 +21,7 @@ Rails.application.routes.draw do
 
   get 'charts_term_type' => 'charts#term_type'
   get 'charts_sessions_dates' => 'charts#sessions_dates'
+  get 'charts_used_link' => 'charts#used_link'
 
   get 'admin/stats' => "admin#stats"
   get 'admin/searches' => "admin#searches"

@@ -24,3 +24,18 @@ UnobtrusiveFlash.flashOptions['timeout'] = 5000; // milliseconds
 $(function(){
   $("a[rel='tooltip']").tooltip();
 })
+
+$(document).ready(function () {
+    var loadingmessage = $('#loading');
+    var button = $('#button_loading');
+
+    loadingmessage.hide();
+
+    button.click( function()
+           {
+             loadingmessage.show();
+             button.hide();
+           }
+    );
+    
+});

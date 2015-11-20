@@ -364,7 +364,6 @@ class UsersController < ApplicationController
 		# on recupère l'hruid à partir du token de session
 		session = Recoverysession.find_by(token: @session_token)
 		@hruid = session.hruid
-		@session_token = session_token
 
 		#on recupere l'utilisateur dans le site soce
 		soce_user = Usersoce.where(hruid: @hruid).take

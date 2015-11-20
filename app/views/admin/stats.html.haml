@@ -45,6 +45,12 @@
                 %td=t[1]
     .box.shadow-1.mtm
       .box-top.pam
-        Fréquence
+        Fréquence sessions
       .box-bottom.pam
-        %span= column_chart charts_sessions_dates_path
+        %span= column_chart charts_sessions_dates_path, stacked: true
+
+    / .box.shadow-1.mtm
+    /   .box-top.pam
+    /     Fréquence liens recup
+    /   .box-bottom.pam
+    /     %span= column_chart charts_used_link_path, stacked: true
