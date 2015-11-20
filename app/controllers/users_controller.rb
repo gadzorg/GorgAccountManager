@@ -205,10 +205,10 @@ class UsersController < ApplicationController
 		# TODO mettres des if not nil
 		#emails du gram
 		@list_emails = Array.new
-		@list_emails.push(user_from_gram.mail_forwarding)
+		@list_emails.push(user_from_gram.mail_forwarding) unless user_from_gram.mail_forwarding.nil?
 		#@list_emails.push(user_from_gram.mail_alias)
-		@list_emails.push(user_from_gram.email)
-		@list_emails.push(user_from_gram.email_forge)
+		@list_emails.push(user_from_gram.email) unless user_from_gram.email.nil?
+		@list_emails.push(user_from_gram.email_forge) unless user_from_gram.email_forge.nil?
 		#email du site soce
 		@list_emails.push(soce_user.emails_valides) unless soce_user.nil?
 
