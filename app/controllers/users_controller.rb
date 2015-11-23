@@ -82,14 +82,19 @@ class UsersController < ApplicationController
 
   def recovery
   	@user = User.new
-		re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
-
-		if !re_try.nil? || re_try == true 
-			@first_attempt = false
-		else
-			@first_attempt = true
-		end	 		
-		render :layout => 'recovery'
+	re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
+	help = params[:help]
+	if !re_try.nil? || re_try == true 
+		@first_attempt = false
+	else
+		@first_attempt = true
+	end
+	if help.nil? || help == false
+		@help = false
+	else
+		@help = true
+	end	 		
+	render :layout => 'recovery'
 	end
 
 	def create_recovery_session
@@ -138,7 +143,7 @@ class UsersController < ApplicationController
 
 					end
 				else
-					format.html { redirect_to recovery_path, notice: "Nous n'acceptons pas les robots ici!"}
+					format.html { redirect_to recovery_path(help: true), notice: 'As-tu bien coché la case "je ne suis pas un rotot?"'}
 
 				end
 
