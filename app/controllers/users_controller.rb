@@ -210,7 +210,10 @@ class UsersController < ApplicationController
 		# TODO mettres des if not nil
 		#emails du gram
 		@list_emails = Array.new
-		@list_emails.push(user_from_gram.mail_forwarding) unless user_from_gram.mail_forwarding.nil?
+		begin # oui parce que si il n'y en a pas on peut pas tester avec nil?
+			@list_emails.push(user_from_gram.mail_forwarding)
+		rescue #NoMethodError
+		end
 		#@list_emails.push(user_from_gram.mail_alias)
 		@list_emails.push(user_from_gram.email) unless user_from_gram.email.nil?
 		@list_emails.push(user_from_gram.email_forge) unless user_from_gram.email_forge.nil?
