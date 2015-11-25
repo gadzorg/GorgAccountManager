@@ -25,6 +25,7 @@ Rails.application.routes.draw do
 
   get 'admin/stats' => "admin#stats"
   get 'admin/searches' => "admin#searches"
+  get 'admin/recovery_sessions' => "admin#recovery_sessions"
   resources :users do
     get "dashboard"
   end

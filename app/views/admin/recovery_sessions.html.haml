@@ -1,0 +1,16 @@
+%section.pam
+  %h1 Recovery sessions
+
+  .w100
+    .box.shadow-1.mtm
+      .box-bottom.pam
+        %table.alternate
+          %thead
+
+            -@sessions.each do |t|
+              %tr
+                %td
+                  =link_to t.hruid, admin_info_user_path(:hruid => t.hruid) unless t.hruid.nil?
+                %td=t.used
+                %td=t.sms_count
+                %td=t.created_at

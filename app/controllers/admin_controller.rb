@@ -27,4 +27,9 @@ class AdminController < ApplicationController
 	@user_from_platal = Userplatal.where(hruid: hruid).take
 
   end
+
+  def recovery_sessions
+  	authorize! :read, :admin
+  	@sessions = Recoverysession.all
+  end
 end

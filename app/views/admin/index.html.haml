@@ -26,3 +26,8 @@
         %i.zmdi.zmdi-chart
         %div.small-inbl
           Termes de recherches
+    - if can? :manage, :admin
+      =link_to admin_recovery_sessions_path, class:'box shadow-1 mtm bouton bouton-light'  do
+        %i.zmdi.zmdi-chart
+        %div.small-inbl
+          Termes de recherches
