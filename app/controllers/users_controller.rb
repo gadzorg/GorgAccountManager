@@ -168,6 +168,9 @@ class UsersController < ApplicationController
 	def recovery_step1
 		@session_token = params[:token_session]
 		session = Recoverysession.find_by(token: @session_token)
+		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
+		hruid = session.hruid
+		user_from_gram = GramAccount.find(hruid)
 
 		if !session.nil? && session.usable?
 			#on recupere l'utilisateur dans le site soce
@@ -181,6 +184,12 @@ class UsersController < ApplicationController
 			else
 				@have_phone = false
 			end
+
+		
+		list_emails = get_emails(user_from_gram,soce_user)
+		@list_emails_to_display = list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
+
+
 
 
 			render :layout => 'recovery'
@@ -209,24 +218,8 @@ class UsersController < ApplicationController
 
 		# TODO mettres des if not nil
 		#emails du gram
-		@list_emails = Array.new
-		begin # oui parce que si il n'y en a pas on peut pas tester avec nil?
-			@list_emails.push(user_from_gram.mail_forwarding)
-		rescue #NoMethodError
-		end
-		#@list_emails.push(user_from_gram.mail_alias)
-		@list_emails.push(user_from_gram.email) unless user_from_gram.email.nil?
-		@list_emails.push(user_from_gram.email_forge) unless user_from_gram.email_forge.nil?
-		#email du site soce
-		@list_emails.push(soce_user.emails_valides) unless soce_user.nil?
-
-		@list_emails = @list_emails.flatten.uniq
 		
-		# on supprime les adresses en gadz.org pour éviter d'avoir des doublons
-		# je l'ai commenté parce que les emails du gram ne sont pas forcement à jour
-		#@list_emails = @list_emails.drop_while{|e| /gadz.org/.match(e)}
-
-		#@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"*")[1..c.length-3]+c[c.length-2..c.length-1]}
+		@list_emails = get_emails(user_from_gram,soce_user)
 		@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
 
 
@@ -497,6 +490,27 @@ class UsersController < ApplicationController
 	    		"\nDate de naissance: " + birthdate +
 	    		"\nTéléphone: " + phone +
 	    		"\n\n" + desc )
+	    end
+
+	    def get_emails(user_from_gram,soce_user)
+		    list_emails = Array.new
+			begin # oui parce que si il n'y en a pas on peut pas tester avec nil?
+				list_emails.push(user_from_gram.mail_forwarding)
+			rescue #NoMethodError
+			end
+			#@list_emails.push(user_from_gram.mail_alias)
+			list_emails.push(user_from_gram.email) unless user_from_gram.email.nil?
+			list_emails.push(user_from_gram.email_forge) unless user_from_gram.email_forge.nil?
+			#email du site soce
+			list_emails.push(soce_user.emails_valides) unless soce_user.nil?
+
+			list_emails = list_emails.flatten.uniq
+			
+			# on supprime les adresses en gadz.org pour éviter d'avoir des doublons
+			# je l'ai commenté parce que les emails du gram ne sont pas forcement à jour
+			@list_emails = @list_emails.drop_while{|e| /gadz.org/.match(e)}
+
+			#@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"*")[1..c.length-3]+c[c.length-2..c.length-1]}
 	    end
 
     # Never trust parameters from the scary internet, only allow the white list through.
