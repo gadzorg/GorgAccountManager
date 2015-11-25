@@ -18,4 +18,13 @@ class AdminController < ApplicationController
   	authorize! :read, :admin
   	@searches = Search.all
   end
+
+  def info_user
+  	authorize! :read, :admin
+  	hruid = params[:hruid]
+  	@user_from_gram = GramAccount.find(hruid)
+	@user_from_soce = Usersoce.where(hruid: hruid).take
+	@user_from_platal = Userplatal.where(hruid: hruid).take
+
+  end
 end

@@ -29,6 +29,8 @@ Rails.application.routes.draw do
     get "dashboard"
   end
 
+  get 'info_user/:hruid', to: "admin#info_user", as: :admin_info_user, :constraints => {:hruid => /[^\/]+/}
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
