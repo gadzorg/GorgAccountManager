@@ -494,15 +494,13 @@ class UsersController < ApplicationController
 
 	    def get_emails(user_from_gram,soce_user)
 		    list_emails = Array.new
-			begin # oui parce que si il n'y en a pas on peut pas tester avec nil?
-				list_emails.push(user_from_gram.mail_forwarding)
-			rescue #NoMethodError
-			end
+			list_emails.push(user_from_gram.mail_forwarding) if user_from_gram.respond_to?(:mail_forwarding)
+
 			#@list_emails.push(user_from_gram.mail_alias)
-			list_emails.push(user_from_gram.email) unless user_from_gram.email.nil?
-			list_emails.push(user_from_gram.email_forge) unless user_from_gram.email_forge.nil?
+			list_emails.push(user_from_gram.email) if user_from_gram.email.present? && user_from_gram.respond_to?(:email)
+			list_emails.push(user_from_gram.email_forge) if user_from_gram.email_forge.present? && user_from_gram.respond_to?(:email_forge)
 			#email du site soce
-			list_emails.push(soce_user.emails_valides) unless soce_user.nil?
+			list_emails.push(soce_user.emails_valides) unless soce_user.blank?
 
 			list_emails = list_emails.flatten.uniq
 			
