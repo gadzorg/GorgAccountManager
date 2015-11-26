@@ -11,6 +11,6 @@
               %tr
                 %td
                   =link_to t.hruid, admin_info_user_path(:hruid => t.hruid) unless t.hruid.nil?
-                %td=t.used
+                %td=t.used.to_s
                 %td=t.sms_count
                 %td=t.created_at
