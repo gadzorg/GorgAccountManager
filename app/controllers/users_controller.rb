@@ -178,7 +178,7 @@ class UsersController < ApplicationController
 
 			# cherche le numéro de téléhpone sur le site soce
 			!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
-			if !phone.nil?
+			if phone.present?
 				@phone_hidden = hide_phone(phone)
 				@have_phone = true
 			else
