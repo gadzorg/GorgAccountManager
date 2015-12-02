@@ -289,6 +289,10 @@ class UsersController < ApplicationController
 		end
 	end
 
+	def recovery_inscription
+					@user = User.new
+	end
+
 	def create_sms
 		session_token = params[:token_session]
 		# on recupère l'hruid à partir du token de session
