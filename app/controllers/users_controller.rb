@@ -216,6 +216,14 @@ class UsersController < ApplicationController
 		#on recupere l'utilisateur dans le site soce
 		soce_user = Usersoce.where(hruid: @hruid).take
 
+		!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
+		if phone.present?
+			@phone_hidden = hide_phone(phone)
+			!@phone_hidden == false ? @have_phone = true : @have_phone = false
+		else
+			@have_phone = false
+		end
+
 		# TODO mettres des if not nil
 		#emails du gram
 		
