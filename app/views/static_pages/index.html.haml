@@ -1,17 +1,34 @@
-%section.pam
-  %h1 Titre
+
+.center.mw1140p
+  %section.pam
+    %h1.txtcenter Gère et contrôle ton compte AgorAM depuis un même endroit
+    / %h3.txtcentersmall Modifie ton mot de passe,
 
 
-  .grid-2-small-1
-    .box.shadow-1.mtm
-      .box-top.pam
-        Box 1
-      .box-bottom.pam
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    .grid-2-small-1
+      .box.shadow-1.mtm
+        .box-top.pam
+          %span
+            %i.zmdi.zmdi-lock-outline
+            Connexion et sécurité
+        .box-bottom.pam
+          %p
+            = link_to recovery_path(), title: "Récupère ton mot de passe" do
+              Récupèrer mon mot de passe
+          %p Changer mon mot de passe (bientôt disponible)
+          %p Mes options de récupérations (bientôt disponible)
 
 
-    .box.shadow-1.mtm
-      .box-top.pam
-        Box 2
-      .box-bottom.pam
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+
+      .box.shadow-1.mtm
+        .box-top.pam
+          %span
+            %i.zmdi.zmdi-info-outline
+            Site en bêta
+        .box-bottom.pam
+          %p 
+            nomcompte.gadz.org est encore 
+            %b en cours de développement 
+            et est régilièrement mis à jour.
+          %p Si tu veux nous faire part de bug ou de remarques, tu peux envoyer un mail à support@gadz.org .
