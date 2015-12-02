@@ -30,3 +30,8 @@
           /     = submit_tag 'Vérifier',:class => "bouton bouton_bleu"
         -else
           %p Nous n'avons pas trouvé ton compte Soce ou alors tu n'as pas renseigné de numéro de téléhpone portable, nous ne pouvons donc pas te proposer de récupérer ton compte par SMS.
+
+        %p.small.mtm
+          Si tu n'as plus accès à ces adresses email ou à ce numéro de téléphone, tu peux 
+          = link_to recovery_support_path(), title: "contacter le support" do
+            contacter le support.
