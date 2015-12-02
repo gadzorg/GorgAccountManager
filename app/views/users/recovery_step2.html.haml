@@ -14,5 +14,9 @@
           Tu n'as pas reçu de mail de récupération? Un délai de 15 minutes peut être nécessaire. Si tu as attendu plus de 15 minutes, nous pouvons t'envoyer un SMS de récupération au #{@phone_hidden}. 
           = link_to create_sms_path(:token_session => @session_token) , :method=> :post, title: "Envoie-moi un sms" do
             Envoie-moi un sms
+        %p.small
+          Si tu ne reçois rien par SMS ou par email tu peux
+          = link_to recovery_support_path(), title: "contacter le support" do
+            contacter le support.
 
 

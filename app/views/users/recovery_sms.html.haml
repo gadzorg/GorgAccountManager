@@ -20,4 +20,8 @@
           Rien reçu sur ton numéro après quelques minutes? Tu peux rééssayer à nouveau
           = link_to create_sms_path(:token_session => @session_token) , :method=> :post, title: "Envoie-moi un sms" do
             Envoie-moi un sms
+        %p.small
+          Si tu ne reçois rien par SMS ou par email tu peux
+          = link_to recovery_support_path(), title: "contacter le support" do
+            contacter le support.
         
