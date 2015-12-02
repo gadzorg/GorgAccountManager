@@ -5,9 +5,9 @@
       GrAM
     .box-bottom.pam
       %p=@user_from_gram.hruid
-      %p=@user_from_gram.firstname
-      %p=@user_from_gram.lastname
-      %p=@user_from_gram.id_soce
+      %p=@user_from_gram.firstname if @user_from_gram.respond_to?(:firstname)
+      %p=@user_from_gram.lastname if @user_from_gram.respond_to?(:lastname)
+      %p=@user_from_gram.id_soce if @user_from_gram.respond_to?(:id_soce)
       %p=@user_from_gram.enable
       %p=@user_from_gram.id
       %p=@user_from_gram.uid_number
@@ -20,9 +20,9 @@
         =m
       %p=@user_from_gram.email
       %p=@user_from_gram.email_forge
-      %p=@user_from_gram.birthdate
+      %p=@user_from_gram.birthdate if @user_from_gram.respond_to?(:birthdate)
       %p=@user_from_gram.login_validation_check
-      %p=@user_from_gram.description
+      %p=@user_from_gram.description if @user_from_gram.respond_to?(:description)
       -@user_from_gram.entities.each do |e|
         =e
       %p=@user_from_gram.entite

@@ -180,7 +180,7 @@ class UsersController < ApplicationController
 			!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
 			if phone.present?
 				@phone_hidden = hide_phone(phone)
-				@have_phone = true
+				!@phone_hidden == false ? @have_phone = true : @have_phone = false
 			else
 				@have_phone = false
 			end
@@ -464,12 +464,15 @@ class UsersController < ApplicationController
 	    		internat_phone = "0033"+phone.gsub(".","").split(//).join[1..9] 
 	    	elsif phone.length > 15 # pour les numeros de tel étranger 0033.123.456.789 avec la possibilité d'avoir un indicatif à 3 chiffres et des point tous les 2 chiffre
 	    		internat_phone = phone.gsub(".","")
+	    	else
+	    		return false 
 	    	end
 	    	return internat_phone
 	    end
 
 	    def hide_phone(phone)
 	    	internat_phone = phone_parse(phone)
+	    	return false if internat_phone == false #on quite la fonction si le numéro de télephone n'est pas reconnu ou parsable
 	    	hiden_phone = "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
 	    end
 
