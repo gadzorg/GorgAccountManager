@@ -160,6 +160,15 @@ a:focus {
 .bg-blue-dark-1 { background-color: #01B0C0; color: #fff;}
 .bg-blue-light-1 { background-color: #63D4DE; color: #fff;}
 
+.bg-grey-light-1 {background-color: #F7F7F7}
+
+.bg-blue a, 
+.bg-blue-dark-2 a, 
+.bg-blue-dark-1 a,
+.bg-blue-light-1 a{
+    color: #FFF;
+}
+
 @font-face {
     font-family: 'bebas_neueregular';
     src: font-url('bebas/bebasneue-webfont.eot');
@@ -286,6 +295,15 @@ input, select,textarea {
   color: #14BFCC;
   background: #f9f9f9;
   padding-left: 5px;
+}
+
+input.login {
+    background-color: #fff;
+    /*border: solid 1px #14BFCC;*/
+    border: 1px solid #D3D3D3;
+    /*box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.08);*/
+    border-radius: 2px;
+
 }
 
 input:invalid{

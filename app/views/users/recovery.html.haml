@@ -15,7 +15,7 @@
           %p Tu peux essayer à nouveau:
         .mtm 
           =form_for  [@user], :url=> create_recovery_session_path()  do |f|
-            =f.text_field :hruid, :placeholder => "Entre ici ton identifiant OU email OU n° de sociétaire,...", :class => "w100", :autofocus => true
+            =f.text_field :hruid, :placeholder => "Entre ici ton identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
             -if @help == true
               %p.small.red Peux-tu cocher la case ci-dessous? C'est une mesure de sécurité pour éviter les abus sur ce site. Merci!
             .w100.ptm.pbm=recaptcha_tags
@@ -28,7 +28,7 @@
         %p.small Ton identifiant est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
 
       -unless @first_attempt
-        .box-bottom.border-top
+        .box-bottom.border-top.bg-blue-dark-2
           .pam
             %p 
               Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux 
