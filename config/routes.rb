@@ -17,7 +17,9 @@ Rails.application.routes.draw do
   get 'recovery_support' => "users#recovery_support"
   post 'recovery_support_final' => "users#recovery_support_final"
   get 'recovery_sms' => "users#recovery_sms"
+  
   #get 'recovery_inscription/:token', to: "users#recovery_inscription", as: :user_recovery_inscription
+  #post 'password_change_inscription/:token', to: "users#password_change_inscription", as: :password_change_inscription
 
 
   get 'charts_term_type' => 'charts#term_type'

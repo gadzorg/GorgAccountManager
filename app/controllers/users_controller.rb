@@ -301,6 +301,60 @@ class UsersController < ApplicationController
 					@user = User.new
 	end
 
+	def password_change_inscription
+		token = params[:token]
+		password = params[:password]
+		password_confirmation = params[:password_confirmation]
+		prenom = params[:prenom]
+		nom = params[:nom]
+		bucque = params[:bucque]
+		fams = params[:fams]
+		promo = params[:promo]
+		email = params[:email]
+
+		recovery_link = Uniqlink.find_by(token: token)
+		if recovery_link.usable?
+			respond_to do |format|
+
+				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
+				if params[:user][:password] != params[:user][:password_confirmation] 
+					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
+				else
+
+					@hruid = recovery_link.hruid
+					user_from_gram = GramAccount.find(@hruid)
+
+					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
+					user_from_gram.password = passwd_hash
+
+					#mise à jour du compte SOCE
+					soce_user.nom = nom
+					soce_user.prenom = prenom
+					soce_user.famille = fams
+					# = bucque
+					# = promo
+					# = email
+
+
+
+					if user_from_gram.save
+		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
+		        	  recovery_link.set_used
+		        	  format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+
+		        	else
+		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+
+		        	end
+		        end
+		    end
+		else
+			respond_to do |format|
+				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
+			end
+		end
+	end
+
 	def create_sms
 		session_token = params[:token_session]
 		# on recupère l'hruid à partir du token de session
@@ -433,10 +487,10 @@ class UsersController < ApplicationController
 	    end
 
 	    def gen_uniq_link(hruid)
-	    	recovery_link = Uniqlink.new
-	    	recovery_link.generate_token
-	    	recovery_link.hruid = hruid
-	    	recovery_link.used = false
+			recovery_link = Uniqlink.new
+			recovery_link.generate_token
+			recovery_link.hruid = hruid
+			recovery_link.used = false
 			recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
 			recovery_link.save
 			return recovery_link

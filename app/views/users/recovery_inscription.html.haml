@@ -5,17 +5,20 @@
         Mets donc à jour tes informations!
       .box-bottom.pam
         
-        = form_tag(recovery_support_final_path(), :method => :post) do
+        = form_tag(password_change_inscription_path(), :method => :post) do
           =password_field_tag :password,"" , :placeholder => "Nouveau mot de passe", :size => 30, :autofocus => true
           %p Utilise au moins 8 caractères. Ne choisis pas un mot de passe que tu utilises déjà sur un autre site, ni un mot de passe trop évident.
           =password_field_tag :password_confirmation,"", :placeholder => "Confirme le mot de passe", :size => 30
-          = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 30
-          = text_field_tag :nom,"", :placeholder => "Nom", :size => 30
-          = text_field_tag :bucque,"", :placeholder => "Bucque", :size => 30
-          = text_field_tag :fams,"", :placeholder => "Fam's", :size => 30
-          = text_field_tag :promo,"", :placeholder => "Promo", :size => 30
-          = text_field_tag :email,"", :placeholder => "Email", :size => 30
+          %p
+            = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 30
+            = text_field_tag :nom,"", :placeholder => "Nom", :size => 30
+          %p
+            = text_field_tag :bucque,"", :placeholder => "Bucque", :size => 30
+            = text_field_tag :fams,"", :placeholder => "Fam's", :size => 30
+            = text_field_tag :promo,"", :placeholder => "Promo", :size => 30
+          %p
+            = text_field_tag :email,"", :placeholder => "Email", :size => 30
           %p#confirmMessageOK 
           %p#confirmMessageNOK.red.small Les mots de passe ne correspondent pas!
           %p#confirmMessageNOKSHORT.red.small C'est un peu court comme mot de passe non?
-          =submit_tag 'Change mon mot de passe!',:class => "bouton bouton_bleu mtm"
+          =submit_tag 'Ok tout est bon!',:class => "bouton bouton_bleu mtm"
