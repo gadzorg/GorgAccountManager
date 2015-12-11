@@ -562,7 +562,7 @@ class UsersController < ApplicationController
 	    end
 
 	    def get_emails(user_from_gram,soce_user)
-		    list_emails = Array.new
+			list_emails = Array.new
 			list_emails.push(user_from_gram.mail_forwarding) if user_from_gram.respond_to?(:mail_forwarding)
 
 			#@list_emails.push(user_from_gram.mail_alias)
@@ -572,7 +572,8 @@ class UsersController < ApplicationController
 			list_emails.push(soce_user.emails_valides) unless soce_user.blank?
 
 			list_emails = list_emails.flatten.uniq
-			
+			list_emails = list_emails.reject(&:blank?) #on supprime les emails vides
+
 			# on supprime les adresses en gadz.org pour éviter d'avoir des doublons
 			# je l'ai commenté parce que les emails du gram ne sont pas forcement à jour
 			# @list_emails = @list_emails.drop_while{|e| /gadz.org/.match(e)}
