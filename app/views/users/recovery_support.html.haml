@@ -17,6 +17,6 @@
             = text_field_tag :telephone,"", :placeholder => "Téléphone", :size => 33
             -#= text_field_tag :ddn,"", :placeholder => "Date de naissance", :size => 30
             =label_tag "Date de naissance"
-            = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn'}, html_options = {})
+            = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
             = text_area_tag :issue,"", :placeholder => "Déscription du problème", :cols => 32
             %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"
