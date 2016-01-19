@@ -17,6 +17,10 @@
  */
 
 
+$violet-dark: #8E2862 ;
+$violet: #A62F73 ;
+$violet-light: #C23687;
+
 
  /*-----------------------------MENU-------------------------*/
  nav {
@@ -26,7 +30,7 @@
 }
 .menu {
     float: right;
-    margin-right: 45px;
+    /*margin-right: 45px;*/
 }
 .menu ul{list-style: outside none none;
     margin: 0px;
@@ -68,13 +72,15 @@
 #logo{
     display: inline;
     height: 50px;
+    width: 210px;
 }
 #logo2{
     display: block;
     height: 50px;
 }
 body {
-    background: #EEE none repeat scroll 0% 0%;
+    /*background: #EEE none repeat scroll 0% 0%;*/
+    background: #f7f7f7;
     padding: 0px;
     margin: 0px;
 }
@@ -84,7 +90,7 @@ body {
 
 section{/*background: #fff;*/}
 .int {
-    max-width: 1170px;
+    max-width: 1140px;
     margin: 0px auto;
 
 }
@@ -225,12 +231,27 @@ a:focus {
     background-size: cover;
 }
 /*-----------------------------redirections-------------------------*/
+.container-grey{
+    background: #f7f7f7;
+}
+.container-grey:before{
+    content: '';
+    float: left;
+    /*height: 100%;*/
+}
+.container-grey:after{
+    content: '';
+    clear: both;
+    display: block;
+}
 
 .box{
-     background: #fff;
      border-radius: 2px;
      overflow: hidden;
  }
+
+.box-grey{background: #f7f7f7;}
+.box-light{background: #fff;}
 
 .shadow-1{box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.16), 0px 2px 10px 0px rgba(0, 0, 0, 0.12);}
 .shadow-2{box-shadow: 0px 8px 17px 0px rgba(0, 0, 0, 0.2), 0px 6px 20px 0px rgba(0, 0, 0, 0.19);}
@@ -244,12 +265,20 @@ a:focus {
  .box-top{
     /*font-weight: bold;*/
     font-size: 150%;
-    color: #fff;
+
     /*background: #F49700;*/
-    background: #14BFCC;
+    
  }
+
+ .box-top-color{background: #14BFCC;     color: #fff;}
+ .box-top-light{
+    background: #FFF;
+    color: #4c4c4c;
+    border-bottom: 1px solid #E0E0E0;
+}
+.box-top-light i{color: $violet;}
  .box-bottom{
-    /*background: #eee;*/
+
 }
 
  #big-arrow{
@@ -277,7 +306,7 @@ li{
   transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
 }
 /*-----------------------------inputs-------------------------*/
-
+label {display: inline;}
 input, select,textarea {
   /*margin: 40px 25px;*/
   /*width: 200px;*/
