@@ -21,13 +21,15 @@
         %i.zmdi.zmdi-chart
         %div.small-inbl
           Stats
-    - if can? :manage, :admin
       =link_to admin_searches_path, class:'box shadow-1 mtm bouton bouton-light'  do
         %i.zmdi.zmdi-chart
         %div.small-inbl
           Termes de recherches
-    - if can? :manage, :admin
       =link_to admin_recovery_sessions_path, class:'box shadow-1 mtm bouton bouton-light'  do
         %i.zmdi.zmdi-chart
         %div.small-inbl
           Sessions
+      =link_to admin_inscriptions_path, class:'box shadow-1 mtm bouton bouton-light'  do
+        %i.zmdi.zmdi-chart
+        %div.small-inbl
+          Inscriptions
