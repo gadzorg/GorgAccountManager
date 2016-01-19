@@ -1,24 +1,51 @@
 %section.pam
-  .w500p.center
-    .box.shadow-1.mtm
+  .mw500p.center
+    .box.box-light.shadow-1.mtm
       .box-top.pam
         Mets donc à jour tes informations!
-      .box-bottom.pam
+      .box-bottom.box-top-color.pam
         
         = form_tag(password_change_inscription_path(), :method => :post) do
-          =password_field_tag :password,"" , :placeholder => "Nouveau mot de passe", :size => 30, :autofocus => true
-          %p Utilise au moins 8 caractères. Ne choisis pas un mot de passe que tu utilises déjà sur un autre site, ni un mot de passe trop évident.
-          =password_field_tag :password_confirmation,"", :placeholder => "Confirme le mot de passe", :size => 30
+          %h2 À propos de toi
           %p
-            = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 30
-            = text_field_tag :nom,"", :placeholder => "Nom", :size => 30
+            = text_field_tag :prenom,@user_soce.prenom, :placeholder => "Prénom", :size => 30, :autofocus => true
+            = text_field_tag :nom,@user_soce.nom, :placeholder => "Nom", :size => 30
           %p
-            = text_field_tag :bucque,"", :placeholder => "Bucque", :size => 30
-            = text_field_tag :fams,"", :placeholder => "Fam's", :size => 30
-            = text_field_tag :promo,"", :placeholder => "Promo", :size => 30
+            = text_field_tag :bucque,@user_soce.surnom, :placeholder => "Bucque", :size => 30
+            = text_field_tag :fams,@user_soce.famille1, :placeholder => "Fam's", :size => 30
+            = text_field_tag :promo,@user_soce.promo1, :placeholder => "Promo", :size => 30
           %p
-            = text_field_tag :email,"", :placeholder => "Email", :size => 30
+            = text_field_tag :email,@user_soce.email, :placeholder => "Email", :size => 30
+            .small Vérifie bien ton email, c'est celui qui sera utilisé pour activer ton compte.
+          %p
+            = text_field_tag :telphone,@user_soce.tel_mobile, :placeholder => "Portable", :size => 30
+            .small En cas de problème avec ton email, c'est le seul moyen que tu auras pour récupérer ton compte.
+          %h2 Sécurité
+          %p
+            =password_field_tag :user_password,"" , :placeholder => "Nouveau mot de passe", :size => 30
+          %p
+            Utilise au moins 8 caractères. Ne choisis pas un mot de passe que tu utilises déjà sur un autre site, ni un mot de passe trop évident.
+          %p
+            =password_field_tag :user_password_confirmation,"", :placeholder => "Confirme le mot de passe", :size => 30
           %p#confirmMessageOK 
           %p#confirmMessageNOK.red.small Les mots de passe ne correspondent pas!
           %p#confirmMessageNOKSHORT.red.small C'est un peu court comme mot de passe non?
+
+          %h2 Compte Google
+          %p 
+            Nous te proposons de te créer un compte 
+            %b Gadzmel.
+            C'est un compte 
+            %b Google Apps 
+            lié à ton compte Agoram/Gadz.org/Soce. Il te permetra d'accéder à des services supplémentaire comme des comptes Google Drive de prom's et t'offrira une boite mail unique pour communiquer avec tous les gadzarts.
+
+          .mtm
+            =check_box_tag :gapps, false
+            =label_tag :gapps,"Non, je ne veux pas de compte Gadzmel et je préfère avoir un système de mail plus lent et je ne veux pas accèder aux services supplementaires qui me seront offerts"
+          %h2 Allez, on y est presque...
+          %p Là c'est le moment où on te demande de lire les CGU. C'est clairement moins long que les 40 pages des CGU d'iTunes et tu pourras dire que tu as lu des CGU au moins une fois dans ta vie.
+          .mtm
+            =check_box_tag :cgu_gorg, true
+            =label_tag :cgu_gorg,"Oui j'ai tout lu, c'est promis et j'accepte"
+
           =submit_tag 'Ok tout est bon!',:class => "bouton bouton_bleu mtm"

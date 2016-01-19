@@ -298,46 +298,65 @@ class UsersController < ApplicationController
 	end
 
 	def recovery_inscription
-					@user = User.new
+		@user = User.new
+		token = params[:token]
+		recovery_link = Uniqlink.find_by(token: token)
+		if recovery_link.usable?
+			respond_to do |format|
+				@hruid = recovery_link.hruid
+				@user_soce = Usersoce.where(hruid: @hruid).take
+				format.html
+
+			end
+		end
 	end
 
 	def password_change_inscription
 		token = params[:token]
-		password = params[:password]
-		password_confirmation = params[:password_confirmation]
+		password = params[:user_password]
+		password_confirmation = params[:user_password_confirmation]
 		prenom = params[:prenom]
 		nom = params[:nom]
 		bucque = params[:bucque]
 		fams = params[:fams]
 		promo = params[:promo]
 		email = params[:email]
+		cgu_gorg = params[:cgu_gorg] ? true : false
+		gapps = !params[:gapps] ? true : false #true si gapps = nil false si gapps = false
 
 		recovery_link = Uniqlink.find_by(token: token)
 		if recovery_link.usable?
 			respond_to do |format|
 
 				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
-				if params[:user][:password] != params[:user][:password_confirmation] 
-					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
+				if password != password_confirmation 
+					format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
 				else
 
 					@hruid = recovery_link.hruid
 					user_from_gram = GramAccount.find(@hruid)
 
-					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
+					passwd_hash = Digest::SHA1.hexdigest password_confirmation
 					user_from_gram.password = passwd_hash
 
 					#mise à jour du compte SOCE
 					soce_user.nom = nom
 					soce_user.prenom = prenom
-					soce_user.famille = fams
-					# = bucque
-					# = promo
-					# = email
+					soce_user.famille1 = fams
+					soce_user.surnom = bucque
+					soce_user.promo1 = promo
+					soce_user.email = email
 
-
-
-					if user_from_gram.save
+					# activer CGU à l'inscription
+					if cgu_gorg
+						#valider les cgu dans GrAM
+					end
+					# action si google apps coché
+					if gapps
+						# créer le gapps
+					end
+					
+					if user_from_gram.save # & soce_user.save
 		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
 		        	  recovery_link.set_used
 		        	  format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }

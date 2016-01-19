@@ -20,11 +20,17 @@ class Uniqlink < ActiveRecord::Base
 	end
 
 	def usable?
-		if !self.used? && self.expire_date >= DateTime.now
+		if !self.used? && self.expire_date >= DateTime.now || !self.used? && self.inscription = true
 			return true
 		else
 			return false
 		end
+	end
+
+	def new_inscription_link(hruid, email)
+		self.token = self.generate_token
+		self.inscription = true
+		self.email = email
 	end
 
 end

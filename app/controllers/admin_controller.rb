@@ -32,4 +32,12 @@ class AdminController < ApplicationController
   	authorize! :read, :admin
   	@sessions = Recoverysession.all
   end
+
+  def inscriptions
+    authorize! :read, :admin
+  end
+
+  def add_inscriptions
+    authorize! :read, :admin
+  end
 end

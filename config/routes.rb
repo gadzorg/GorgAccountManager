@@ -18,8 +18,8 @@ Rails.application.routes.draw do
   post 'recovery_support_final' => "users#recovery_support_final"
   get 'recovery_sms' => "users#recovery_sms"
   
-  #get 'recovery_inscription/:token', to: "users#recovery_inscription", as: :user_recovery_inscription
-  #post 'password_change_inscription/:token', to: "users#password_change_inscription", as: :password_change_inscription
+  get 'recovery_inscription/:token', to: "users#recovery_inscription", as: :user_recovery_inscription
+  post 'password_change_inscription/:token', to: "users#password_change_inscription", as: :password_change_inscription
 
 
   get 'charts_term_type' => 'charts#term_type'
@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   get 'charts_used_link' => 'charts#used_link'
 
   get 'admin/stats' => "admin#stats"
+  get 'admin/inscriptions' => "admin#inscriptions"
+  post 'admin/inscriptions' => "admin#add_inscriptions"
   get 'admin/searches' => "admin#searches"
   get 'admin/recovery_sessions' => "admin#recovery_sessions"
   resources :users do
