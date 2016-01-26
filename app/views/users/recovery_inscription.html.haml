@@ -11,12 +11,18 @@
             = text_field_tag :prenom,@user_soce.prenom, :placeholder => "Prénom", :size => 30, :autofocus => true
             = text_field_tag :nom,@user_soce.nom, :placeholder => "Nom", :size => 30
           %p
+            = select_date( date = @user_soce.date_naissance, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
+          %p
             = text_field_tag :bucque,@user_soce.surnom, :placeholder => "Bucque", :size => 30
             = text_field_tag :fams,@user_soce.famille1, :placeholder => "Fam's", :size => 30
-            = text_field_tag :promo,@user_soce.promo1, :placeholder => "Promo", :size => 30
+            = text_field_tag :promo,@tbk[@user_soce.centre1 - 1], :placeholder => "tbk", :size => 30, :disabled => true
+            = text_field_tag :promo,@user_soce.promo1, :placeholder => "Promo", :size => 30, :disabled => true
           %p
             = text_field_tag :email,@user_soce.email, :placeholder => "Email", :size => 30
-            .small Vérifie bien ton email, c'est celui qui sera utilisé pour activer ton compte.
+            .small 
+              Vérifie bien ton email, c'est celui qui sera utilisé pour activer ton compte. Nous te conseillons de mettre ton 
+              %b adresse personelle 
+              plutôt que ton adresse @ensam.eu.
           %p
             = text_field_tag :telphone,@user_soce.tel_mobile, :placeholder => "Portable", :size => 30
             .small En cas de problème avec ton email, c'est le seul moyen que tu auras pour récupérer ton compte.
@@ -26,7 +32,7 @@
           %p
             Utilise au moins 8 caractères. Ne choisis pas un mot de passe que tu utilises déjà sur un autre site, ni un mot de passe trop évident.
           %p
-            =password_field_tag :user_password_confirmation,"", :placeholder => "Confirme le mot de passe", :size => 30
+            =password_field_tag :user_password_confirmation,"", :placeholder => "Confirme ton mot de passe", :size => 30
           %p#confirmMessageOK 
           %p#confirmMessageNOK.red.small Les mots de passe ne correspondent pas!
           %p#confirmMessageNOKSHORT.red.small C'est un peu court comme mot de passe non?

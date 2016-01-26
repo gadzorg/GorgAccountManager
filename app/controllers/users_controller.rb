@@ -298,6 +298,7 @@ class UsersController < ApplicationController
 	end
 
 	def recovery_inscription
+		@tbk = ["ch","an","kin","cl","li","pa","bo","ka","me" ]
 		@user = User.new
 		token = params[:token]
 		recovery_link = Uniqlink.find_by(token: token)
@@ -312,6 +313,8 @@ class UsersController < ApplicationController
 	end
 
 	def password_change_inscription
+		tbk = ["ch","an","kin","cl","li","pa","bo","ka","me" ]
+
 		token = params[:token]
 		password = params[:user_password]
 		password_confirmation = params[:user_password_confirmation]
@@ -323,8 +326,10 @@ class UsersController < ApplicationController
 		email = params[:email]
 		cgu_gorg = params[:cgu_gorg] ? true : false
 		gapps = !params[:gapps] ? true : false #true si gapps = nil false si gapps = false
+		date_naissance = Date.parse(params[:ddn][:year]+params[:ddn][:month].to_s.rjust(2, "0")+params[:ddn][:day].to_s.rjust(2, "0")).strftime("%Y-%m-%d")
 
 		recovery_link = Uniqlink.find_by(token: token)
+
 		if recovery_link.usable?
 			respond_to do |format|
 
@@ -335,34 +340,51 @@ class UsersController < ApplicationController
 
 					@hruid = recovery_link.hruid
 					user_from_gram = GramAccount.find(@hruid)
+					soce_user = Usersoce.where(hruid: @hruid).take
 
 					passwd_hash = Digest::SHA1.hexdigest password_confirmation
-					user_from_gram.password = passwd_hash
 
 					#mise à jour du compte SOCE
 					soce_user.nom = nom
 					soce_user.prenom = prenom
 					soce_user.famille1 = fams
 					soce_user.surnom = bucque
-					soce_user.promo1 = promo
+					#soce_user.promo1 = promo #on ne permet pas de modifier la promo pour l'instant
 					soce_user.email = email
+					soce_user.date_naissance = date_naissance
+					soce_user.pass_crypt = passwd_hash
 
+					#mise à jour du compte GrAM
+					user_from_gram.lastname = nom
+					user_from_gram.firstname = prenom
+					user_from_gram.birthdate = date_naissance +" 00:00:00"
+					user_from_gram.password = passwd_hash
+
+					#creation de l'entrée pour le compte platal à créer
+					newgorgaccount = Newgorgaccount.new
+					newgorgaccount.email = email
+					newgorgaccount.hruid = @hruid
+					newgorgaccount.promo = soce_user.promo1
+					newgorgaccount.tbk = tbk[soce_user.centre1.to_i - 1 ]
 					# activer CGU à l'inscription
 					if cgu_gorg
 						#valider les cgu dans GrAM
+						user_from_gram.loginvalidationcheck = "CGU="+DateTime.now.strftime("%Y-%m-%d")
 					end
 					# action si google apps coché
 					if gapps
-						# créer le gapps
+						newgorgaccount.wantsgoogleapps = true
+					else
+						newgorgaccount.wantsgoogleapps = false
 					end
 					
-					if user_from_gram.save # & soce_user.save
-		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
+					if user_from_gram.save && soce_user.save && newgorgaccount.save
+		        	  # si on a reussi à changer le mdp, on marque le lien comme utilisé
 		        	  recovery_link.set_used
-		        	  format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+		        	  format.html { redirect_to recovery_final_path, notice: 'Ton compte est mis à jour!' }
 
 		        	else
-		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la mise à jour de ton compte', :layout => 'recovery'}
 
 		        	end
 		        end
