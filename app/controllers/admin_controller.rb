@@ -35,9 +35,30 @@ class AdminController < ApplicationController
 
   def inscriptions
     authorize! :read, :admin
+
+    @inscription_links = Uniqlink.where(inscription: true)
   end
 
   def add_inscriptions
     authorize! :read, :admin
+    hruids=params[:hruids].split("\r\n")
+    hruids.each do |hruid|
+      # pour chaque ligne on créé un nouveau lien de récup
+
+      user_from_soce = Usersoce.where(hruid: hruid).take
+      email = user_from_soce.email
+      recovery_link = Uniqlink.new(
+        hruid: hruid,
+        inscription: true,
+        email: email
+      )
+      recovery_link.generate_token
+      recovery_link.save
+      InscriptionMailer.inscription_email(email, recovery_link.get_inscription_url, user_from_soce.nom, user_from_soce.prenom ).deliver_now
+    end
+    respond_to do |format|
+      format.html{ redirect_to admin_inscriptions_path}
+    end
+
   end
 end

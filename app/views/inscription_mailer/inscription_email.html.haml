@@ -1,0 +1,21 @@
+= stylesheet_link_tag    "mail", media: "all"
+.mw500p.center
+	%p=image_tag "http://www.arts-et-metiers.asso.fr/images/logo.png"
+
+	%p Sal's #{@prenom},
+	%p tu l'attendais? La voilà! Ton adresse mail Gadz.org arrive très bientôt !
+
+	%p Mais avant tout, nous allons te demander de vérifier tes infos pour que ton compte soit à la côte.
+
+
+	.txtcenter.bouton.bouton_bleu
+		=link_to "Vérifier mes infos", @url ,:class => "bouton bouton_bleu txtcenter"
+
+
+	%p Tu as jusqu'au 5 février pour vérifier tes coordonnées, passé ce délais, nous ne pourons te garantir d'avoir ton adresse en même temps que ta prom's.
+
+	%p 
+		%br Fratern's,
+		%br blaked 84me211
+		%br Team Gadz.org / Soce
+

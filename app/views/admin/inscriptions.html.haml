@@ -3,23 +3,34 @@
 
 
   .grid
-    .box.shadow-1.mtm
+    .box.box-light.shadow-1.mtm
       .box-top.pam
         Workflow
       .box-bottom.pam
         %ul
           %li On inscrit la personne sur le site SOCE
-          %li On récupère sont hrui + son email
-          %li On met ça dans le formulaire ci-dessous
+          %li On récupère son hruid
+          %li On met son hruid dans le formulaire ci-dessous
           %li Ça va generer un lien d'inscription unique qui lui sera envoyé à son adresse
-          %li En liquant sue le lien le personne arrive sur un formualire pour récupérer sont MDP et corriger ses info dans le GrAM et le Site SOCE
-          %li après avec validé, on génere une liste des nouveau inscrits (hruid) pour les inscrire dans plat'al
-          %li.grey il faut ensuite lancer le script d'inscriptions dans les lsites des diffusions (à faire)
+          %li En liquant sur le lie, la personne arrive sur un formualire pour récupérer son MDP et corriger ses infos dans le GrAM ET le Site SOCE
+          %li après avec validé, on génere une liste des nouveau inscrits (hruid) pour les inscrire dans plat/al
+          %li.grey il faut ensuite lancer le script d'inscriptions dans les lites des diffusions (à faire)
 
-    .box.shadow-1.mtm
+    .box.box-light.shadow-1.mtm
       .box-top.pam
         Ajout de compte
       .box-bottom.pam
         = form_tag(admin_inscriptions_path(), :method => :post) do
-          =text_area_tag 'name'
+          =text_area_tag 'hruids'
           =submit_tag 'Go! ',:class => "bouton bouton_bleu mtm"
+
+    .box.box-light.shadow-1.mtm
+      .box-top.pam
+        Inscriptions en attentes
+      .box-bottom.pam
+        %table.alternate
+          %thead
+            -@inscription_links.each do |l|
+              %tr
+                %td=l.hruid
+                %td=l.email

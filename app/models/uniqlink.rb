@@ -18,9 +18,12 @@ class Uniqlink < ActiveRecord::Base
 	def get_url
 		return Configurable[:site_url] + "password_reset/" + self.token
 	end
+	def get_inscription_url
+		return Configurable[:site_url] + "recovery_inscription/" + self.token
+	end
 
 	def usable?
-		if !self.used? && self.expire_date >= DateTime.now || !self.used? && self.inscription = true
+		if !self.used? && self.inscription = true || !self.used? && self.expire_date >= DateTime.now
 			return true
 		else
 			return false
