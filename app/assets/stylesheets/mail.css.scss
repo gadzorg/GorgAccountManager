@@ -21,10 +21,10 @@ a.bouton_bleu {
     background-color: #14BFCC;
 }
 
-a.bouton_bleu:hover {
-    background-color: rgba(20, 191, 204, 0.85);
-    color: #fff;
+a.bouton_orange_1 {
+    background-color: #F39200;
 }
+
 
 a.bouton{
     display: inline-block;
@@ -60,4 +60,15 @@ a.bouton-light{
 }
 a:focus {
     outline: 0px none;
+}
+
+body{background: #F7F7F7;}
+.content{background: #fff;}
+
+
+.mam {
+  margin: 2rem;
+}
+.pam {
+  padding: 2rem;
 }

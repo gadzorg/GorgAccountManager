@@ -24,8 +24,10 @@
               %b adresse personelle 
               plutôt que ton adresse @ensam.eu.
           %p
-            = text_field_tag :telphone,@user_soce.tel_mobile, :placeholder => "Portable", :size => 30
-            .small En cas de problème avec ton email, c'est le seul moyen que tu auras pour récupérer ton compte.
+            = text_field_tag :telephone,@user_soce.tel_mobile, :placeholder => "Portable", :size => 30
+            .small 
+              En cas de problème avec ton email, c'est le seul moyen que tu auras pour récupérer ton compte. Garde bien le format 
+              %b "06.xx.xx.xx.xx".
           %h2 Sécurité
           %p
             =password_field_tag :user_password,"" , :placeholder => "Nouveau mot de passe", :size => 30
@@ -48,10 +50,10 @@
           .mtm
             =check_box_tag :gapps, false
             =label_tag :gapps,"Non, je ne veux pas de compte Gadzmel et je préfère avoir un système de mail plus lent et je ne veux pas accèder aux services supplementaires qui me seront offerts"
-          %h2 Allez, on y est presque...
-          %p Là c'est le moment où on te demande de lire les CGU. C'est clairement moins long que les 40 pages des CGU d'iTunes et tu pourras dire que tu as lu des CGU au moins une fois dans ta vie.
-          .mtm
-            =check_box_tag :cgu_gorg, true
-            =label_tag :cgu_gorg,"Oui j'ai tout lu, c'est promis et j'accepte"
+          / %h2 Allez, on y est presque...
+          / %p Là c'est le moment où on te demande de lire les CGU. C'est clairement moins long que les 40 pages des CGU d'iTunes et tu pourras dire que tu as lu des CGU au moins une fois dans ta vie.
+          / .mtm
+          /   =check_box_tag :cgu_gorg, true
+          /   =label_tag :cgu_gorg,"Oui j'ai tout lu, c'est promis et j'accepte"
 
           =submit_tag 'Ok tout est bon!',:class => "bouton bouton_bleu mtm"

@@ -306,10 +306,10 @@ class UsersController < ApplicationController
 			respond_to do |format|
 				@hruid = recovery_link.hruid
 				@user_soce = Usersoce.where(hruid: @hruid).take
-				format.html
-
+				format.html {render :layout => 'recovery'}
 			end
 		end
+
 	end
 
 	def password_change_inscription
@@ -322,72 +322,81 @@ class UsersController < ApplicationController
 		nom = params[:nom]
 		bucque = params[:bucque]
 		fams = params[:fams]
+		telephone = params[:telephone]
 		promo = params[:promo]
 		email = params[:email]
 		cgu_gorg = params[:cgu_gorg] ? true : false
 		gapps = !params[:gapps] ? true : false #true si gapps = nil false si gapps = false
 		date_naissance = Date.parse(params[:ddn][:year]+params[:ddn][:month].to_s.rjust(2, "0")+params[:ddn][:day].to_s.rjust(2, "0")).strftime("%Y-%m-%d")
 
+
 		recovery_link = Uniqlink.find_by(token: token)
 
 		if recovery_link.usable?
 			respond_to do |format|
 
-				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
-				if password != password_confirmation 
-					format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
-				else
+				if telephone.count(".") > 3 || prenom == "" || nom == "" || email == ""
 
-					@hruid = recovery_link.hruid
-					user_from_gram = GramAccount.find(@hruid)
-					soce_user = Usersoce.where(hruid: @hruid).take
 
-					passwd_hash = Digest::SHA1.hexdigest password_confirmation
-
-					#mise à jour du compte SOCE
-					soce_user.nom = nom
-					soce_user.prenom = prenom
-					soce_user.famille1 = fams
-					soce_user.surnom = bucque
-					#soce_user.promo1 = promo #on ne permet pas de modifier la promo pour l'instant
-					soce_user.email = email
-					soce_user.date_naissance = date_naissance
-					soce_user.pass_crypt = passwd_hash
-
-					#mise à jour du compte GrAM
-					user_from_gram.lastname = nom
-					user_from_gram.firstname = prenom
-					user_from_gram.birthdate = date_naissance +" 00:00:00"
-					user_from_gram.password = passwd_hash
-
-					#creation de l'entrée pour le compte platal à créer
-					newgorgaccount = Newgorgaccount.new
-					newgorgaccount.email = email
-					newgorgaccount.hruid = @hruid
-					newgorgaccount.promo = soce_user.promo1
-					newgorgaccount.tbk = tbk[soce_user.centre1.to_i - 1 ]
-					# activer CGU à l'inscription
-					if cgu_gorg
-						#valider les cgu dans GrAM
-						user_from_gram.loginvalidationcheck = "CGU="+DateTime.now.strftime("%Y-%m-%d")
-					end
-					# action si google apps coché
-					if gapps
-						newgorgaccount.wantsgoogleapps = true
+					# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
+					if password != password_confirmation || password == ""
+						format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Les mots de passe ne correspondents pas ou sont vides' }
 					else
-						newgorgaccount.wantsgoogleapps = false
-					end
-					
-					if user_from_gram.save && soce_user.save && newgorgaccount.save
-		        	  # si on a reussi à changer le mdp, on marque le lien comme utilisé
-		        	  recovery_link.set_used
-		        	  format.html { redirect_to recovery_final_path, notice: 'Ton compte est mis à jour!' }
 
-		        	else
-		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la mise à jour de ton compte', :layout => 'recovery'}
+						@hruid = recovery_link.hruid
+						user_from_gram = GramAccount.find(@hruid)
+						soce_user = Usersoce.where(hruid: @hruid).take
 
-		        	end
-		        end
+						passwd_hash = Digest::SHA1.hexdigest password_confirmation
+
+						#mise à jour du compte SOCE
+						soce_user.nom = nom
+						soce_user.prenom = prenom
+						soce_user.famille1 = fams
+						soce_user.surnom = bucque
+						#soce_user.promo1 = promo #on ne permet pas de modifier la promo pour l'instant
+						soce_user.email = email
+						soce_user.tel_mobile = telephone
+						soce_user.date_naissance = date_naissance
+						soce_user.pass_crypt = passwd_hash
+
+						#mise à jour du compte GrAM
+						user_from_gram.lastname = nom
+						user_from_gram.firstname = prenom
+						user_from_gram.birthdate = date_naissance +" 00:00:00"
+						user_from_gram.password = passwd_hash
+
+						#creation de l'entrée pour le compte platal à créer
+						newgorgaccount = Newgorgaccount.new
+						newgorgaccount.email = email
+						newgorgaccount.hruid = @hruid
+						newgorgaccount.promo = soce_user.promo1
+						newgorgaccount.tbk = tbk[soce_user.centre1.to_i - 1 ]
+						# activer CGU à l'inscription
+						if cgu_gorg
+							#valider les cgu dans GrAM
+							user_from_gram.loginvalidationcheck = "CGU="+DateTime.now.strftime("%Y-%m-%d")
+						end
+						# action si google apps coché
+						if gapps
+							newgorgaccount.wantsgoogleapps = true
+						else
+							newgorgaccount.wantsgoogleapps = false
+						end
+						
+						if user_from_gram.save && soce_user.save && newgorgaccount.save
+			        	  # si on a reussi à changer le mdp, on marque le lien comme utilisé
+			        	  recovery_link.set_used
+			        	  format.html { redirect_to recovery_inscription_final_path, notice: 'Ton compte se fait usiner!' }
+
+			        	else
+			        		format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'erreur lors de la mise à jour de ton compte', :layout => 'recovery'}
+
+			        	end
+			        end
+			    else
+			    	format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Tu as laissé des champs vite ou mal renseignés :-(', :layout => 'recovery'} 
+			    end	
 		    end
 		else
 			respond_to do |format|
@@ -484,6 +493,11 @@ class UsersController < ApplicationController
 	def recovery_final
 		render :layout => 'recovery'
 	end
+
+	def recovery_inscription_final
+		render :layout => 'recovery'
+	end
+
 	def recovery_support
 		@user = User.new
 		render :layout => 'recovery'

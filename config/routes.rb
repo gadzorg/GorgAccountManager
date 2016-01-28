@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   #get 'validate_sms/:token', to: 'users#validate_sms', as: :validate_sms
   post 'validate_sms' => 'users#validate_sms'
   get 'recovery_final' => "users#recovery_final"
+  get 'recovery_inscription_final' => "users#recovery_inscription_final"
   get 'recovery_support' => "users#recovery_support"
   post 'recovery_support_final' => "users#recovery_support_final"
   get 'recovery_sms' => "users#recovery_sms"

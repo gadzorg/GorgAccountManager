@@ -37,6 +37,9 @@ class AdminController < ApplicationController
     authorize! :read, :admin
 
     @inscription_links = Uniqlink.where(inscription: true)
+
+    @newgorgaccounts = Newgorgaccount.all.map{|a| [a.hruid, true].join(";")}.join("\n")
+    @newgorgaccounts_gapps = Newgorgaccount.all.where(wantsgoogleapps: true).map{|a| a.hruid}.join("\n")
   end
 
   def add_inscriptions
