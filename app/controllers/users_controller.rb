@@ -338,7 +338,7 @@ class UsersController < ApplicationController
 
 		if recovery_link.usable?
 			respond_to do |format|
-				if telephone.count(".") > 3 && prenom != "" && nom != "" && email != ""
+				if telephone.count(".") > 3 && prenom != "" && nom != "" && email != "" && validate_alpha_accent(prenom) && validate_alpha_accent(nom) && validate_alpha_accent(bucque) &&validate_fams(fams)
 
 
 					# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
@@ -639,6 +639,16 @@ class UsersController < ApplicationController
 
 			#@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"*")[1..c.length-3]+c[c.length-2..c.length-1]}
 	    end
+
+	    # retourne true si valide
+	    def validate_alpha_accent str
+			(ActiveSupport::Inflector.transliterate(str) =~ /^[a-zA-Z\-\s]*$/ ) == nil ? false : true
+		end
+
+		# autorise uniquement les chiffre,-,! et µ
+		def validate_fams str
+			(ActiveSupport::Inflector.transliterate(str.gsub("µ","")) =~ /^[0-9\!\-\s]*$/ ) == nil ? false : true		
+		end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
