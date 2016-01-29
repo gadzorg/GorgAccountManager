@@ -338,7 +338,7 @@ class UsersController < ApplicationController
 
 		if recovery_link.usable?
 			respond_to do |format|
-				if telephone.count(".") > 3 && prenom != "" && nom != "" && email != "" && validate_alpha_accent(prenom) && validate_alpha_accent(nom) && validate_alpha_accent(bucque) &&validate_fams(fams)
+				if telephone.count(".") > 3 && prenom != "" && nom != "" && email != "" && validate_alpha_accent(prenom) && validate_alpha_accent(nom) && validate_alpha_accent(bucque) && validate_fams(fams) && email.exclude?("gadz.org") && email.include?("@") && email.include?(".")
 
 
 					# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
