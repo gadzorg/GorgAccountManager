@@ -273,13 +273,17 @@ class UsersController < ApplicationController
 
 					@hruid = recovery_link.hruid
 					user_from_gram = GramAccount.find(@hruid)
+					user_from_soce = Usersoce.where(hruid: @hruid).take
 
 					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
 					user_from_gram.password = passwd_hash
+					user_from_soce.pass_crypt = passwd_hash
+					
 
 
 
-					if user_from_gram.save
+
+					if user_from_gram.save && user_from_soce.save
 		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
 		        	  recovery_link.set_used
 		        	  format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
@@ -394,7 +398,7 @@ class UsersController < ApplicationController
 			        	end
 			        end
 			    else
-			    	format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Tu as laissé des champs vite ou mal renseignés :-(', :layout => 'recovery'} 
+			    	format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Tu as laissé des champs vides ou mal renseignés :-(', :layout => 'recovery'} 
 			    end	
 		    end
 		else
