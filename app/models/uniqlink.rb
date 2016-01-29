@@ -1,8 +1,9 @@
 class Uniqlink < ActiveRecord::Base
 	before_save :default_values
-	  def default_values
-	    self.inscription ||= false
-	  end
+	def default_values
+		self.inscription ||= false
+		true
+	end
 
 	def generate_token
 		self.token = loop do
