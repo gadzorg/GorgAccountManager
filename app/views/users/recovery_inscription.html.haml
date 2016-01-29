@@ -15,6 +15,7 @@
             = select_date( date = @user_soce.date_naissance, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
           %p
             = text_field_tag :bucque,@user_soce.surnom, :placeholder => "Bucque", :size => 30
+            .small Pas de caractère spécial ni de chiffre
             = text_field_tag :fams,@user_soce.famille1, :placeholder => "Fam's", :size => 30
             = text_field_tag :promo,@tbk[@user_soce.centre1 - 1], :placeholder => "tbk", :size => 30, :disabled => true
             = text_field_tag :promo,@user_soce.promo1, :placeholder => "Promo", :size => 30, :disabled => true
