@@ -334,8 +334,7 @@ class UsersController < ApplicationController
 
 		if recovery_link.usable?
 			respond_to do |format|
-
-				if telephone.count(".") > 3 || prenom == "" || nom == "" || email == ""
+				if telephone.count(".") > 3 && prenom != "" && nom != "" && email != ""
 
 
 					# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
@@ -546,6 +545,7 @@ class UsersController < ApplicationController
 			recovery_link.generate_token
 			recovery_link.hruid = hruid
 			recovery_link.used = false
+			recovery_link.inscription = false
 			recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
 			recovery_link.save
 			return recovery_link

@@ -1,4 +1,9 @@
 class Uniqlink < ActiveRecord::Base
+	before_save :default_values
+	  def default_values
+	    self.inscription ||= false
+	  end
+
 	def generate_token
 		self.token = loop do
 			random_token = SecureRandom.urlsafe_base64(nil, false)
