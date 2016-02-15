@@ -1,14 +1,22 @@
-%p Bonjour,
-%p Pour lancer le processus de réinitialisation du mot de passe de votre compte Gadz #{@hruid} , cliquez sur le lien ci-dessous :
+= stylesheet_link_tag    "mail", media: "all"
+.mam
+	.content.mw800p.center
+		.pam
+			%p=image_tag "http://www.arts-et-metiers.asso.fr/images/logo.png", height: '50'
+			
+			%p Bonjour,
+			%p Pour lancer le processus de réinitialisation du mot de passe de votre compte Gadz #{@hruid}, cliquez sur le lien ci-dessous :
 
-%p=link_to @url, @url
+			.txtcenter.bouton.bouton_bleu
+				=link_to "changer mon mot de passe", @url ,:class => "bouton bouton_orange_1 txtcenter"
 
-%p Pour information votre login est : #{@hruid}
+			%p Pour information votre login est : #{@hruid}
 
-%p Si ce lien ne fonctionne pas, copiez l'URL, puis collez-la dans une nouvelle fenêtre de navigateur. Si vous avez reçu ce message par erreur, il est possible qu'un autre utilisateur ait saisi votre adresse e-mail par inadvertance alors qu'il tentait de réinitialiser un mot de passe. Si vous n'avez pas formulé de demande en ce sens, aucune action supplémentaire de votre part n'est requise. Par conséquent, vous pouvez ignorer ce message.
+			%p Si ce lien ne fonctionne pas, copiez l'URL #{@url} , puis collez-la dans une nouvelle fenêtre de navigateur. Si vous avez reçu ce message par erreur, il est possible qu'un autre utilisateur ait saisi votre adresse e-mail par inadvertance alors qu'il tentait de réinitialiser un mot de passe. Si vous n'avez pas formulé de demande en ce sens, aucune action supplémentaire de votre part n'est requise. Par conséquent, vous pouvez ignorer ce message.
 
-%p Attention ce lien ne fonctionne que 24h, après ce délai vous pourrez recommencer la procédure en allant sur : https://agoram.gadz.org/c/recovery/password.
+			%p Attention ce lien ne fonctionne que 24h, après ce délai vous pourrez recommencer la procédure en allant sur : 
+			=link_to Configurable[:site_url] + "recovery", Configurable[:site_url] + "recovery"
 
-%p
-	Cordialement,
-	L'équipe Support Gadz.org
+			%p
+				Cordialement, 
+				%br L'équipe Support Gadz.org
