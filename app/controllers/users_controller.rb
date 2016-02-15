@@ -642,7 +642,7 @@ class UsersController < ApplicationController
 
 	    # retourne true si valide
 	    def validate_alpha_accent str
-			(ActiveSupport::Inflector.transliterate(str) =~ /^[a-zA-Z\-\s]*$/ ) == nil ? false : true
+			(ActiveSupport::Inflector.transliterate(str) =~ /^[a-zA-Z\'\-\s]*$/ ) == nil ? false : true
 		end
 
 		# autorise uniquement les chiffre,-,! et µ
