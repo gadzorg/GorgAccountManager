@@ -1,0 +1,17 @@
+%section.pam
+  .mw500p.center
+    .box.box-light.shadow-1.mtm
+      .box-top.box-top-color.pam
+        Chercher un compte
+      .box-bottom.pam
+
+
+        .mtm 
+          =form_for  [@user], :url=> admin_search_user_path()  do |f|
+            =f.text_field :hruid, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
+            =f.submit 'Chercher',:class => "bouton bouton_bleu mtm", :id => "button_loading"
+            %span#loading
+              =image_tag "Preloader_3.gif"
+              Recherche en cours...
+
+        %p.small Entre une adresse @gadz.org, un indentifiant, un numéro de sociétaire ou un email soce

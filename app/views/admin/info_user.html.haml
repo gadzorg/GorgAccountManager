@@ -1,4 +1,6 @@
 %section.pam
-  %h1 Titre
+	=form_for  [@user], :url=> admin_search_user_path()  do |f|
+		=f.text_field :hruid, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w80 login", :autofocus => true
+		=f.submit 'Chercher!',:class => "bouton bouton_bleu", :id => "button_loading"
 
 =render partial: "shared/user_all_info"

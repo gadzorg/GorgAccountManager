@@ -19,8 +19,44 @@ class AdminController < ApplicationController
   	@searches = Search.all
   end
 
+  def search_user
+    authorize! :read, :admin
+    @user = User.new
+    user = params[:user]
+    
+      if user.present?
+        respond_to do |format|
+        a = params[:user][:hruid].to_s
+        begin
+        @hruid = GramEmail.find(a).hruid
+        rescue #ArgumentError ||  ActiveResource::ResourceNotFound
+          begin
+            @hruid = GramAccount.find(a).hruid
+          rescue #ActiveResource::ResourceNotFound || ArgumentError
+            begin
+              @hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
+            rescue #ActiveResource::ServerError
+              #@hruid = "on t'as pas trouvé :-("
+
+              #Si on ne trouve rien, on cherche dans platal l'adresse mail
+              redirect = Redirectplatal.where(redirect: a).take
+              if !redirect.nil?
+                @hruid = Userplatal.find(redirect.uid).hruid
+              else
+                  # format.html { redirect_to recovery_support_path() }
+                  format.html { redirect_to admin_search_user_path , notice: "Désol's, j'ai rien trouvé"}
+              end   
+            end
+          end
+        end
+        format.html { redirect_to admin_info_user_path(:hruid => @hruid) }
+      end
+    end #end repond_to 
+  end
+
   def info_user
   	authorize! :read, :admin
+    @user = User.new
   	hruid = params[:hruid]
   	@user_from_gram = GramAccount.find(hruid)
 	@user_from_soce = Usersoce.where(hruid: hruid).take

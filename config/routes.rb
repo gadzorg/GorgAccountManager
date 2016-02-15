@@ -31,12 +31,15 @@ Rails.application.routes.draw do
   get 'admin/inscriptions' => "admin#inscriptions"
   post 'admin/inscriptions' => "admin#add_inscriptions"
   get 'admin/searches' => "admin#searches"
+  get 'admin/search_user' => "admin#search_user"
+  post 'admin/search_user' => "admin#search_user"
+  get 'admin/info_user' => "admin#info_user"
   get 'admin/recovery_sessions' => "admin#recovery_sessions"
   resources :users do
     get "dashboard"
   end
 
-  get 'info_user/:hruid', to: "admin#info_user", as: :admin_info_user, :constraints => {:hruid => /[^\/]+/}
+  #get 'info_user/:hruid', to: "admin#info_user", as: :admin_info_user, :constraints => {:hruid => /[^\/]+/}
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
