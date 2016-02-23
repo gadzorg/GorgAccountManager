@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe AdminController, type: :controller do
+RSpec.describe RolesController, type: :controller do
 
 include Devise::TestHelpers
 
@@ -31,8 +31,13 @@ include Devise::TestHelpers
     end
   end
 
-
   describe "GET #index" do
+
+    before :each do
+      @admin_role=FactoryGirl.create(:role, name:"admin")
+      @support_role=FactoryGirl.create(:role, name: 'support')
+    end
+
     it_should_behave_like "an admin only endpoint", :index
 
     context "user login as admin" do
@@ -44,10 +49,12 @@ include Devise::TestHelpers
       end
 
       it { is_expected.to respond_with :success }
-    end
-    
+      it { is_expected.to render_with_layout :application }
+      it { is_expected.to render_template :index }
+      it "populate @roles list with all roles" do
+        expect(assigns(:roles)).to eq([@admin_role, @support_role])
+      end
+    end    
   end
-
-
 
 end

@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   get 'admin/index'
-
-  devise_for :users, :controllers => { :omniauth_callbacks => "users/omniauth_callbacks" }
+  
+  devise_for :users, :controllers => {
+    :omniauth_callbacks => "users/omniauth_callbacks",
+    :sessions => "users/sessions"
+    }
+  
   get 'static_pages/index'
   get 'recovery' => 'users#recovery'
   post 'recovery' => 'users#recovery'
@@ -56,6 +60,7 @@ Rails.application.routes.draw do
 
     get :autocomplete_user_hruid, :on => :collection
     get :search_by_id, :on => :collection
+    get :sync, to: 'users#sync_with_gram', on: :member
 
 
   end

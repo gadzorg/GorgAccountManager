@@ -32,47 +32,50 @@ class UsersController < ApplicationController
   # POST /users
   # POST /users.json
   def create
-  	@user = User.new(user_params)
-  	authorize! :create, @user
-  	authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
+    @user = User.new(user_params)
+    authorize! :create, @user
+    authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
 
-  	respond_to do |format|
-  		if @user.save
-  			format.html { redirect_to @user, notice: 'User was successfully created.' }
-  			format.json { render :show, status: :created, location: @user }
-  		else
-  			format.html { render :new }
-  			format.json { render json: @user.errors, status: :unprocessable_entity }
-  		end
-  	end
+    respond_to do |format|
+      if @user.save
+        format.html { redirect_to @user, notice: I18n.translate('users.flash.create.success', user: @user.fullname) }
+        format.json { render :show, status: :created, location: @user }
+      else
+        format.html { render :new, notice: I18n.translate('users.flash.create.fail') , status: :unprocessable_entity }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   # PATCH/PUT /users/1
   # PATCH/PUT /users/1.json
   def update
-  	authorize! :update, @user
-  	authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
+    authorize! :update, @user
+    authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
 
-  	respond_to do |format|
-  		if @user.update(user_params)
-  			format.html { redirect_to @user, notice: 'User was successfully updated.' }
-  			format.json { render :show, status: :ok, location: @user }
-  		else
-  			format.html { render :edit }
-  			format.json { render json: @user.errors, status: :unprocessable_entity }
-  		end
-  	end
+    respond_to do |format|
+      if @user.update(user_params)
+        format.html { redirect_to @user, notice: I18n.translate('users.flash.update.success', user: @user.fullname) }
+        format.json { render :show, status: :ok, location: @user }
+      else
+        format.html { render :edit, notice: I18n.translate('users.flash.update.fail', user: @user.fullname) , status: :unprocessable_entity}
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   # DELETE /users/1
   # DELETE /users/1.json
   def destroy
-  	authorize! :destroy, @user
-  	@user.destroy
-  	respond_to do |format|
-  		format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-  		format.json { head :no_content }
-  	end
+
+    authorize! :destroy, @user
+    username=@user.fullname
+    @user.destroy
+    respond_to do |format|
+      format.html { redirect_to users_url, notice:  I18n.translate('users.flash.destroy.success', user: username) }
+      format.json { head :no_content }
+    end
   end
 
 
@@ -80,6 +83,7 @@ class UsersController < ApplicationController
   	redirect_to user_path(params[:id])
   end
 
+<<<<<<< HEAD
   def recovery
   	@user = User.new
 	re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
@@ -532,7 +536,23 @@ class UsersController < ApplicationController
 
 	end
 
-
+	def sync_with_gram
+		authorize! :sync, @user
+		respond_to do |format|
+		  if @user.syncable? && ( @user.next_sync_allowed_at <= Time.now)
+		    if @user.update_from_gram
+		      format.html { redirect_to @user, notice: I18n.translate('users.flash.sync.success', user: @user.fullname) }
+		      format.json { render :show, status: :ok, location: @user }
+		    else
+		      format.html { redirect_to @user, notice: I18n.translate('users.flash.sync.fail', user: @user.fullname)}
+		      format.json { render json: '{"error": "Problems occured during syncronization"}', status: :unprocessable_entity }
+		    end
+		  else
+		    format.html { redirect_to @user, notice: I18n.translate('users.flash.sync.too_soon', user: @user.fullname, eta: (@user.next_sync_allowed_at-Time.now).round)}
+		    format.json { render json: "{\"error\": \"Try again in #{(@user.next_sync_allowed_at-Time.now).round} seconds\"}", status: :unprocessable_entity }
+		  end
+		end
+	end
 	private
 
 		    # Use callbacks to share common setup or constraints between actions.
@@ -650,9 +670,11 @@ class UsersController < ApplicationController
 			(ActiveSupport::Inflector.transliterate(str.gsub("µ","")) =~ /^[0-9\!\-\s]*$/ ) == nil ? false : true		
 		end
 
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-    	params.require(:user).permit(:email, :firstname, :lastname, :hruid, :id, :role_id)
+      params.require(:user).permit(:email, :firstname, :lastname, :hruid, :id, :role_id, :password, :password_confirmation)
+
     end
 
 end

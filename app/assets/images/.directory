@@ -1,4 +1,8 @@
 [Dolphin]
 PreviewsShown=true
+<<<<<<< HEAD
 Timestamp=2016,1,14,15,23,53
+=======
+Timestamp=2016,2,23,17,9,44
+>>>>>>> d995c7f9acc56f287ee247aa6ec1b97818a098fa
 Version=3

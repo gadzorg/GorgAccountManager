@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  email                  :string           default(""), not null
+#  encrypted_password     :string           default(""), not null
+#  reset_password_token   :string
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0), not null
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string
+#  last_sign_in_ip        :string
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  hruid                  :string
+#  firstname              :string
+#  lastname               :string
+#  role_id                :integer
+#  last_gram_sync_at      :datetime
+#
+
 ##
 # A User of the application
 #
@@ -22,6 +46,12 @@ class User < ActiveRecord::Base
 
   validates :hruid, uniqueness: true, :allow_blank => true, :allow_nil => true
 
+
+
+
+############################################################################
+#######  TEMPLATE FUNCTIONS  ###############################################
+############################################################################
   ##
   # Check current role
   def has_role? (role_name)
@@ -32,28 +62,54 @@ class User < ActiveRecord::Base
   ##
   # Add or change role
   def  add_role (role_name)
-    self.update_attribute(:role_id,Role.find_by_name(role_namee).id)
+    self.update_attribute(:role_id,Role.find_or_create_by(name: role_name).id)
   end
 
   ##
   # Delete current role if any
   def  remove_role (role_name=nil)
-    self.update_attribute(:role_id,nil)
+    self.update_attribute(:role_id,nil) unless !self.role ||(role_name && role_name.to_s != self.role.name)
   end
 
   ##
   # Update local user data with data contained in GrAM
   def update_from_gram
     self.synced_with_gram = false
-    gram_data=GramAccount.find(self.hruid)
+    if self.syncable?
+      begin
+        gram_data=GramAccount.find(self.hruid)
+        self.email=gram_data.email
+        self.firstname=gram_data.firstname
+        self.lastname=gram_data.lastname
+        self.last_gram_sync_at = Time.now
+        if self.save
+          self.synced_with_gram = true 
+          return self
+        else
+          return false
+        end
+      rescue ActiveResource::ResourceNotFound
+        logger.error "[GrAM] Utilisateur introuvable : #{self.hruid}"
+        return false
+      rescue ActiveResource::ServerError
+        logger.error "[GrAM] Connexion au serveur impossible"
+        return false
+      rescue ActiveResource::UnauthorizedAccess, ActiveResource::ForbiddenAccess
+        logger.error "[GrAM] Connexion au serveur impossible : verifier identifiants"
+        return false
+      end
+    else
+      return false
+    end
 
-    self.email=gram_data.email
-    self.firstname=gram_data.firstname
-    self.lastname=gram_data.lastname
+  end
 
-    self.save
-    self.synced_with_gram = true
-    self
+  def syncable?
+    hruid.present?
+  end
+
+  def next_sync_allowed_at
+    self.last_gram_sync_at ? self.last_gram_sync_at + 5.minutes : Time.now
   end
 
   ##
@@ -75,16 +131,16 @@ class User < ActiveRecord::Base
           firstname: auth_data[:extra][:firstname],
           lastname: auth_data[:extra][:lastname],
       )
-      user.save!
+      user.save
     end
 
-    begin
+    if user.persisted?
       user.update_from_gram
-    rescue => e
-      logger.error "Erreur de connexion au GrAM :\n #{YAML::dump e}"
+      user
+    else
+      logger.error "Donnees revoyes par le CAS invalide : "+auth_data.to_s
+      nil
     end
-
-    user
   end
 
   ##
@@ -94,7 +150,16 @@ class User < ActiveRecord::Base
   end
 
 
+############################################################################
+#######  FORK FUNCTIONS  ###################################################
+############################################################################
+
+
   private
+
+    ############################################################################
+    #######  TEMPLATE FUNCTIONS  ###############################################
+    ############################################################################
 
     ##
     #Define default values of runtime attributes
@@ -102,5 +167,9 @@ class User < ActiveRecord::Base
       self.synced_with_gram = false
     end
 
+
+    ############################################################################
+    #######  FORK FUNCTIONS  ###################################################
+    ############################################################################
 
 end
