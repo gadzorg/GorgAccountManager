@@ -1,0 +1,26 @@
+%section.pam
+  %h1.txtcenter Ton compte Gadz.org et Soce ne font plus qu'un!
+
+  =form_for  [@user_soce], :url=> module_merge_user_path() do |f|
+
+    .form-inputs.mtm
+      -@info.each do |info|
+        -if info[3]==0
+          -if info[1]==info[2]
+            %p Données identiques!
+            = label_tag info[1]
+            = label_tag info[2]
+          -else
+            %p=info[0]
+            = label_tag info[1]
+            = f.radio_button info[0], "platal"
+            = label_tag info[2]
+            = f.radio_button info[0], "soce"
+        -else
+          %p=info[0]
+          = label_tag info[1]
+          = label_tag info[2]
+
+
+    .form-actions
+      =submit_tag 'Envoyer',:class => "bouton bouton_bleu"

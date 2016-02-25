@@ -1,0 +1,2 @@
+module Module::MergeHelper
+end

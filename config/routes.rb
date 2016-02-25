@@ -43,6 +43,11 @@ Rails.application.routes.draw do
     get "dashboard"
   end
 
+  namespace :module do
+    get "merge/user/:hruid" => "merge#user"
+    get 'merge/user/:hruid', to: "merge#user", as: :merge_user, :constraints => {:hruid => /[^\/]+/}
+  end
+
   #get 'info_user/:hruid', to: "admin#info_user", as: :admin_info_user, :constraints => {:hruid => /[^\/]+/}
 
   # The priority is based upon order of creation: first created -> highest priority.
