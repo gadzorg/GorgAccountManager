@@ -1,26 +1,40 @@
 %section.pam
-  %h1.txtcenter Ton compte Gadz.org et Soce ne font plus qu'un!
+  .mw960p.center
+    %h1.txtcenter Ton compte Gadz.org et Soce ne font plus qu'un!
 
-  =form_for  [@user_soce], :url=> module_merge_user_path() do |f|
+    Explication blabla Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-    .form-inputs.mtm
-      -@info.each do |info|
-        -if info[3]==0
-          -if info[1]==info[2]
-            %p Données identiques!
-            = label_tag info[1]
-            = label_tag info[2]
-          -else
-            %p=info[0]
-            = label_tag info[1]
-            = f.radio_button info[0], "platal"
-            = label_tag info[2]
-            = f.radio_button info[0], "soce"
-        -else
-          %p=info[0]
-          = label_tag info[1]
-          = label_tag info[2]
+    =form_for  [@user_soce], :url=> module_merge_user_path() do |f|
+
+      .mtm.box-merge
+        -@info.each do |info|
+          %h3.txtcenter=info[0] 
+          .grid-2.box-merge
+            -if info[4]==0
+              -if info[2]==info[3]
+                .box-merge-left Données identiques:
+                .box-merge-right= label_tag info[3],nil, :class => 'label-uniq'
+              -else
+                .box-merge-left
+                  = f.radio_button info[1], "platal"
+                  = f.label info[1], info[2], :value => "platal"
+                .box-merge-right
+                  = f.radio_button info[1], "soce"
+                  = f.label info[1], info[3], :value => "soce"
+                / 8888888888888
+                / =f.label info[1],info[2] , :value => info[2] do
+                /   =f.radio_button info[1],info[2]
+                /   Hello
+                / =f.label info[3],info[3] do
+                /   =f.radio_button info[1],info[3]
+                /   fffffff
+                / 9999999999999999
+                / =f.label info[1],info[2], :value => info[2]
+                / =f.radio_button info[1],info[2]
+            -else
+              .box-merge-left Info fixe:  
+              .box-merge-right= label_tag info[3], nil, :class => 'label-uniq'
 
 
-    .form-actions
-      =submit_tag 'Envoyer',:class => "bouton bouton_bleu"
+      .form-actions.center
+        =submit_tag 'Envoyer',:class => "bouton bouton_bleu"

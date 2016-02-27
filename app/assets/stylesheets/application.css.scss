@@ -11,6 +11,7 @@
  * file per style scope.
  *
  *= require_tree ./autoload
+ *= require_tree .
  *= require_self
  *= require jquery-ui
  *= require bootstrap/bootstrap-tooltip
@@ -442,3 +443,4 @@ input:focus::-webkit-input-placeholder, input:valid::-moz-input-placeholder, inp
 .red{
     color: #c0392b
 }
+
