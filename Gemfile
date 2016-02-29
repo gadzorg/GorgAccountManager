@@ -91,6 +91,10 @@ gem "premailer-rails"
 
 gem "nokogiri"
 
+gem "geocoder"
+
+gem "fuzzy-string-match"
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -101,7 +105,7 @@ gem "nokogiri"
 # gem 'capistrano-rails', group: :development
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger consolep
   gem 'byebug'
   
   gem "letter_opener"
