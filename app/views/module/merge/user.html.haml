@@ -43,7 +43,7 @@
       / .form-actions.center
       /   =submit_tag 'Envoyer',:class => "bouton bouton_bleu"
 
-    =form_tag module_merge_user_path do
+    =form_tag module_merge_update_soce_user_path do
       .mtm.box-merge
         -@info.each do |info|
           %h3.txtcenter=info[0] 
@@ -75,26 +75,61 @@
 
         %h3.txtcenter Adresses
         .grid-2
-          .box
+          .box.pam
             -@addresses_platal.each_with_index do |address, i|
-              .div.mam
-                %p
-                  -address[0].each do |field|
-                    = text_field_tag field, field
-
-                %p
+              .box.box-light.shadow-1.mtm
+                .box-top.box-top-light.pam
+                  #{address.first[3]} #{address.last}
+                .box-bottom.pam
+                  %div
+                    -address[0].each do |field|
+                      = text_field_tag field, field, :placeholder => " ", :class => "w100 slim mbs"
+                .box.pam
                   -if address[1]
-                    Une adresse similaire semble déjà exister
+                    .mbm Une adresse similaire semble déjà exister
                   = radio_button_tag i.to_s, "oui"
                   = label_tag i.to_s+"_oui", "Transfèrer"
                   = radio_button_tag i.to_s, "non"
                   = label_tag i.to_s+"_non", "Non"
 
-          .box
+          .box.pam
             Adressses SOCE
             -@addresses_soce.each_with_index do |address, i|
-              %div
-                -address.each do |field|
-                  %p=field.last
+              .box.box-light.shadow-1.mtm
+                .box-top.box-top-light.pam
+                  #{address["ville"]} (#{address["libelle"]})
+                .box-bottom.pam
+                  .address-fields=address["adresse_1"]
+                  .address-fields=address["adresse_2"]
+                  .address-fields
+                    =address["code_postal"]
+                    =address["ville"]
+                  .address-fields.small=address["nompays"]
+
+        %h3.txtcenter Emploi
+        .grid-2
+          .box.pam
+            -@jobs_platal.each_with_index do |job, i|
+              .box.box-light.shadow-1.mtm
+                .box-top.box-top-light.pam
+                  #{job["cpny_name"]} (#{job["entry_year"]})
+                .box-bottom.pam
+                  %div
+                    -job.each do |field|
+                      = text_field_tag field[0], field[1], :placeholder => " ", :class => "w100 slim mbs"
+                .box.pam
+                  = radio_button_tag i.to_s, "oui"
+                  = label_tag i.to_s+"_oui", "Transfèrer"
+                  = radio_button_tag i.to_s, "non"
+                  = label_tag i.to_s+"_non", "Non"
+          .box.pam
+            Jobs SOCE
+            -@jobs_soce.each_with_index do |job, i|
+              .box.box-light.shadow-1.mtm
+                .box-top.box-top-light.pam
+                  #{job["nom_entreprise"].titleize} (#{job["date_debut"]})
+                .box-bottom.pam
+                  -job.each do |field|
+                    .address-fields=field[1]
 
     =submit_tag 'Envoyer',:class => "bouton bouton_bleu"

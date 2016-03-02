@@ -3,6 +3,8 @@ class Module::MergeController < ApplicationController
   require 'fuzzystringmatch'
 
   def user
+    # authorize! :read, :admin
+
     hruid = params[:hruid].to_s
     @user_soce = Usersoce.where(hruid: hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {0=choix possible, 1=ok}]
@@ -33,9 +35,20 @@ class Module::MergeController < ApplicationController
     @addresses_platal=addresses_platal.map do |a| 
       [
       formate_address_soce(Geocoder.search(a["formatted_address"]).first), 
-      addresses_soce_formated.map{ |b| jarow.getDistance(a["formatted_address"], b)}.max > 0.8
+      addresses_soce_formated.map{ |b| jarow.getDistance(a["formatted_address"], b)}.max > 0.8,
+      a["type"],
+      case a["flags"]
+      when /current/
+        "(Principale)"
+      when /secondary/
+        "(Secondaire)"
+      end
+          
       ]
     end
+
+    @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
+    @jobs_soce = get_jobs_from_soce(hruid)
 
   end
 
@@ -74,7 +87,7 @@ class Module::MergeController < ApplicationController
     def get_addresses_from_platal(hruid)
       @connection = ActiveRecord::Base.establish_connection "platal_#{Rails.env}"
 
-      sql = "select formatted_address, postalText
+      sql = "select formatted_address, postalText, pa.type, pa.flags
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profile_addresses AS pa ON (pa.pid=ap.pid)
@@ -85,18 +98,55 @@ class Module::MergeController < ApplicationController
       end
 
     end
+    def get_jobs_from_platal(hruid)
+      @connection = ActiveRecord::Base.establish_connection "platal_#{Rails.env}"
+
+      sql = "select pj.description AS job_desc, pj.email, pj.url AS job_url, entry_year, pje.name AS cpny_name, pje.url, NAF_code, pje.description AS cpny_desc, jte.name, jte.full_name
+        from accounts as a
+        left JOIN account_profiles AS ap ON (ap.uid=a.uid )
+        left JOIN profile_job AS pj ON (pj.pid=ap.pid)
+        left JOIN profile_job_enum AS pje ON (pje.id=pj.jobid)
+        left JOIN profile_job_term AS jt  ON (jt.pid = pj.pid AND jt.jid = pj.id)
+        LEFT JOIN  profile_job_term_enum AS jte USING(jtid)
+        where hruid = '#{hruid}'"
+      @result = @connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["jobs"] 
+      end
+
+    end
+
+
+    
 
     def get_addresses_from_soce(hruid)
       @connection = ActiveRecord::Base.establish_connection "soce_#{Rails.env}"
 
       sql = "SELECT adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
-      left JOIN adresses AS ad ON (u.id_user=ad.id_user )
-      left JOIN pays AS py ON (py.id_pays=ad.id_pays )
-      left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
+        left JOIN adresses AS ad ON (u.id_user=ad.id_user )
+        left JOIN pays AS py ON (py.id_pays=ad.id_pays )
+        left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
         where hruid = '#{hruid}'"
       @result = @connection.connection.execute(sql);
       @result.each(:as => :hash) do |row| 
         row["adresses"] 
+      end
+
+    end
+
+    def get_jobs_from_soce(hruid)
+      @connection = ActiveRecord::Base.establish_connection "soce_#{Rails.env}"
+
+      sql = "SELECT e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation
+, py.*, f.* FROM users 
+left join postes AS p on users.id_user = p.id_user
+left join entreprises AS e on e.id_entreprise = p.id_entreprise
+left join pays AS py on e.id_pays = py.id_pays
+left join liste_fonctions AS f on f.id_fonction = p.id_fonction
+        where hruid = '#{hruid}'"
+      @result = @connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["jobs"] 
       end
 
     end
@@ -129,12 +179,11 @@ class Module::MergeController < ApplicationController
       ].join(" ")
 
       addresss2 =""
-      addresss3 =""
       postal_code = ( begin address.address_components.select{|n| n["types"].include? "postal_code"}.first["long_name"] rescue "" end )
       city = ( begin address.address_components.select{|n| n["types"].include? "locality"}.first["long_name"] rescue "" end )
       country = ( begin address.address_components.select{|n| n["types"].include? "country"}.first["long_name"] rescue "" end )
 
-      return [addresss1, addresss2, addresss3, postal_code, city, country]
+      return [addresss1, addresss2, postal_code, city, country]
 
     end
 end

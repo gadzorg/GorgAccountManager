@@ -383,6 +383,16 @@ input.login {
 
 }
 
+input.slim {
+    background-color: #fff;
+    /*border: solid 1px #14BFCC;*/
+    border: 1px solid #D3D3D3;
+    box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    padding: 3px;
+
+}
+
 input:invalid{
   border-bottom: solid 1px #c0392b;
   background: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 96%, #c0392b 4%);
@@ -433,6 +443,12 @@ input:focus::-webkit-input-placeholder, input:valid::-moz-input-placeholder, inp
  visibility: visible !important;
 }
 
+
+
+/*------------------------specials fields--------------------*/
+.address-fields {
+    display: block;
+}
 
 
 
