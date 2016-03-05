@@ -83,7 +83,6 @@ class UsersController < ApplicationController
   	redirect_to user_path(params[:id])
   end
 
-<<<<<<< HEAD
   def recovery
   	@user = User.new
 	re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
