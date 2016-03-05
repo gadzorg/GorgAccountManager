@@ -127,7 +127,7 @@
             -@jobs_soce.each_with_index do |job, i|
               .box.box-light.shadow-1.mtm
                 .box-top.box-top-light.pam
-                  #{job["nom_entreprise"].titleize} (#{job["date_debut"]})
+                  #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
                 .box-bottom.pam
                   -job.each do |field|
                     .address-fields=field[1]

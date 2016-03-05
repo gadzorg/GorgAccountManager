@@ -3,9 +3,11 @@ class Module::MergeController < ApplicationController
   require 'fuzzystringmatch'
 
   def user
-    # authorize! :read, :admin
+    hruid = (params[:hruid].nil? ? params[:hruid].to_s : current_user.hruid)
 
-    hruid = params[:hruid].to_s
+    @user = User.find_by(:hruid => hruid)
+    authorize! :read, @user
+
     @user_soce = Usersoce.where(hruid: hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {0=choix possible, 1=ok}]
     info_platal=get_info_from_platal(hruid)
