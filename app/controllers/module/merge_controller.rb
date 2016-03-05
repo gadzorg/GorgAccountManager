@@ -60,7 +60,7 @@ class Module::MergeController < ApplicationController
 
   private
     def get_info_from_platal(hruid)
-      @connection = ActiveRecord::Base.establish_connection "platal_#{Rails.env}"
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
 
       sql = "select *, hruid, firstname, lastname, pgn.name as buktxt, pgn2.name as bukzal, email, gadz_fams, gadz_fams_display, birthdate, deathdate, search_tel, IF (tbk = 'kin', 'ai', tbk) as tbk
         from accounts as a
@@ -76,30 +76,33 @@ class Module::MergeController < ApplicationController
         and tel_type = 'mobile'
         and link_type = 'user'
         and hruid = '#{hruid}'"
-      @result = @connection.connection.execute(sql);
+      @result = connection.connection.execute(sql);
       @result.each(:as => :hash) do |row| 
         row["user"] 
       end
+      connection.disconnect!
       @result.first
 
     end
 
     def get_addresses_from_platal(hruid)
-      @connection = ActiveRecord::Base.establish_connection "platal_#{Rails.env}"
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
 
       sql = "select formatted_address, postalText, pa.type, pa.flags
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profile_addresses AS pa ON (pa.pid=ap.pid)
         where hruid = '#{hruid}'"
-      @result = @connection.connection.execute(sql);
+      @result = connection.connection.execute(sql);
+            connection.disconnect!
+
       @result.each(:as => :hash) do |row| 
         row["adresses"] 
       end
 
     end
     def get_jobs_from_platal(hruid)
-      @connection = ActiveRecord::Base.establish_connection "platal_#{Rails.env}"
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
 
       sql = "select pj.description AS job_desc, pj.email, pj.url AS job_url, entry_year, pje.name AS cpny_name, pje.url, NAF_code, pje.description AS cpny_desc, jte.name, jte.full_name
         from accounts as a
@@ -109,7 +112,9 @@ class Module::MergeController < ApplicationController
         left JOIN profile_job_term AS jt  ON (jt.pid = pj.pid AND jt.jid = pj.id)
         LEFT JOIN  profile_job_term_enum AS jte USING(jtid)
         where hruid = '#{hruid}'"
-      @result = @connection.connection.execute(sql);
+      @result = connection.connection.execute(sql);
+            connection.disconnect!
+
       @result.each(:as => :hash) do |row| 
         row["jobs"] 
       end
@@ -120,14 +125,16 @@ class Module::MergeController < ApplicationController
     
 
     def get_addresses_from_soce(hruid)
-      @connection = ActiveRecord::Base.establish_connection "soce_#{Rails.env}"
+      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
 
       sql = "SELECT adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
         left JOIN adresses AS ad ON (u.id_user=ad.id_user )
         left JOIN pays AS py ON (py.id_pays=ad.id_pays )
         left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
         where hruid = '#{hruid}'"
-      @result = @connection.connection.execute(sql);
+      @result = connection.connection.execute(sql);
+            connection.disconnect!
+
       @result.each(:as => :hash) do |row| 
         row["adresses"] 
       end
@@ -135,7 +142,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_jobs_from_soce(hruid)
-      @connection = ActiveRecord::Base.establish_connection "soce_#{Rails.env}"
+      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
 
       sql = "SELECT e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation
 , py.*, f.* FROM users 
@@ -144,7 +151,9 @@ left join entreprises AS e on e.id_entreprise = p.id_entreprise
 left join pays AS py on e.id_pays = py.id_pays
 left join liste_fonctions AS f on f.id_fonction = p.id_fonction
         where hruid = '#{hruid}'"
-      @result = @connection.connection.execute(sql);
+      @result = connection.connection.execute(sql);
+            connection.disconnect!
+
       @result.each(:as => :hash) do |row| 
         row["jobs"] 
       end
