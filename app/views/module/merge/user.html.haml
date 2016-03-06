@@ -4,7 +4,7 @@
 
     Explication blabla Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-    =form_for  [@user_soce], :url=> module_merge_user_path() do |f|
+    =form_for  [@user_soce], :url=> module_merge_user_path(@user_soce.hruid) do |f|
 
       / .mtm.box-merge
       /   -@info.each do |info|
@@ -106,6 +106,24 @@
                     =address["ville"]
                   .address-fields.small=address["nompays"]
 
+        %h3.txtcenter Réseaux sociaux
+        .grid-2
+          .box.pam
+            -@socials_platal.each_with_index do |social, i|
+              .box.box-light.shadow-1.mtm
+                .box-top.box-top-light.pam
+                  =social["name"]
+                .box-bottom.pam
+                  %div
+                    = text_field_tag social["link"].gsub("%s", social["address"]), social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
+                .box.pam
+                  = radio_button_tag i.to_s, "oui"
+                  = label_tag i.to_s+"_oui", "Transfèrer"
+                  = radio_button_tag i.to_s, "non"
+                  = label_tag i.to_s+"_non", "Non"
+
+
+
         %h3.txtcenter Emploi
         .grid-2
           .box.pam
@@ -128,6 +146,17 @@
               .box.box-light.shadow-1.mtm
                 .box-top.box-top-light.pam
                   #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
+                .box-bottom.pam
+                  -job.each do |field|
+                    .address-fields=field[1]
+
+        %h3.txtcenter Emploi test linkedin
+        .grid-2
+          .box.pam
+            -@linkedin_profile.past_companies.each_with_index do |job, i|
+              .box.box-light.shadow-1.mtm
+                .box-top.box-top-light.pam
+                  #{job[:company]} (#{job["entry_year"]})
                 .box-bottom.pam
                   -job.each do |field|
                     .address-fields=field[1]

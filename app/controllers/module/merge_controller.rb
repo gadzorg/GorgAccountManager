@@ -1,9 +1,10 @@
 class Module::MergeController < ApplicationController
 
   require 'fuzzystringmatch'
+  require 'linkedin_scraper'
 
   def user
-    hruid = (params[:hruid].nil? ? params[:hruid].to_s : current_user.hruid)
+    hruid = (params[:hruid].present? ? params[:hruid].to_s : current_user.hruid)
 
     @user = User.find_by(:hruid => hruid)
     authorize! :read, @user
@@ -49,8 +50,15 @@ class Module::MergeController < ApplicationController
       ]
     end
 
+    @socials_platal = get_socials_from_platal(hruid)
+    @socials_soce = get_socials_from_soce(hruid)
+
+
     @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
     @jobs_soce = get_jobs_from_soce(hruid)
+
+    #linkedintest
+    @linkedin_profile = Linkedin::Profile.get_profile("")
 
   end
 
@@ -68,8 +76,8 @@ class Module::MergeController < ApplicationController
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profiles AS p ON (p.pid=ap.pid) 
-        right JOIN profile_gadz_names AS pgn ON (pgn.pid = p.pid and pgn.type = 'buktxt')
-        right JOIN profile_gadz_names AS pgn2 ON (pgn2.pid = p.pid and pgn2.type = 'bukzal')
+        left JOIN profile_gadz_names AS pgn ON (pgn.pid = p.pid and pgn.type = 'buktxt')
+        left JOIN profile_gadz_names AS pgn2 ON (pgn2.pid = p.pid and pgn2.type = 'bukzal')
         left join group_members on a.uid = group_members.uid
         left join groups on group_members.asso_id = groups.id
         left join profile_phones on p.pid = profile_phones.pid
@@ -123,6 +131,24 @@ class Module::MergeController < ApplicationController
 
     end
 
+    def get_socials_from_platal(hruid)
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+
+      sql = "select pn.*, pne.*, a.hruid
+        FROM accounts as a
+        left JOIN account_profiles AS ap ON (ap.uid=a.uid )
+        left JOIN profile_networking AS pn ON ap.pid = pn.pid
+        left JOIN profile_networking_enum AS pne ON pn.nwid = pne.nwid
+        where hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+            connection.disconnect!
+
+      @result.each(:as => :hash) do |row| 
+        row["socials"] 
+      end
+
+    end
+
 
     
 
@@ -152,6 +178,23 @@ left join postes AS p on users.id_user = p.id_user
 left join entreprises AS e on e.id_entreprise = p.id_entreprise
 left join pays AS py on e.id_pays = py.id_pays
 left join liste_fonctions AS f on f.id_fonction = p.id_fonction
+        where hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+            connection.disconnect!
+
+      @result.each(:as => :hash) do |row| 
+        row["jobs"] 
+      end
+
+    end
+
+    def get_socials_from_soce(hruid)
+      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+
+      sql = "SELECT urs.​*, lrs.*​, "ee"
+        FROM users as u
+        left join users_reseaux_sociaux as urs on u.id_user = urs.id_user
+        left join liste_reseaux_sociaux as lrs on lrs.id_reseau_social = urs.id_reseau_social
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
             connection.disconnect!
