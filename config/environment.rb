@@ -4,6 +4,9 @@ require File.expand_path('../application', __FILE__)
 # Initialize the Rails application.
 Rails.application.initialize!
 
+ENV['INLINEDIR'] = File.join(File.dirname(__FILE__),'../public/
+uploads/')
+
 ActionMailer::Base.smtp_settings = {
   :user_name => Rails.application.secrets.smtp_user,
   :password => Rails.application.secrets.smtp_password,
