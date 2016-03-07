@@ -5,10 +5,13 @@ class Module::MergeController < ApplicationController
 
   def user
     # select current user if no params
-    @user = (params[:hruid].present? ? User.find_by(:hruid => params[:hruid]) : current_user)
+    if params[:hruid].present?
+      hruid = params[:hruid]
+    else
+      @user=User.find_by(:hruid => params[:hruid])
+      hruid = @user.hruid
+    end
     authorize! :read, @user
-
-    hruid = @user.hruid
 
     @user_soce = Usersoce.where(hruid: hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {0=choix possible, 1=ok}]
@@ -59,9 +62,11 @@ class Module::MergeController < ApplicationController
     @jobs_soce = get_jobs_from_soce(hruid)
 
     #linkedintest
-    linkedin_hash = @socials_platal.select{|n| n["name"].include? "LinkedIn"}.first
-    linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
-    @linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
+    linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
+    if linkedin_hash.present?
+      linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
+      @linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
+    end
 
   end
 
@@ -137,7 +142,7 @@ class Module::MergeController < ApplicationController
     def get_socials_from_platal(hruid)
       connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
 
-      sql = "select pn.*, pne.*, a.hruid
+      sql = "select pn.*, pne.*
         FROM accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profile_networking AS pn ON ap.pid = pn.pid

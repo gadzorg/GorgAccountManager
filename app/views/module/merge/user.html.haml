@@ -118,13 +118,15 @@
         %h3.txtcenter Réseaux sociaux
         .grid-2
           .box.pam
-            -@socials_platal.each_with_index do |social, i|
-              .box.box-light.shadow-1.mtm
-                .box-top.box-top-light.pam
-                  =social["name"]
-                .box-bottom.pam
-                  %div
-                    = text_field_tag social["link"].gsub("%s", social["address"]), social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
+            -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
+            -if @socials_platal.map{|a| a.compact.present? }.include? true
+              -@socials_platal.each_with_index do |social, i|
+                .box.box-light.shadow-1.mtm
+                  .box-top.box-top-light.pam
+                    =social["name"]
+                  .box-bottom.pam
+                    %div
+                      = text_field_tag social["link"].gsub("%s", social["address"]), social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
                 .box.pam
                   = radio_button_tag "social_"+i.to_s, "oui"
                   = label_tag "social_"+i.to_s+"_oui", "Transfèrer"
