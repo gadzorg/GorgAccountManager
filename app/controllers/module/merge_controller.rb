@@ -8,7 +8,7 @@ class Module::MergeController < ApplicationController
     if params[:hruid].present?
       hruid = params[:hruid]
     else
-      @user=User.find_by(:hruid => params[:hruid])
+      @user=current_user
       hruid = @user.hruid
     end
     authorize! :read, @user
