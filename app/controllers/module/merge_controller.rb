@@ -4,9 +4,8 @@ class Module::MergeController < ApplicationController
   require 'linkedin_scraper'
 
   def user
-    hruid = (params[:hruid].present? ? params[:hruid].to_s : current_user.hruid)
-
-    @user = User.find_by(:hruid => hruid)
+    # select current user if no params
+    @user = (params[:hruid].present? ? User.find_by(:hruid => hruid) : current_user)
     authorize! :read, @user
 
     @user_soce = Usersoce.where(hruid: hruid).take
@@ -58,7 +57,9 @@ class Module::MergeController < ApplicationController
     @jobs_soce = get_jobs_from_soce(hruid)
 
     #linkedintest
-    @linkedin_profile = Linkedin::Profile.get_profile("")
+    linkedin_hash = @socials_platal.select{|n| n["name"].include? "LinkedIn"}.first
+    linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
+    @linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
 
   end
 
@@ -191,7 +192,7 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
     def get_socials_from_soce(hruid)
       connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
 
-      sql = "SELECT urs.​*, lrs.*​, "ee"
+      sql = "SELECT urs.*, lrs.*
         FROM users as u
         left join users_reseaux_sociaux as urs on u.id_user = urs.id_user
         left join liste_reseaux_sociaux as lrs on lrs.id_reseau_social = urs.id_reseau_social
