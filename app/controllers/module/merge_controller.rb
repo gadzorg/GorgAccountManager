@@ -5,7 +5,7 @@ class Module::MergeController < ApplicationController
 
   def user
     # select current user if no params
-    @user = (params[:hruid].present? ? User.find_by(:hruid => hruid) : current_user)
+    @user = (params[:hruid].present? ? User.find_by(:hruid => params[:hruid]) : current_user)
     authorize! :read, @user
 
     hruid = @user.hruid
@@ -93,7 +93,7 @@ class Module::MergeController < ApplicationController
       @result.each(:as => :hash) do |row| 
         row["user"] 
       end
-      connection.disconnect!
+
       @result.first
 
     end
@@ -107,7 +107,7 @@ class Module::MergeController < ApplicationController
         left JOIN profile_addresses AS pa ON (pa.pid=ap.pid)
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
-            connection.disconnect!
+      
 
       @result.each(:as => :hash) do |row| 
         row["adresses"] 
@@ -126,7 +126,7 @@ class Module::MergeController < ApplicationController
         LEFT JOIN  profile_job_term_enum AS jte USING(jtid)
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
-            connection.disconnect!
+      
 
       @result.each(:as => :hash) do |row| 
         row["jobs"] 
@@ -144,8 +144,6 @@ class Module::MergeController < ApplicationController
         left JOIN profile_networking_enum AS pne ON pn.nwid = pne.nwid
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
-            connection.disconnect!
-
       @result.each(:as => :hash) do |row| 
         row["socials"] 
       end
@@ -164,8 +162,6 @@ class Module::MergeController < ApplicationController
         left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
-            connection.disconnect!
-
       @result.each(:as => :hash) do |row| 
         row["adresses"] 
       end
@@ -182,9 +178,7 @@ left join entreprises AS e on e.id_entreprise = p.id_entreprise
 left join pays AS py on e.id_pays = py.id_pays
 left join liste_fonctions AS f on f.id_fonction = p.id_fonction
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-            connection.disconnect!
-
+      @result = connection.connection.execute(sql);    
       @result.each(:as => :hash) do |row| 
         row["jobs"] 
       end
@@ -200,8 +194,6 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
         left join liste_reseaux_sociaux as lrs on lrs.id_reseau_social = urs.id_reseau_social
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
-            connection.disconnect!
-
       @result.each(:as => :hash) do |row| 
         row["jobs"] 
       end
