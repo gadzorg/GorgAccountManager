@@ -8,6 +8,8 @@ class Module::MergeController < ApplicationController
     @user = (params[:hruid].present? ? User.find_by(:hruid => hruid) : current_user)
     authorize! :read, @user
 
+    hruid = @user.hruid
+
     @user_soce = Usersoce.where(hruid: hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {0=choix possible, 1=ok}]
     info_platal=get_info_from_platal(hruid)
