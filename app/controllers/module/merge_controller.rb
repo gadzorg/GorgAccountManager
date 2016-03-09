@@ -9,7 +9,7 @@ class Module::MergeController < ApplicationController
       hruid = params[:hruid]
     else
       @user=current_user
-      hruid = @user.hruid
+      hruid = @user.hruid if @user.present?
     end
     authorize! :read, @user
 
@@ -87,11 +87,9 @@ class Module::MergeController < ApplicationController
         left JOIN profile_gadz_names AS pgn2 ON (pgn2.pid = p.pid and pgn2.type = 'bukzal')
         left join group_members on a.uid = group_members.uid
         left join groups on group_members.asso_id = groups.id
-        left join profile_phones on p.pid = profile_phones.pid
+        left join profile_phones on (p.pid = profile_phones.pid and profile_phones.tel_type = 'mobile' and profile_phones.link_type = 'user')
         left join profile_campus_enum on p.campus = profile_campus_enum.id
         where groups.cat = 'Promotions'
-        and tel_type = 'mobile'
-        and link_type = 'user'
         and hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
       @result.each(:as => :hash) do |row| 

@@ -127,7 +127,10 @@
                       =social["name"]
                     .box-bottom.pam
                       %div
-                        = text_field_tag social["link"].gsub("%s", social["address"]), social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
+                        -if social["link"].include? "%s"
+                          = text_field_tag "social_field_"+i.to_s, social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
+                        -else
+                          = text_field_tag "social_field_"+i.to_s, social["address"], :placeholder => " ", :class => "w100 slim mbs"
                     .box.pam
                       = radio_button_tag "social_"+i.to_s, "oui"
                       = label_tag "social_"+i.to_s+"_oui", "Ajouter"
