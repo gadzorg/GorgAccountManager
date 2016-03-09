@@ -23,11 +23,11 @@ class Module::MergeController < ApplicationController
       ["Nom", "nom",   formate_name(info_platal['lastname']),   @user_soce.nom,     0],
       ["Buque", "buktxt",  info_platal['buktxt'],  @user_soce.surnom,     0],
       ["Buque Zaloeil", "bukzal",  info_platal['bukzal'],  @user_soce.surnom,     0],
-      ["Tabagn's", "centre1",  info_platal['tbk'],  @user_soce.centre1,     0],
+      ["Tabagn's", "centre1",  info_platal['tbk'],  @user_soce.centre1.to_s.gsub(/[0-9]/, "1" => "ch", "2" => "an", "3" => "ai", "4" => "cl", "5" => "li", "6" => "pa", "7" => "bo", "8" => "ka", "9" => "me", "10" => "am"),     0],
       ["Email", "email",  info_platal['email'],  @user_soce.email,     0],
       ["Télephone portable", "tel_mobile",  info_platal['search_tel'],  @user_soce.tel_mobile,     0],
       ["Fam's", "famille1",  info_platal['gadz_fams'],  @user_soce.famille1,     0],
-      ["Fam's Zaloeil", "famille1zal",  info_platal['gadz_fams_display'],  "choix2",     0],
+      ["Fam's Zaloeil", "famille1zal",  info_platal['gadz_fams_display'],  "champ à ajouter dans bdd SOCE",     0],
       ["Date de naissance", "date_naissance",  info_platal['birthdate'],  @user_soce.date_naissance,     0],
       ["date_declaration_deces", "date_declaration_deces",  info_platal['deathdate'],  @user_soce.date_declaration_deces,     0]
     ]
@@ -53,7 +53,6 @@ class Module::MergeController < ApplicationController
           
       ]
     end
-
     @socials_platal = get_socials_from_platal(hruid)
     @socials_soce = get_socials_from_soce(hruid)
 

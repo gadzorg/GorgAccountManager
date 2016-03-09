@@ -56,37 +56,38 @@
     =form_tag module_merge_update_soce_user_path do
       .mtm.box-merge
         -@info.each do |info|
-          %h3.txtcenter=info[0] 
-          .grid-2.box-merge
-            -if info[4]==0
-              -if info[2]==info[3]
-                .box-merge-left Données identiques:
-                .box-merge-right= label_tag info[3],nil, :class => 'label-uniq'
+          -unless  info[2]==info[3] && info[3].nil? # on affiche rien si les champs sont vides
+            %h3.txtcenter=info[0]
+            .grid-2.box-merge
+              -if info[4]==0
+                -if info[2]==info[3]
+                  .box-merge-left Données identiques:
+                  .box-merge-right= label_tag info[3],nil, :class => 'label-uniq'
+                -else
+                  .box-merge-left
+                    = radio_button_tag info[1], "platal"
+                    = label_tag info[1]+"_platal", (info[2].nil? ? "" : info[2])
+                  .box-merge-right
+                    = radio_button_tag info[1], "soce"
+                    = label_tag info[1]+"_soce", (info[3].nil? ? "" : info[3])
+                  / 8888888888888
+                  / =f.label info[1],info[2] , :value => info[2] do
+                  /   =f.radio_button info[1],info[2]
+                  /   Hello
+                  / =f.label info[3],info[3] do
+                  /   =f.radio_button info[1],info[3]
+                  /   fffffff
+                  / 9999999999999999
+                  / =f.label info[1],info[2], :value => info[2]
+                  / =f.radio_button info[1],info[2]
               -else
-                .box-merge-left
-                  = radio_button_tag info[1], "platal"
-                  = label_tag info[1]+"_platal", info[2]
-                .box-merge-right
-                  = radio_button_tag info[1], "soce"
-                  = label_tag info[1]+"_soce", info[3]
-                / 8888888888888
-                / =f.label info[1],info[2] , :value => info[2] do
-                /   =f.radio_button info[1],info[2]
-                /   Hello
-                / =f.label info[3],info[3] do
-                /   =f.radio_button info[1],info[3]
-                /   fffffff
-                / 9999999999999999
-                / =f.label info[1],info[2], :value => info[2]
-                / =f.radio_button info[1],info[2]
-            -else
-              .box-merge-left Info fixe:  
-              .box-merge-right= label_tag info[3], nil, :class => 'label-uniq'
+                .box-merge-left Info fixe:  
+                .box-merge-right= label_tag info[3], nil, :class => 'label-uniq'
 
         %h3.txtcenter Adresses
         .grid-2
           .box.pam
-            -@addresses_platal.each_with_index do |address, i|
+            -@addresses_platal.select{|a| a[2]=="home"}.each_with_index do |address, i|
               .box.box-light.shadow-1.mtm
                 .box-top.box-top-light.pam
                   #{address.first[3]} #{address.last}
@@ -96,11 +97,11 @@
                       = text_field_tag field, field, :placeholder => " ", :class => "w100 slim mbs"
                 .box.pam
                   -if address[1]
-                    .mbm Une adresse similaire semble déjà exister
+                    .mbm Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus.
                   = radio_button_tag i.to_s, "oui"
-                  = label_tag i.to_s+"_oui", "Transfèrer"
+                  = label_tag i.to_s+"_oui", "Ajouter"
                   = radio_button_tag i.to_s, "non"
-                  = label_tag i.to_s+"_non", "Non"
+                  = label_tag i.to_s+"_non", "Oublier"
 
           .box.pam
             -@addresses_soce.each_with_index do |address, i|
@@ -114,31 +115,32 @@
                     =address["code_postal"]
                     =address["ville"]
                   .address-fields.small=address["nompays"]
-
-        %h3.txtcenter Réseaux sociaux
-        .grid-2
-          .box.pam
-            -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
-            -if @socials_platal.map{|a| a.compact.present? }.include? true
-              -@socials_platal.each_with_index do |social, i|
-                .box.box-light.shadow-1.mtm
-                  .box-top.box-top-light.pam
-                    =social["name"]
-                  .box-bottom.pam
-                    %div
-                      = text_field_tag social["link"].gsub("%s", social["address"]), social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
-                .box.pam
-                  = radio_button_tag "social_"+i.to_s, "oui"
-                  = label_tag "social_"+i.to_s+"_oui", "Transfèrer"
-                  = radio_button_tag "social_"+i.to_s, "non"
-                  = label_tag "social_"+i.to_s+"_non", "Non"
-          .box.pam
-            -@socials_soce.each_with_index do |social, i|
-              .box.box-light.shadow-1.mtm
-                .box-top.box-top-light.pam
-                  =social["libelle"]
-                .box-bottom.pam
-                  .address-fields=social["adresse"]
+        -if @socials_platal.map{|a| a.compact.present? }.include?(true) || @socials_soce.map{|a| a.compact.present? }.include?(true)
+          %h3.txtcenter Réseaux sociaux
+          .grid-2
+            .box.pam
+              -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
+              -if @socials_platal.map{|a| a.compact.present? }.include? true
+                -@socials_platal.each_with_index do |social, i|
+                  .box.box-light.shadow-1.mtm
+                    .box-top.box-top-light.pam
+                      =social["name"]
+                    .box-bottom.pam
+                      %div
+                        = text_field_tag social["link"].gsub("%s", social["address"]), social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim mbs"
+                    .box.pam
+                      = radio_button_tag "social_"+i.to_s, "oui"
+                      = label_tag "social_"+i.to_s+"_oui", "Ajouter"
+                      = radio_button_tag "social_"+i.to_s, "non"
+                      = label_tag "social_"+i.to_s+"_non", "Oublier"
+            .box.pam
+              -if @socials_soce.map{|a| a.compact.present? }.include? true
+                -@socials_soce.each_with_index do |social, i|
+                  .box.box-light.shadow-1.mtm
+                    .box-top.box-top-light.pam
+                      =social["libelle"]
+                    .box-bottom.pam
+                      .address-fields=social["adresse"]
 
 
 
@@ -155,9 +157,9 @@
                       = text_field_tag field[0], field[1], :placeholder => " ", :class => "w100 slim mbs"
                 .box.pam
                   = radio_button_tag "job_"+i.to_s, "oui"
-                  = label_tag "job_"+i.to_s+"_oui", "Transfèrer"
+                  = label_tag "job_"+i.to_s+"_oui", "Ajouter"
                   = radio_button_tag "job_"+i.to_s, "non"
-                  = label_tag "job_"+i.to_s+"_non", "Non"
+                  = label_tag "job_"+i.to_s+"_non", "Oublier"
           .box.pam
             -@jobs_soce.each_with_index do |job, i|
               .box.box-light.shadow-1.mtm
