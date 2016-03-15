@@ -22,7 +22,7 @@ class Module::MergeController < ApplicationController
       ["Prénom", "prenom",  formate_name(info_platal['firstname']),   @user_soce.prenom,     0],
       ["Nom", "nom",   formate_name(info_platal['lastname']),   @user_soce.nom,     0],
       ["Buque", "buktxt",  info_platal['buktxt'],  @user_soce.surnom,     0],
-      ["Buque Zaloeil", "bukzal",  info_platal['bukzal'],  @user_soce.surnom,     0],
+      ["Buque Zaloeil", "bukzal",  info_platal['bukzal'],  "champ à ajouter dans bdd SOCE",     0],
       ["Tabagn's", "centre1",  info_platal['tbk'],  @user_soce.centre1.to_s.gsub(/[0-9]/, "1" => "ch", "2" => "an", "3" => "ai", "4" => "cl", "5" => "li", "6" => "pa", "7" => "bo", "8" => "ka", "9" => "me", "10" => "am"),     0],
       ["Email", "email",  info_platal['email'],  @user_soce.email,     0],
       ["Télephone portable", "tel_mobile",  info_platal['search_tel'],  @user_soce.tel_mobile,     0],
@@ -39,10 +39,11 @@ class Module::MergeController < ApplicationController
     
     jarow = FuzzyStringMatch::JaroWinkler.create( :native )
     # retourne un tableau [ [tableau adresse soce], true si correspondace avec une adresse soce false sinon ]
-    @addresses_platal=addresses_platal.map do |a| 
+    @addresses_platal=addresses_platal.map do |a|
+      adresse_to_formate =  a["formatted_address"].present? ? a["formatted_address"] : a["postalText"]
       [
-      formate_address_soce(Geocoder.search(a["formatted_address"]).first), 
-      addresses_soce_formated.map{ |b| jarow.getDistance(a["formatted_address"], b)}.max > 0.8,
+      formate_address_soce(Geocoder.search(adresse_to_formate).first), 
+      addresses_soce_formated.map{ |b| jarow.getDistance(adresse_to_formate, b)}.max > 0.75,
       a["type"],
       case a["flags"]
       when /current/
@@ -50,9 +51,10 @@ class Module::MergeController < ApplicationController
       when /secondary/
         "(Secondaire)"
       end
-          
+      
       ]
     end
+
     @socials_platal = get_socials_from_platal(hruid)
     @socials_soce = get_socials_from_soce(hruid)
 
