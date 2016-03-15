@@ -95,7 +95,7 @@
                   %div
                     -address[0].each do |field|
                       = text_field_tag field, field, :placeholder => " ", :class => "w100 slim mbs"
-                .box.pam
+                .box.pbm.plm.prm
                   -if address[1]
                     .mbm Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus.
                   = radio_button_tag i.to_s, "oui"
@@ -115,6 +115,12 @@
                     =address["code_postal"]
                     =address["ville"]
                   .address-fields.small=address["nompays"]
+
+                .box.pbm.plm.prm
+                  .small
+                    %i.zmdi.zmdi-info-outline
+                    Cette adresse sera conservée et ne sera pas modifiée
+
         -if @socials_platal.map{|a| a.compact.present? }.include?(true) || @socials_soce.map{|a| a.compact.present? }.include?(true)
           %h3.txtcenter Réseaux sociaux
           .grid-2
