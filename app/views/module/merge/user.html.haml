@@ -100,16 +100,18 @@
                     -if address[1]
                       Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus. 
                     Que veux-tu faire de cette adresse ?
-                  = radio_button_tag i.to_s, "oui"
-                  = label_tag i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
-                  = radio_button_tag i.to_s, "non"
-                  = label_tag i.to_s+"_non", "Oublier"
+                  = radio_button_tag "address_" + i.to_s, "oui"
+                  = label_tag "address_" + i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
+                  = radio_button_tag "address_" + i.to_s, "non"
+                  = label_tag "address_" + i.to_s+"_non", "Oublier"
 
           .box.pam
             -@addresses_soce.each_with_index do |address, i|
               .box.box-light.shadow-1.mtm
                 .box-top.box-top-light.pam
                   #{address["ville"]} (#{address["libelle"]})
+                  / = radio_button_tag "address_main" , i.to_s
+                  / = label_tag "address_main_" + i.to_s, "Principale"
                 .box-bottom.pam
                   .address-fields=address["adresse_1"]
                   .address-fields=address["adresse_2"]
@@ -159,8 +161,38 @@
 
 
 
-        %h3.txtcenter Diplômes
-        Todo
+        -if @diploma_platal.map{|a| a.compact.present? }.include?(true) || @diploma_soce.map{|a| a.compact.present? }.include?(true)
+          %h3.txtcenter Diplômes
+          .grid-2
+            .box.pam
+              -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
+              -if @diploma_platal.map{|a| a.compact.present? }.include? true
+                -@diploma_platal.each_with_index do |diploma, i|
+                  .box.box-light.shadow-1.mtm
+                    .box-top.box-top-light.pam
+                      =diploma["name"]
+                    .box-bottom.pam
+                      %div
+                        = text_field_tag "diploma_field_"+i.to_s, diploma["program"], :placeholder => "program", :class => "w100 slim mbs"
+                        = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim mbs"
+
+                    .box.pam
+                      = radio_button_tag "diploma_"+i.to_s, "oui"
+                      = label_tag "diploma_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
+                      = radio_button_tag "diploma_"+i.to_s, "non"
+                      = label_tag "diploma_"+i.to_s+"_non", "Oublier"
+            .box.pam
+              -if @diploma_soce.map{|a| a.compact.present? }.include? true
+                -@diploma_soce.each_with_index do |diploma, i|
+                  .box.box-light.shadow-1.mtm
+                    .box-top.box-top-light.pam
+                      =diploma["libelle"]
+                    .box-bottom.pam
+                      .address-fields=diploma["annee"]
+                    .box.pbm.plm.prm
+                      .small
+                        %i.zmdi.zmdi-info-outline
+                        Ce diplome sera conservé et ne sera pas modifié
 
         %h3.txtcenter Emploi
         .grid-2
@@ -207,7 +239,37 @@
                       .address-fields=field[1]
 
 
-        %h3.txtcenter Médailles
-        Todo
+        -if @medal_platal.map{|a| a.compact.present? }.include?(true) || @diploma_soce.map{|a| a.compact.present? }.include?(true)
+          %h3.txtcenter Médaille
+          .grid-2
+            .box.pam
+              -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
+              -if @medal_platal.map{|a| a.compact.present? }.include? true
+                -@medal_platal.each_with_index do |medal, i|
+                  .box.box-light.shadow-1.mtm
+                    .box-top.box-top-light.pam
+                      =medal["medal_text"]
+                    .box-bottom.pam
+                      %div
+                        / = text_field_tag "diploma_field_"+i.to_s, diploma["program"], :placeholder => "program", :class => "w100 slim mbs"
+                        / = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim mbs"
+
+                    .box.pam
+                      = radio_button_tag "medal_"+i.to_s, "oui"
+                      = label_tag "medal_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
+                      = radio_button_tag "medal_"+i.to_s, "non"
+                      = label_tag "medal_"+i.to_s+"_non", "Oublier"
+            .box.pam
+              -if @medal_soce.map{|a| a.compact.present? }.include? true
+                -@medal_soce.each_with_index do |medal, i|
+                  .box.box-light.shadow-1.mtm
+                    .box-top.box-top-light.pam
+                      =medal["libelle"]
+                    .box-bottom.pam
+                      .address-fields=medal["annee"]
+                    .box.pbm.plm.prm
+                      .small
+                        %i.zmdi.zmdi-info-outline
+                        Ce médaille sera conservée et ne sera pas modifiée
 
     =submit_tag 'Envoyer',:class => "bouton bouton_bleu"

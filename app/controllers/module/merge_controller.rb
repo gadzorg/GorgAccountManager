@@ -62,6 +62,12 @@ class Module::MergeController < ApplicationController
     @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
     @jobs_soce = get_jobs_from_soce(hruid)
 
+    @diploma_platal = get_diploma_from_platal(hruid)
+    @diploma_soce = get_diploma_from_soce(hruid)
+
+    @medal_platal = get_medal_from_platal(hruid)
+    @medal_soce = get_medal_from_soce(hruid)
+
     #linkedintest
     linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
     if linkedin_hash.present?
@@ -154,6 +160,42 @@ class Module::MergeController < ApplicationController
 
     end
 
+    def get_diploma_from_platal(hruid)
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+
+      sql = "Select *
+        from accounts as a
+        left JOIN account_profiles AS ap ON (ap.uid=a.uid )
+        left JOIN profile_education AS pe ON (ap.pid=pe.pid ) 
+        left JOIN profile_education_enum AS pee ON (pee.id=pe.eduid )
+        where not pee.id = 28  
+        and hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["diploma"] 
+      end
+
+    end
+
+    def get_medal_from_platal(hruid)
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+
+      sql = "Select pme.type, pme.text AS medal_text, pmge.text AS medal_grade_text
+        from accounts as a
+        left JOIN account_profiles AS ap ON (ap.uid=a.uid )
+        left JOIN profile_medals AS pm ON (ap.pid=pm.pid ) 
+        left JOIN profile_medal_enum AS pme ON (pme.id=pm.mid ) 
+        left JOIN profile_medal_grade_enum AS pmge ON (pmge.mid=pm.mid and pmge.gid = pm.gid )  
+        where hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["medal"] 
+      end
+
+    end
+
+    
+
 
     
 
@@ -199,7 +241,35 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
         where hruid = '#{hruid}'"
       @result = connection.connection.execute(sql);
       @result.each(:as => :hash) do |row| 
-        row["jobs"] 
+        row["socials"] 
+      end
+
+    end
+    def get_diploma_from_soce(hruid)
+      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+
+      sql = "SELECT ud.*
+        FROM users as u
+        left join users_diplomes as ud on u.id_user = ud.id_user
+        where hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["diploma"] 
+      end
+
+    end
+
+    def get_medal_from_soce(hruid)
+      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+
+      sql = "SELECT m.*, annee
+        FROM users as u
+        left join liens_users_medailles as um on um.id_user = u.id_user
+        left join medailles as m on m.id_medaille = um.id_medaille
+        where hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["medal"] 
       end
 
     end
