@@ -96,10 +96,12 @@
                     -address[0].each do |field|
                       = text_field_tag field, field, :placeholder => " ", :class => "w100 slim mbs"
                 .box.pbm.plm.prm
-                  -if address[1]
-                    .mbm Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus.
+                  .mbm 
+                    -if address[1]
+                      Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus. 
+                    Que veux-tu faire de cette adresse ?
                   = radio_button_tag i.to_s, "oui"
-                  = label_tag i.to_s+"_oui", "Ajouter"
+                  = label_tag i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
                   = radio_button_tag i.to_s, "non"
                   = label_tag i.to_s+"_non", "Oublier"
 
@@ -139,7 +141,7 @@
                           = text_field_tag "social_field_"+i.to_s, social["address"], :placeholder => " ", :class => "w100 slim mbs"
                     .box.pam
                       = radio_button_tag "social_"+i.to_s, "oui"
-                      = label_tag "social_"+i.to_s+"_oui", "Ajouter"
+                      = label_tag "social_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
                       = radio_button_tag "social_"+i.to_s, "non"
                       = label_tag "social_"+i.to_s+"_non", "Oublier"
             .box.pam
@@ -150,6 +152,10 @@
                       =social["libelle"]
                     .box-bottom.pam
                       .address-fields=social["adresse"]
+                    .box.pbm.plm.prm
+                      .small
+                        %i.zmdi.zmdi-info-outline
+                        Ce réseau social sera conservée et ne sera pas modifiée
 
 
 
@@ -159,27 +165,34 @@
         %h3.txtcenter Emploi
         .grid-2
           .box.pam
-            -@jobs_platal.each_with_index do |job, i|
-              .box.box-light.shadow-1.mtm
-                .box-top.box-top-light.pam
-                  #{job["cpny_name"]} (#{job["entry_year"]})
-                .box-bottom.pam
-                  %div
-                    -job.each do |field|
-                      = text_field_tag field[0], field[1], :placeholder => " ", :class => "w100 slim mbs"
-                .box.pam
-                  = radio_button_tag "job_"+i.to_s, "oui"
-                  = label_tag "job_"+i.to_s+"_oui", "Ajouter"
-                  = radio_button_tag "job_"+i.to_s, "non"
-                  = label_tag "job_"+i.to_s+"_non", "Oublier"
+            -if @jobs_platal.map{|a| a.compact.present? }.include? true
+              -@jobs_platal.each_with_index do |job, i|
+                .box.box-light.shadow-1.mtm
+                  .box-top.box-top-light.pam
+                    #{job["cpny_name"]} (#{job["entry_year"]})
+                  .box-bottom.pam
+                    %div
+                      -job.each do |field|
+                        = text_field_tag field[0], field[1], :placeholder => " ", :class => "w100 slim mbs"
+                  .box.pam
+                    = radio_button_tag "job_"+i.to_s, "oui"
+                    = label_tag "job_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE"
+                    = radio_button_tag "job_"+i.to_s, "non"
+                    = label_tag "job_"+i.to_s+"_non", "Oublier"
           .box.pam
-            -@jobs_soce.each_with_index do |job, i|
-              .box.box-light.shadow-1.mtm
-                .box-top.box-top-light.pam
-                  #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
-                .box-bottom.pam
-                  -job.each do |field|
-                    .address-fields=field[1]
+            -if @jobs_soce.map{|a| a.compact.present? }.include? true
+              -@jobs_soce.each_with_index do |job, i|
+                .box.box-light.shadow-1.mtm
+                  .box-top.box-top-light.pam
+                    #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
+                  .box-bottom.pam
+                    -job.each do |field|
+                      .address-fields=field[1]
+                  .box.pbm.plm.prm
+                    .small
+                      %i.zmdi.zmdi-info-outline
+                      Cet emploi sera conservée et ne sera pas modifiée
+
 
         -if @linkedin_profile.present?        
           %h3.txtcenter [TEST] Emploi linkedin

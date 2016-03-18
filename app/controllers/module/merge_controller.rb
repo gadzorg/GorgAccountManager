@@ -28,7 +28,7 @@ class Module::MergeController < ApplicationController
       ["Télephone portable", "tel_mobile",  info_platal['search_tel'],  @user_soce.tel_mobile,     0],
       ["Fam's", "famille1",  info_platal['gadz_fams'],  @user_soce.famille1,     0],
       ["Fam's Zaloeil", "famille1zal",  info_platal['gadz_fams_display'],  "champ à ajouter dans bdd SOCE",     0],
-      ["Date de naissance", "date_naissance",  info_platal['birthdate'],  @user_soce.date_naissance,     0],
+      ["Date de naissance", "date_naissance",  info_platal['birthdate'].strftime("%d %b %Y"),  @user_soce.date_naissance.strftime("%d %b %Y"),     0],
       ["date_declaration_deces", "date_declaration_deces",  info_platal['deathdate'],  @user_soce.date_declaration_deces,     0]
     ]
     @addresses_soce=get_addresses_from_soce(hruid)
