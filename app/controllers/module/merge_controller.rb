@@ -31,6 +31,9 @@ class Module::MergeController < ApplicationController
       ["Date de naissance", "date_naissance",  info_platal['birthdate'].strftime("%d %b %Y"),  @user_soce.date_naissance.strftime("%d %b %Y"),     0],
       ["date_declaration_deces", "date_declaration_deces",  info_platal['deathdate'],  @user_soce.date_declaration_deces,     0]
     ]
+
+    @phones_platal = get_phones_from_platal(hruid)
+
     @addresses_soce=get_addresses_from_soce(hruid)
 
     addresses_soce_formated = @addresses_soce.map { |a| Geocoder.search(a.map(&:last)[0...-1].join(" ")).first.formatted_address }
@@ -47,13 +50,15 @@ class Module::MergeController < ApplicationController
       a["type"],
       case a["flags"]
       when /current/
-        "(Principale)"
+        "(Principale)" 
       when /secondary/
         "(Secondaire)"
       end
       
       ]
     end
+
+    @phones_adresse_platal = @phones_platal.select{|n| (n["link_type"].include? "address")}
 
     @socials_platal = get_socials_from_platal(hruid)
     @socials_soce = get_socials_from_soce(hruid)
@@ -190,6 +195,21 @@ class Module::MergeController < ApplicationController
       @result = connection.connection.execute(sql);
       @result.each(:as => :hash) do |row| 
         row["medal"] 
+      end
+
+    end
+
+    def get_phones_from_platal(hruid)
+      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+
+      sql = "select pp.*
+        from accounts as a
+        left JOIN account_profiles AS ap ON (ap.uid=a.uid )
+        left JOIN profile_phones AS pp ON (pp.pid=ap.pid)
+        where hruid = '#{hruid}'"
+      @result = connection.connection.execute(sql);
+      @result.each(:as => :hash) do |row| 
+        row["phone"] 
       end
 
     end
