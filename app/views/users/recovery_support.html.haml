@@ -6,17 +6,34 @@
       .box-bottom
         .pam
           %p.mtm Laisse-nous quelques informations pour t'identifier et décris-nous ton problème.
-          = form_tag(recovery_support_final_path(), :method => :post) do
-            -#= label_tag :nom
-            = text_field_tag :nom,"", :placeholder => "Nom", :size => 33, :autofocus => true
-            -#= label_tag :prenom
-            = text_field_tag :prenom,"", :placeholder => "Prénom", :size => 33
-            -#= label_tag :email, "Email où nous pourrons te contacter"
-            = text_field_tag :email,"", :placeholder => "Email où nous pouvons te contacter", :size => 33
-            -#= label_tag :telephone
-            = text_field_tag :telephone,"", :placeholder => "Téléphone", :size => 33
-            -#= text_field_tag :ddn,"", :placeholder => "Date de naissance", :size => 30
-            =label_tag "Date de naissance"
-            = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
-            = text_area_tag :issue,"", :placeholder => "Déscription du problème", :cols => 32
-            %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"
+          .mtm
+            = form_tag(recovery_support_final_path(), :method => :post) do
+              .group-m-form
+                = text_field_tag :nom,"", :class => "w100", :autofocus => true
+                = label_tag :nom
+                .span.highlight.w100
+                .span.bar.w100
+              .group-m-form
+                = text_field_tag :prenom,"", :class => "w100"
+                = label_tag :prenom
+                .span.highlight.w100
+                .span.bar.w100
+              .group-m-form
+                = text_field_tag :email,"", :class => "w100"
+                = label_tag :email, "Email où nous pourrons te contacter"
+                .span.highlight.w100
+                .span.bar.w100
+              .group-m-form
+                = text_field_tag :telephone,"", :class => "w100"
+                = label_tag :telephone
+                .span.highlight.w100
+                .span.bar.w100
+              .group-m-form
+                %p Date de naissance
+                -#= text_field_tag :ddn,"", :size => 30
+                = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
+              .group-m-form
+                = text_area_tag :issue,"", :class => "w100"
+                = label_tag :issue, "Déscription du problème"
+
+              %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"

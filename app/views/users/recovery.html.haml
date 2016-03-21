@@ -15,10 +15,14 @@
           %p Tu peux essayer à nouveau:
         .mtm 
           =form_for  [@user], :url=> create_recovery_session_path()  do |f|
-            =f.text_field :hruid, :placeholder => "Entre ici ton identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
+            .group-m-form
+              =f.text_field :hruid, :placeholder => "", :class => "w100 login", :autofocus => true
+              =f.label :hruid, "Entre ici ton identifiant OU email OU n° de sociétaire,..."
+              .span.highlight.w100
+              .span.bar.w100
             -if @help == true
               %p.small.red Peux-tu cocher la case ci-dessous? C'est une mesure de sécurité pour éviter les abus sur ce site. Merci!
-            .w100.ptm.pbm=recaptcha_tags
+            .w100.pbm=recaptcha_tags
             =f.submit 'Recuperer',:class => "bouton bouton_bleu", :id => "button_loading"
             %span#loading
               =image_tag "Preloader_3.gif"
