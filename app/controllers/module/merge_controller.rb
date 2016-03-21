@@ -329,7 +329,7 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
       city = ( begin address.address_components.select{|n| n["types"].include? "locality"}.first["long_name"] rescue "" end )
       country = ( begin address.address_components.select{|n| n["types"].include? "country"}.first["long_name"] rescue "" end )
 
-      return [addresss1, addresss2, postal_code, city, country]
-
+      a = ["Adresse 1", addresss1, "Adresse 2",addresss2, "Code postal",postal_code, "Ville",city, "Pays",country]
+      return Hash[*a]
     end
 end

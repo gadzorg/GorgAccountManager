@@ -1,6 +1,38 @@
 // Place all the styles related to the Module/Merge controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+@import "autoload/colors";
+
+.box-merge{}
+.box-merge-left{
+	text-align: right;
+}
+.box-merge-right{
+	text-align: left;
+}
+.box-merge-left input{
+	float: right;
+	clear: both;
+}
+.box-merge-right{}
+
+.box-merge input[type="radio"] {
+	visibility: hidden;
+	position: absolute;
+	top: -9999px;
+	left: -9999px;
+}
+.box-merge label.black {
+	padding: 10px;
+	border-radius: 7px;
+	border: rgba(0, 0, 0, 0.07) 3px solid;
+	pointer-events: auto;
+}
+
+.mtm input[type="radio"]:checked + label.black, .box-merge-right .label-uniq{
+	border: $violet-dark 3px solid;
+}
+
 .bottom-merge{
 	position: fixed;
 	bottom: 0;
@@ -15,4 +47,8 @@ background: rgba(255, 255, 255, 0.86);
 	left: 0px;
 	height: 45px;
 	font-size: 38px;
+}
+
+label.black{
+	color: #4c4c4c;
 }
