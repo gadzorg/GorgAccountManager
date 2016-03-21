@@ -6,7 +6,7 @@ gem 'rails', '4.2.3'
 
 #DATABASE
 # Use sqlite3 as the database for Active Record
-gem 'sqlite3'
+#gem 'sqlite3'
 # Use mysql2 as the database for Active Record
 #gem 'mysql2'
 gem 'mysql2', '~> 0.3.20'
@@ -132,6 +132,14 @@ group :development, :test do
   gem 'rspec-rails'
 
   gem 'factory_girl_rails'
+
+  gem 'mysql2', '~> 0.3.20'
+
+  #performance test
+  gem 'rack-mini-profiler'
+  gem 'flamegraph'
+  gem 'stackprof' # ruby 2.1+ only
+  gem 'memory_profiler'
 
 end
 

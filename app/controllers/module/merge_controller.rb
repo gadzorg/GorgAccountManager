@@ -36,7 +36,10 @@ class Module::MergeController < ApplicationController
 
     @addresses_soce=get_addresses_from_soce(hruid)
 
-    addresses_soce_formated = @addresses_soce.map { |a| Geocoder.search(a.map(&:last)[0...-1].join(" ")).first.formatted_address }
+    addresses_soce_formated = @addresses_soce.map do |a| 
+      b=Geocoder.search(a.map(&:last)[0...-1].join(" ")).first
+      b.formatted_address if b.present?
+    end
 
     addresses_platal=get_addresses_from_platal(hruid)
     
@@ -90,7 +93,7 @@ class Module::MergeController < ApplicationController
 
   private
     def get_info_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "select *, hruid, firstname, lastname, pgn.name as buktxt, pgn2.name as bukzal, email, gadz_fams, gadz_fams_display, birthdate, deathdate, search_tel, IF (tbk = 'kin', 'ai', tbk) as tbk
         from accounts as a
@@ -114,7 +117,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_addresses_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "select formatted_address, postalText, pa.type, pa.flags
         from accounts as a
@@ -130,7 +133,7 @@ class Module::MergeController < ApplicationController
 
     end
     def get_jobs_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "select pj.description AS job_desc, pj.email, pj.url AS job_url, entry_year, pje.name AS cpny_name, pje.url, NAF_code, pje.description AS cpny_desc, jte.name, jte.full_name
         from accounts as a
@@ -150,7 +153,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_socials_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "select pn.*, pne.*
         FROM accounts as a
@@ -166,7 +169,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_diploma_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "Select *
         from accounts as a
@@ -183,7 +186,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_medal_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "Select pme.type, pme.text AS medal_text, pmge.text AS medal_grade_text
         from accounts as a
@@ -200,7 +203,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_phones_from_platal(hruid)
-      connection = OtherDatabaseConnection.establish_connection "platal_#{Rails.env}"
+      connection = PlatalDatabaseConnection
 
       sql = "select pp.*
         from accounts as a
@@ -220,9 +223,9 @@ class Module::MergeController < ApplicationController
     
 
     def get_addresses_from_soce(hruid)
-      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+      connection = SoceDatabaseConnection
 
-      sql = "SELECT adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
+      sql = "SELECT tel_fixe, fax, adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
         left JOIN adresses AS ad ON (u.id_user=ad.id_user )
         left JOIN pays AS py ON (py.id_pays=ad.id_pays )
         left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
@@ -235,7 +238,7 @@ class Module::MergeController < ApplicationController
     end
 
     def get_jobs_from_soce(hruid)
-      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+      connection = SoceDatabaseConnection
 
       sql = "SELECT e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation
 , py.*, f.* FROM users 
@@ -252,7 +255,7 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
     end
 
     def get_socials_from_soce(hruid)
-      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+      connection = SoceDatabaseConnection
 
       sql = "SELECT urs.*, lrs.*
         FROM users as u
@@ -266,7 +269,7 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
 
     end
     def get_diploma_from_soce(hruid)
-      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+      connection = SoceDatabaseConnection
 
       sql = "SELECT ud.*
         FROM users as u
@@ -280,7 +283,7 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
     end
 
     def get_medal_from_soce(hruid)
-      connection = OtherDatabaseConnection.establish_connection "soce_#{Rails.env}"
+      connection = SoceDatabaseConnection
 
       sql = "SELECT m.*, annee
         FROM users as u

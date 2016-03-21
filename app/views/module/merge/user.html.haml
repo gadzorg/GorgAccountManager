@@ -117,12 +117,21 @@
                   / = radio_button_tag "address_main" , i.to_s
                   / = label_tag "address_main_" + i.to_s, "Principale"
                 .box-bottom.pam
-                  .address-fields=address["adresse_1"]
-                  .address-fields=address["adresse_2"]
                   .address-fields
-                    =address["code_postal"]
-                    =address["ville"]
-                  .address-fields.small=address["nompays"]
+                    %i.zmdi.zmdi-phone
+                    =address["tel_fixe"]
+                  .address-fields
+                    %i.zmdi.zmdi-file-text
+                    Fax :
+                    =address["fax"]
+                  .ptm
+                    %i.zmdi.zmdi-pin 
+                    .address-fields=address["adresse_1"]
+                    .address-fields=address["adresse_2"]
+                    .address-fields
+                      =address["code_postal"]
+                      =address["ville"]
+                    .address-fields.small=address["nompays"]
 
                 .box.pbm.plm.prm
                   .small
@@ -225,8 +234,64 @@
                   .box-top.box-top-light.pam
                     #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
                   .box-bottom.pam
-                    -job.each do |field|
-                      .address-fields=field[1]
+                    -if job["date_debut"].present? && job["date_fin"].present?
+                      Du #{job["date_debut"].strftime("%d %b %Y")} à #{job["date_fin"].strftime("%d %b %Y")}
+                    -elsif job["date_debut"].present?
+                      Depuis #{job["date_debut"].strftime("%d %b %Y")}
+
+                    -if job["id_etat_validation"] == -1
+                      .red.small Tu as effectué récement une modification sur cet emploi, il est en attente de validation
+                    .ptm.small
+                      %i.zmdi.zmdi-tag
+                      =job["libelle"]
+                    
+
+                    =job["raison_sociale"]
+                    =job["activite_texte"]
+                    .ptm
+                      .address-fields
+                        %i.zmdi.zmdi-phone
+                        =job["tel_direct"]
+                      .address-fields
+                        %i.zmdi.zmdi-phone 
+                        (Standard) 
+                        =job["tel_standard"]
+                      .address-fields
+                        %i.zmdi.zmdi-email
+                        =job["email"]
+                      .address-fields
+                        %i.zmdi.zmdi-smartphone-iphone
+                        =job["gsm"]
+                      .address-fields
+                        %i.zmdi.zmdi-file
+                        Fax 
+                        =job["fax"]
+                    .ptm  
+                      %i.zmdi.zmdi-pin
+                      Bureau
+                      .address-fields=job["adresse"]
+                      .address-fields=job["adresse2"]
+                      .address-fields=job["adresse3"]
+                      .address-fields
+                        =job["code_postal"]
+                        =job["ville"]
+                      .address-fields.small=job["nompays"]
+
+                    .ptm
+                      %i.zmdi.zmdi-pin
+                      Siège social
+                      .address-fields=job["adresse_siege_1"]
+                      .address-fields=job["adresse_siege_2"]
+                      .address-fields=job["adresse_siege_3"]
+                      .address-fields
+                        =job["code_postal_entreprise"]
+                        =job["ville_entreprise"]
+                      .address-fields.small=job["pays_entreprise"]
+                    
+                    
+                    / \#######################
+                    / -job.each do |field|
+                    /   .address-fields=field[1]
                   .box.pbm.plm.prm
                     .small
                       %i.zmdi.zmdi-info-outline
