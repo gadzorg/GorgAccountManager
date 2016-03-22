@@ -29,7 +29,7 @@
 	pointer-events: auto;
 }
 
-.mtm input[type="radio"]:checked + label.black, .box-merge-right .label-uniq{
+.mtm input[type="radio"]:checked + label.black, .box-merge-right .label-uniq.black{
 	border: $violet-dark 3px solid;
 }
 
