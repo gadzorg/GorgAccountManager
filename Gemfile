@@ -137,9 +137,9 @@ group :development, :test do
 
   #performance test
   gem 'rack-mini-profiler'
-  gem 'flamegraph'
-  gem 'stackprof' # ruby 2.1+ only
-  gem 'memory_profiler'
+  # gem 'flamegraph'
+  # gem 'stackprof' # ruby 2.1+ only
+  # gem 'memory_profiler'
 
 end
 
