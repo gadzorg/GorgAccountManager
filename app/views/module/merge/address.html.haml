@@ -171,6 +171,7 @@
           .box-top.box-top-light.pam
             #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
           .box-bottom.pam
+            .address-fields=job["fonction_texte"]
             -if job["date_debut"].present? && job["date_fin"].present?
               Du #{job["date_debut"].strftime("%d %b %Y")} à #{job["date_fin"].strftime("%d %b %Y")}
             -elsif job["date_debut"].present?

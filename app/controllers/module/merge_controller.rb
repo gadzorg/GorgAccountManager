@@ -256,7 +256,7 @@ class Module::MergeController < ApplicationController
     def get_jobs_from_soce(hruid)
       connection = SoceDatabaseConnection
 
-      sql = "SELECT e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation
+      sql = "SELECT *,e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation
 , py.*, f.* FROM users 
 left join postes AS p on users.id_user = p.id_user
 left join entreprises AS e on e.id_entreprise = p.id_entreprise
