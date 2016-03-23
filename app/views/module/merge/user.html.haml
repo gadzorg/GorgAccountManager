@@ -18,11 +18,12 @@
         %b fusionnent
         enfin ! Afin que tes 
         %b infos personnelles soient à jour
-        , tu peux choisir ci-dessous lesquelles tu souhaite garder. Tu trouveras à gauche celles qui proviennent de l'annuaire gadz.org et à droite celle de l'annuaire Soce.
+        , tu peux choisir ci-dessous lesquelles tu souhaites garder. Tu trouveras à gauche celles qui proviennent de l'annuaire gadz.org et à droite celle de l'annuaire Soce.
       .small Temps estimé : 2 minutes
 
 
     =form_tag module_merge_update_soce_user_path do
+      #hruid=hidden_field_tag @info[0][3], :class => "hruid"
       .mtm.box-merge
         .grid-2
           .box-merge-left.prm
@@ -60,7 +61,7 @@
                   / =f.radio_button info[1],info[2]
               -else
                 .box-merge-left Info fixe:  
-                .box-merge-right= label_tag info[3], nil, :class => 'label-uniq black'
+                .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'
         #addresses
           .box.box-light.shadow-1.mtm.w50.pam.center
             .txtcenter=image_tag "Preloader_3.gif"

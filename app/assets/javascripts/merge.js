@@ -4,7 +4,7 @@
 
 $(document).ready(function () {
 	$.ajax({
-		url: "/module/merge/address/me",
+		url: "/module/merge/address/" + $("#hruid").children().first().attr("name"),
 		cache: false,
 		success: function(html){
 			$("#addresses").replaceWith(html);
