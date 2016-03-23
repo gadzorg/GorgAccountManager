@@ -27,9 +27,16 @@
 	border-radius: 7px;
 	border: rgba(0, 0, 0, 0.07) 3px solid;
 	pointer-events: auto;
+	cursor: pointer;
+	transition:0.2s ease all; 
+	-moz-transition:0.2s ease all; 
+	-webkit-transition:0.2s ease all;
 }
 
-.mtm input[type="radio"]:checked + label.black, .box-merge-right .label-uniq{
+.box-merge label.black:hover {
+	color: $violet-dark;
+}
+.mtm input[type="radio"]:checked + label.black, .box-merge-right .label-uniq.black{
 	border: $violet-dark 3px solid;
 }
 
@@ -37,8 +44,8 @@
 	position: fixed;
 	bottom: 0;
 	width: 100%;
-left: 0px;
-background: rgba(255, 255, 255, 0.86);
+	left: 0px;
+	background: rgba(255, 255, 255, 0.86);
 }
 .bottom-merge-arrow{
 	position: fixed;
@@ -49,6 +56,15 @@ background: rgba(255, 255, 255, 0.86);
 	font-size: 38px;
 }
 
-label.black{
+label.black, .box-merge label.black:hover{
 	color: #4c4c4c;
+}
+
+.label-uniq:hover{
+	color: #4c4c4c;
+	cursor: auto;
+}
+
+.bottom-bar{
+	border-bottom: 1px solid #777;
 }

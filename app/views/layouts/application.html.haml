@@ -5,7 +5,7 @@
     %title Mon compte AgorAM
     = csrf_meta_tags
     = stylesheet_link_tag    "application", media: "all"
-    = javascript_include_tag :application
+    = javascript_include_tag :application, controller_name
     -if slack_chat?
       =javascript_include_tag 'slack-chat.min.js'
       =javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js'
@@ -23,8 +23,7 @@
       /   %div{:class => "#{key} notif"}= value
 
 
-    .center.mw1140p
-      = yield
-
     -if slack_chat?
       =slack_chat_box
+    .center.mw1140p
+      = yield

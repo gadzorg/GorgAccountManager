@@ -34,6 +34,20 @@ class Module::MergeController < ApplicationController
 
     @phones_platal = get_phones_from_platal(hruid)
 
+
+  end
+
+  def address
+    # select current user if no params
+    if params[:hruid].present?
+      hruid = params[:hruid]
+    else
+      @user=current_user
+      hruid = @user.hruid if @user.present?
+    end
+    authorize! :read, @user
+    @phones_platal = get_phones_from_platal(hruid)
+
     @addresses_soce=get_addresses_from_soce(hruid)
 
     addresses_soce_formated = @addresses_soce.map do |a| 
@@ -83,6 +97,8 @@ class Module::MergeController < ApplicationController
       @linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
     end
 
+
+    render :layout => false
   end
 
   def update_soce_user

@@ -45,6 +45,7 @@ Rails.application.routes.draw do
 
   namespace :module do
     get "merge/me" => "merge#user"
+    get "merge/address/me" => "merge#address"
     post "merge/update_soce_user" => "merge#update_soce_user"
     get 'merge/user/:hruid', to: "merge#user", as: :merge_user, :constraints => {:hruid => /[^\/]+/}
   end

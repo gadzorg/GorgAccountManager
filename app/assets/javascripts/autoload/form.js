@@ -1,18 +1,13 @@
 $(document).ready(function() {
-	// hach to swap label and input order
-	// $('input').each(function() {
- //  		$(this).insertBefore( $(this).prev('label') );
-	// });
-/*	$('input').each(function() {
-		var a = $(this).parent()
-  		if($(a[0]).attr('class') != "group") {
-			alert("fff")
-		}
-  		
-	});*/
+     fixForms();
+});
+$(document).bind('DOMNodeInserted',function(){
+	fixForms();
+});
 
+function fixForms(){
 	// dirty hack for autofocus fields, I hate JS.
-    $('input[autofocus]').addClass( 'notempty');
+	$('input[autofocus]').addClass( 'notempty');
 	// check if inputs are empty
 	$('input, textarea').each(function () {
 		if($(this).val() != '') {
@@ -32,6 +27,4 @@ $(document).ready(function() {
 		}
 		
 	});
-
-	
-});
+}
