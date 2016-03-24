@@ -177,7 +177,7 @@ class UsersController < ApplicationController
 
 		if !session.nil? && session.usable?
 			#on recupere l'utilisateur dans le site soce
-			soce_user = Usersoce.where(hruid: session.hruid).take
+			soce_user = Soce::User.where(hruid: session.hruid).take
 
 			# cherche le numéro de téléhpone sur le site soce
 			!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
@@ -217,7 +217,7 @@ class UsersController < ApplicationController
 		user_from_gram = GramAccount.find(@hruid)
 
 		#on recupere l'utilisateur dans le site soce
-		soce_user = Usersoce.where(hruid: @hruid).take
+		soce_user = Soce::User.where(hruid: @hruid).take
 
 		!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
 		if phone.present?
@@ -277,7 +277,7 @@ class UsersController < ApplicationController
 
 					@hruid = recovery_link.hruid
 					user_from_gram = GramAccount.find(@hruid)
-					user_from_soce = Usersoce.where(hruid: @hruid).take
+					user_from_soce = Soce::User.where(hruid: @hruid).take
 
 					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
 					user_from_gram.password = passwd_hash
@@ -313,7 +313,7 @@ class UsersController < ApplicationController
 		if recovery_link.usable?
 			respond_to do |format|
 				@hruid = recovery_link.hruid
-				@user_soce = Usersoce.where(hruid: @hruid).take
+				@user_soce = Soce::User.where(hruid: @hruid).take
 				format.html {render :layout => 'recovery'}
 			end
 		end
@@ -352,7 +352,7 @@ class UsersController < ApplicationController
 
 						@hruid = recovery_link.hruid
 						user_from_gram = GramAccount.find(@hruid)
-						soce_user = Usersoce.where(hruid: @hruid).take
+						soce_user = Soce::User.where(hruid: @hruid).take
 
 						passwd_hash = Digest::SHA1.hexdigest password_confirmation
 
@@ -417,7 +417,7 @@ class UsersController < ApplicationController
 		# on recupère l'hruid à partir du token de session
 		session = Recoverysession.find_by(token: session_token)
 		hruid = session.hruid
-		soce_user = Usersoce.where(hruid: hruid).take
+		soce_user = Soce::User.where(hruid: hruid).take
 		phone = soce_user.tel_mobile
 
 		respond_to do |format|
@@ -490,7 +490,7 @@ class UsersController < ApplicationController
 		@hruid = session.hruid
 
 		#on recupere l'utilisateur dans le site soce
-		soce_user = Usersoce.where(hruid: @hruid).take
+		soce_user = Soce::User.where(hruid: @hruid).take
 		phone = soce_user.tel_mobile
 		@phone_hidden = hide_phone(phone)
 
@@ -531,7 +531,7 @@ class UsersController < ApplicationController
 		authorize! :read, @user
 		hruid = @user.hruid
 		@user_from_gram = GramAccount.find(hruid)
-		@user_from_soce = Usersoce.where(hruid: hruid).take
+		@user_from_soce = Soce::User.where(hruid: hruid).take
 		@user_from_platal = Userplatal.where(hruid: hruid).take
 
 	end

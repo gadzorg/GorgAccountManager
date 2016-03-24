@@ -23,7 +23,7 @@
 
 
     =form_tag module_merge_update_soce_user_path do
-      #hruid=hidden_field_tag @info[0][3], :class => "hruid"
+      #hruid=hidden_field_tag @hruid, :class => "hruid"
       .mtm.box-merge
         .grid-2
           .box-merge-left.prm
@@ -43,11 +43,11 @@
             %h3.txtcenter=info[:title]
             .grid-2.box-merge
               .box-merge-left
-                = radio_button_tag info[:field], "platal"
-                = label_tag info[:field]+"_platal", info[:platal], :class => "black"
+                = radio_button_tag info[:field_name], "platal"
+                = label_tag info[:field_name]+"_platal", info[:platal], :class => "black"
               .box-merge-right
-                = radio_button_tag info[:field], "soce"
-                = label_tag info[:field]+"_soce", info[:soce], :class => "black"
+                = radio_button_tag info[:field_name], "soce"
+                = label_tag info[:field_name]+"_soce", info[:soce], :class => "black"
           -when :fixed
             / .box-merge-left Info fixe:  
             / .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'

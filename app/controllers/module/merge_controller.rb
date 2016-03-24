@@ -13,10 +13,11 @@ class Module::MergeController < ApplicationController
       hruid = @user && @user.hruid
     end
     authorize! :merge, @user
+    @hruid = hruid
 
-    @user_soce = Usersoce.where(hruid: hruid).take
+    @user_soce = Soce::User.where(hruid: hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {:same = déjà la meme valeur, :updatable=choix possible, :fixed=non modifiable}]
-    info_platal=get_info_from_platal(hruid)
+    info_platal=get_info_from_platal(hruid).first
 
     @infos = [
       {title: "Identifiant",field_name: "hruid",
@@ -70,7 +71,7 @@ class Module::MergeController < ApplicationController
     ]
 
     #Calcul des données identiques
-    @infos.each{|i| i.status = :same if i[:platal] == i[:soce]}
+    @infos.each{|i| i[:status] = :same if i[:platal] == i[:soce]}
 
     #On remplace les valeurs nil bar des ""
     @infos.each do |i|

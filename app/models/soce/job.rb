@@ -1,11 +1,10 @@
-class JobSoce < ActiveRecord::Base
-	establish_connection "soce_#{Rails.env}"
+class Soce::Job < Soce::Base
 	self.table_name = "postes"
 
 
 
-	belongs_to :usersoce, foreign_key: "id_user"
-	has_one :list_reseaux_sociaux_soce, foreign_key: "id_reseau_social"
+	belongs_to :user, foreign_key: "id_user"
+	has_one :list_reseaux_sociaux, foreign_key: "id_reseau_social"
 
 	def self.serialize
 		hruid = self.first.usersoce.hruid
