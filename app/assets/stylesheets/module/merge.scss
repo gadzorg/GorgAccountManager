@@ -36,7 +36,7 @@
 .box-merge label.black:hover {
 	color: $violet-dark;
 }
-.mtm input[type="radio"]:checked + label.black, .box-merge-right .label-uniq.black{
+.mtm input[type="radio"]:checked + label.black{
 	border: $violet-dark 3px solid;
 }
 
@@ -67,4 +67,8 @@ label.black, .box-merge label.black:hover{
 
 .bottom-bar{
 	border-bottom: 1px solid #777;
+}
+
+.box-merge-right .label-uniq.black, .box-merge-left .label-uniq.black {
+	border: #27ae60 3px solid;
 }

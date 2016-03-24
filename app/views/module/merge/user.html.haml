@@ -36,32 +36,28 @@
             %span.plm Annuaire SOCE
         -@info.each do |info|
           -unless  info[2]==info[3] && info[3].nil? # on affiche rien si les champs sont vides
-            %h3.txtcenter=info[0]
-            .grid-2.box-merge
-              -if info[4]==0
-                -if info[2]==info[3]
-                  .box-merge-left Données identiques:
-                  .box-merge-right= label_tag info[3],nil, :class => 'label-uniq black'
-                -else
+
+            / .small
+            /   -if info[2]==info[3]
+            /     %i.zmdi.zmdi-check-circle.green
+            /     Info identiques
+
+            -if info[4]==0
+              -if info[2]==info[3]
+                / .box-merge-left= label_tag info[3],nil, :class => 'label-uniq black'
+                / .box-merge-right= label_tag info[3],nil, :class => 'label-uniq black'
+              -else
+                %h3.txtcenter=info[0]
+                .grid-2.box-merge
                   .box-merge-left
                     = radio_button_tag info[1], "platal"
                     = label_tag info[1]+"_platal", (info[2].nil? ? "" : info[2]), :class => "black"
                   .box-merge-right
                     = radio_button_tag info[1], "soce"
                     = label_tag info[1]+"_soce", (info[3].nil? ? "" : info[3]), :class => "black"
-                  / 8888888888888
-                  / =f.label info[1],info[2] , :value => info[2] do
-                  /   =f.radio_button info[1],info[2]
-                  /   Hello
-                  / =f.label info[3],info[3] do
-                  /   =f.radio_button info[1],info[3]
-                  /   fffffff
-                  / 9999999999999999
-                  / =f.label info[1],info[2], :value => info[2]
-                  / =f.radio_button info[1],info[2]
-              -else
-                .box-merge-left Info fixe:  
-                .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'
+            -else
+              .box-merge-left Info fixe:  
+              .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'
         #addresses
           .box.box-light.shadow-1.mtm.w50.pam.center
             .txtcenter=image_tag "Preloader_3.gif"
