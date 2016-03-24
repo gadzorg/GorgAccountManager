@@ -4,6 +4,9 @@ class Soce::User < Soce::Base
 
 	has_many :reseaux_sociaux, foreign_key: "id_user"
 	has_many :job, foreign_key: "id_user"
+	has_many :address, foreign_key: "id_user"
+	has_many :diploma, foreign_key: "id_user"
+	has_many :medal, foreign_key: "id_user"
 
 	def emails_valides
 		email_list = Array.new

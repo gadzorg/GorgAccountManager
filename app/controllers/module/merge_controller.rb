@@ -249,10 +249,7 @@ class Module::MergeController < ApplicationController
     end
 
     
-
-
-    
-
+    # TODO: change for new model
     def get_addresses_from_soce(hruid)
       sql = "SELECT tel_fixe, fax, adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
         left JOIN adresses AS ad ON (u.id_user=ad.id_user )
@@ -262,6 +259,7 @@ class Module::MergeController < ApplicationController
       custom_sql_query(sql,SoceDatabaseConnection)
     end
 
+    # TODO: change for new model
     def get_jobs_from_soce(hruid)
       sql = "SELECT *,e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation, py.*, f.* FROM users 
         left join postes AS p on users.id_user = p.id_user
@@ -273,6 +271,7 @@ class Module::MergeController < ApplicationController
 
     end
 
+    # TODO: change for new model
     def get_socials_from_soce(hruid)
       sql = "SELECT urs.*, lrs.*
         FROM users as u
