@@ -7,7 +7,7 @@ class Module::MergeController < ApplicationController
     # select current user if no params
     if params[:hruid]
       hruid = params[:hruid]
-      @user = User.find_by(hruid: hruid)
+      @user = User.find_by(hruid: hruid) || User.new # If user never logged in before, his acccount doesn't exist
     else
       @user=current_user
       hruid = @user && @user.hruid
