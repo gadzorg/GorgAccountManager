@@ -39,13 +39,16 @@ class Module::MergeController < ApplicationController
 
   def address
     # select current user if no params
-    if params[:hruid].present?
-      hruid = params[:hruid]
-    else
-      @user=current_user
-      hruid = @user.hruid if @user.present?
-    end
+    # if params[:hruid].present?
+    #   hruid = params[:hruid]
+    # else
+    #   @user=current_user
+    #   hruid = @user.hruid if @user.present?
+    # end
+    hruid = params[:hruid]
+    @user = User.where(hruid: hruid).take
     authorize! :read, @user
+
     @phones_platal = get_phones_from_platal(hruid)
 
     @addresses_soce=get_addresses_from_soce(hruid)
@@ -109,8 +112,6 @@ class Module::MergeController < ApplicationController
 
   private
     def get_info_from_platal(hruid)
-      connection = PlatalDatabaseConnection
-
       sql = "select *, hruid, firstname, lastname, pgn.name as buktxt, pgn2.name as bukzal, email, gadz_fams, gadz_fams_display, birthdate, deathdate, search_tel, IF (tbk = 'kin', 'ai', tbk) as tbk
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
@@ -123,34 +124,19 @@ class Module::MergeController < ApplicationController
         left join profile_campus_enum on p.campus = profile_campus_enum.id
         where groups.cat = 'Promotions'
         and hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["user"] 
-      end
-
-      @result.first
-
+      custom_sql_query(sql,PlatalDatabaseConnection)
     end
 
     def get_addresses_from_platal(hruid)
-      connection = PlatalDatabaseConnection
-
       sql = "select formatted_address, postalText, pa.type, pa.flags
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profile_addresses AS pa ON (pa.pid=ap.pid)
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      
-
-      @result.each(:as => :hash) do |row| 
-        row["adresses"] 
-      end
-
+      custom_sql_query(sql,PlatalDatabaseConnection)
     end
-    def get_jobs_from_platal(hruid)
-      connection = PlatalDatabaseConnection
 
+    def get_jobs_from_platal(hruid)
       sql = "select pj.description AS job_desc, pj.email, pj.url AS job_url, entry_year, pje.name AS cpny_name, pje.url, NAF_code, pje.description AS cpny_desc, jte.name, jte.full_name
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
@@ -159,34 +145,20 @@ class Module::MergeController < ApplicationController
         left JOIN profile_job_term AS jt  ON (jt.pid = pj.pid AND jt.jid = pj.id)
         LEFT JOIN  profile_job_term_enum AS jte USING(jtid)
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      
-
-      @result.each(:as => :hash) do |row| 
-        row["jobs"] 
-      end
-
+      custom_sql_query(sql,PlatalDatabaseConnection)
     end
 
     def get_socials_from_platal(hruid)
-      connection = PlatalDatabaseConnection
-
       sql = "select pn.*, pne.*
         FROM accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profile_networking AS pn ON ap.pid = pn.pid
         left JOIN profile_networking_enum AS pne ON pn.nwid = pne.nwid
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["socials"] 
-      end
-
+      custom_sql_query(sql,PlatalDatabaseConnection)
     end
 
     def get_diploma_from_platal(hruid)
-      connection = PlatalDatabaseConnection
-
       sql = "Select *
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
@@ -194,16 +166,12 @@ class Module::MergeController < ApplicationController
         left JOIN profile_education_enum AS pee ON (pee.id=pe.eduid )
         where not pee.id = 28  
         and hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["diploma"] 
-      end
+      custom_sql_query(sql,PlatalDatabaseConnection)
+
 
     end
 
     def get_medal_from_platal(hruid)
-      connection = PlatalDatabaseConnection
-
       sql = "Select pme.type, pme.text AS medal_text, pmge.text AS medal_grade_text
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
@@ -211,26 +179,19 @@ class Module::MergeController < ApplicationController
         left JOIN profile_medal_enum AS pme ON (pme.id=pm.mid ) 
         left JOIN profile_medal_grade_enum AS pmge ON (pmge.mid=pm.mid and pmge.gid = pm.gid )  
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["medal"] 
-      end
+
+      custom_sql_query(sql,PlatalDatabaseConnection)
+
 
     end
 
     def get_phones_from_platal(hruid)
-      connection = PlatalDatabaseConnection
-
       sql = "select pp.*
         from accounts as a
         left JOIN account_profiles AS ap ON (ap.uid=a.uid )
         left JOIN profile_phones AS pp ON (pp.pid=ap.pid)
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["phone"] 
-      end
-
+      custom_sql_query(sql,PlatalDatabaseConnection)
     end
 
     
@@ -239,78 +200,49 @@ class Module::MergeController < ApplicationController
     
 
     def get_addresses_from_soce(hruid)
-      connection = SoceDatabaseConnection
-
       sql = "SELECT tel_fixe, fax, adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
         left JOIN adresses AS ad ON (u.id_user=ad.id_user )
         left JOIN pays AS py ON (py.id_pays=ad.id_pays )
         left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["adresses"] 
-      end
-
+      custom_sql_query(sql,SoceDatabaseConnection)
     end
 
     def get_jobs_from_soce(hruid)
-      connection = SoceDatabaseConnection
-
-      sql = "SELECT *,e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation
-, py.*, f.* FROM users 
-left join postes AS p on users.id_user = p.id_user
-left join entreprises AS e on e.id_entreprise = p.id_entreprise
-left join pays AS py on e.id_pays = py.id_pays
-left join liste_fonctions AS f on f.id_fonction = p.id_fonction
-        where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);    
-      @result.each(:as => :hash) do |row| 
-        row["jobs"] 
-      end
+      sql = "SELECT *,e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation, py.*, f.* FROM users 
+        left join postes AS p on users.id_user = p.id_user
+        left join entreprises AS e on e.id_entreprise = p.id_entreprise
+        left join pays AS py on e.id_pays = py.id_pays
+        left join liste_fonctions AS f on f.id_fonction = p.id_fonction
+                where hruid = '#{hruid}'"
+      custom_sql_query(sql,SoceDatabaseConnection)
 
     end
 
     def get_socials_from_soce(hruid)
-      connection = SoceDatabaseConnection
-
       sql = "SELECT urs.*, lrs.*
         FROM users as u
         left join users_reseaux_sociaux as urs on u.id_user = urs.id_user
         left join liste_reseaux_sociaux as lrs on lrs.id_reseau_social = urs.id_reseau_social
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["socials"] 
-      end
+      custom_sql_query(sql,SoceDatabaseConnection)
 
     end
     def get_diploma_from_soce(hruid)
-      connection = SoceDatabaseConnection
-
       sql = "SELECT ud.*
         FROM users as u
         left join users_diplomes as ud on u.id_user = ud.id_user
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["diploma"] 
-      end
-
+      custom_sql_query(sql,SoceDatabaseConnection)
     end
 
     def get_medal_from_soce(hruid)
-      connection = SoceDatabaseConnection
-
       sql = "SELECT m.*, annee
         FROM users as u
         left join liens_users_medailles as um on um.id_user = u.id_user
         left join medailles as m on m.id_medaille = um.id_medaille
         where hruid = '#{hruid}'"
-      @result = connection.connection.execute(sql);
-      @result.each(:as => :hash) do |row| 
-        row["medal"] 
-      end
-
+      custom_sql_query(sql,SoceDatabaseConnection)
     end
 
 
@@ -347,5 +279,21 @@ left join liste_fonctions AS f on f.id_fonction = p.id_fonction
 
       a = ["Adresse 1", addresss1, "Adresse 2",addresss2, "Code postal",postal_code, "Ville",city, "Pays",country]
       return Hash[*a]
+    end
+
+    def custom_sql_query(query,connection_model)
+      connection = connection_model
+      sql = query
+
+      result = connection.connection.execute(sql);
+      h=result.each(:as => :hash) do |row| 
+        row["44"] 
+      end
+      #return empty array if no results ( hash full of nil )
+      if result.map{|a| a.compact.present? }.include? true 
+        return(h)
+      else
+        return(Array.new())
+      end
     end
 end
