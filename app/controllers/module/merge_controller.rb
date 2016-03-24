@@ -5,20 +5,21 @@ class Module::MergeController < ApplicationController
 
   def user
     # select current user if no params
-    if params[:hruid].present?
+    if params[:hruid]
       hruid = params[:hruid]
+      @user = User.find_by(hruid: hruid)
     else
       @user=current_user
-      hruid = @user.hruid if @user.present?
+      hruid = @user && @user.hruid
     end
-    authorize! :read, @user
+    authorize! :merge, @user
 
     @user_soce = Usersoce.where(hruid: hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {0=choix possible, 1=ok}]
-    info_platal=get_info_from_platal(hruid).first
+    info_platal=get_info_from_platal(hruid)
 
     @info = [
-      # ["Identifiant", "hruid",   info_platal['hruid'],   @user_soce.hruid,     1],
+      ["Identifiant", "hruid",   info_platal['hruid'],   @user_soce.hruid,     1],
       ["Prénom", "prenom",  formate_name(info_platal['firstname']),   @user_soce.prenom,     0],
       ["Nom", "nom",   formate_name(info_platal['lastname']),   @user_soce.nom,     0],
       ["Buque", "buktxt",  info_platal['buktxt'],  @user_soce.surnom,     0],
@@ -47,7 +48,7 @@ class Module::MergeController < ApplicationController
     # end
     hruid = params[:hruid]
     @user = User.where(hruid: hruid).take
-    authorize! :read, @user
+    authorize! :merge, @user
 
     @phones_platal = get_phones_from_platal(hruid)
 

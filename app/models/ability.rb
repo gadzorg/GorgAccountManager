@@ -42,7 +42,8 @@ class Ability
       can :read, Role
     end
 
-    can [:read, :sync], User, :id => user.id
+    can [:read, :sync, :merge], User, :id => user.id
+
 
 
   end
