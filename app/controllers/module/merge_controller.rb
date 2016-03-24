@@ -105,7 +105,7 @@ class Module::MergeController < ApplicationController
 
     @phones_platal = get_phones_from_platal(hruid)
 
-    @addresses_soce=get_addresses_from_soce(hruid)
+    @addresses_soce=Soce::User.find_by(hruid: hruid).address.serialize
 
     addresses_soce_formated = @addresses_soce.map do |a| 
       b=Geocoder.search(a.map(&:last)[0...-1].join(" ")).first
@@ -139,13 +139,13 @@ class Module::MergeController < ApplicationController
 
 
     @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
-    @jobs_soce = get_jobs_from_soce(hruid)
+    @jobs_soce = Soce::User.find_by(hruid: hruid).job.serialize
 
     @diploma_platal = get_diploma_from_platal(hruid)
-    @diploma_soce = get_diploma_from_soce(hruid)
+    @diploma_soce = Soce::User.find_by(hruid: hruid).diploma.serialize
 
     @medal_platal = get_medal_from_platal(hruid)
-    @medal_soce = get_medal_from_soce(hruid)
+    @medal_soce = Soce::User.find_by(hruid: hruid).medal.serialize
 
     #linkedintest
     linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
@@ -248,29 +248,6 @@ class Module::MergeController < ApplicationController
       custom_sql_query(sql,PlatalDatabaseConnection)
     end
 
-    
-    # TODO: change for new model
-    def get_addresses_from_soce(hruid)
-      sql = "SELECT tel_fixe, fax, adresse_1, adresse_2, code_postal, ville, nompays, adt.libelle  FROM users AS u
-        left JOIN adresses AS ad ON (u.id_user=ad.id_user )
-        left JOIN pays AS py ON (py.id_pays=ad.id_pays )
-        left JOIN liste_adresse_types AS adt ON (adt.id_adresse_type=ad.id_adresse_type )
-        where hruid = '#{hruid}'"
-      custom_sql_query(sql,SoceDatabaseConnection)
-    end
-
-    # TODO: change for new model
-    def get_jobs_from_soce(hruid)
-      sql = "SELECT *,e.*, p.date_debut, p.date_fin, p.tel_direct, p.tel_standard, p.email, p.gsm, p.adresse, p.adresse2, p.adresse3, p.code_postal AS code_postal_entreprise, p.ville AS ville_entreprise, p.pays AS pays_entreprise, p.fax, p.id_etat_validation, py.*, f.* FROM users 
-        left join postes AS p on users.id_user = p.id_user
-        left join entreprises AS e on e.id_entreprise = p.id_entreprise
-        left join pays AS py on e.id_pays = py.id_pays
-        left join liste_fonctions AS f on f.id_fonction = p.id_fonction
-                where hruid = '#{hruid}'"
-      custom_sql_query(sql,SoceDatabaseConnection)
-
-    end
-
     # TODO: change for new model
     def get_socials_from_soce(hruid)
       sql = "SELECT urs.*, lrs.*
@@ -280,22 +257,6 @@ class Module::MergeController < ApplicationController
         where hruid = '#{hruid}'"
       custom_sql_query(sql,SoceDatabaseConnection)
 
-    end
-    def get_diploma_from_soce(hruid)
-      sql = "SELECT ud.*
-        FROM users as u
-        left join users_diplomes as ud on u.id_user = ud.id_user
-        where hruid = '#{hruid}'"
-      custom_sql_query(sql,SoceDatabaseConnection)
-    end
-
-    def get_medal_from_soce(hruid)
-      sql = "SELECT m.*, annee
-        FROM users as u
-        left join liens_users_medailles as um on um.id_user = u.id_user
-        left join medailles as m on m.id_medaille = um.id_medaille
-        where hruid = '#{hruid}'"
-      custom_sql_query(sql,SoceDatabaseConnection)
     end
 
 
