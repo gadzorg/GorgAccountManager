@@ -3,6 +3,7 @@ class Usersoce < ActiveRecord::Base
 	self.table_name = "users"
 
 	has_many :reseaux_sociaux_soce, foreign_key: "id_user"
+	has_many :job_soce, foreign_key: "id_user"
 
 	# sql = 'SELECT * FROM int_anakrys_soce.users where hruid = "dorian.becker.2011";'
 	# @result = @connection.connection.execute(sql);
