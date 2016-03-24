@@ -15,23 +15,75 @@ class Module::MergeController < ApplicationController
     authorize! :merge, @user
 
     @user_soce = Usersoce.where(hruid: hruid).take
-    # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {0=choix possible, 1=ok}]
+    # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {:same = déjà la meme valeur, :updatable=choix possible, :fixed=non modifiable}]
     info_platal=get_info_from_platal(hruid)
 
-    @info = [
-      ["Identifiant", "hruid",   info_platal['hruid'],   @user_soce.hruid,     1],
-      ["Prénom", "prenom",  formate_name(info_platal['firstname']),   @user_soce.prenom,     0],
-      ["Nom", "nom",   formate_name(info_platal['lastname']),   @user_soce.nom,     0],
-      ["Buque", "buktxt",  info_platal['buktxt'],  @user_soce.surnom,     0],
-      ["Buque Zaloeil", "bukzal",  info_platal['bukzal'],  "champ à ajouter dans bdd SOCE",     0],
-      ["Tabagn's", "centre1",  info_platal['tbk'],  @user_soce.centre1.to_s.gsub(/[0-9]/, "1" => "ch", "2" => "an", "3" => "ai", "4" => "cl", "5" => "li", "6" => "pa", "7" => "bo", "8" => "ka", "9" => "me", "10" => "am"),     0],
-      ["Email", "email",  info_platal['email'],  @user_soce.email,     0],
-      ["Télephone portable", "tel_mobile",  info_platal['search_tel'],  @user_soce.tel_mobile,     0],
-      ["Fam's", "famille1",  info_platal['gadz_fams'],  @user_soce.famille1,     0],
-      ["Fam's Zaloeil", "famille1zal",  info_platal['gadz_fams_display'],  "champ à ajouter dans bdd SOCE",     0],
-      ["Date de naissance", "date_naissance",  info_platal['birthdate'].strftime("%d %b %Y"),  @user_soce.date_naissance.strftime("%d %b %Y"),     0],
-      ["date_declaration_deces", "date_declaration_deces",  info_platal['deathdate'],  @user_soce.date_declaration_deces,     0]
+    @infos = [
+      {title: "Identifiant",field_name: "hruid",
+        platal: info_platal['hruid'],
+        soce:   @user_soce.hruid,
+        status: :fixed},
+      {title: "Prénom",field_name: "prenom",
+        platal: formate_name(info_platal['firstname']),
+        soce:   @user_soce.prenom,
+        status: :updatable},
+      {title: "Nom",field_name: "nom",
+        platal: formate_name(info_platal['lastname']),
+        soce:   @user_soce.nom,
+        status: :updatable},
+      {title: "Buque",field_name: "buktxt",
+        platal: info_platal['buktxt'],
+        soce:   @user_soce.surnom,
+        status: :updatable},
+      {title: "Buque Zaloeil",field_name: "bukzal",
+        platal: info_platal['bukzal'],
+        soce:   "champ à ajouter dans bdd SOCE", # TODO
+        status: :updatable},
+      {title: "Tabagn's",field_name: "centre1",
+        platal: info_platal['tbk'],
+        soce:   @user_soce.centre1.to_s.gsub(/[0-9]/, "1" => "ch", "2" => "an", "3" => "ai", "4" => "cl", "5" => "li", "6" => "pa", "7" => "bo", "8" => "ka", "9" => "me", "10" => "am"), #TODO Devrait être sortie dans un modèle
+        status: :updatable},
+      {title: "Email",field_name: "email",
+        platal: info_platal['email'],
+        soce:   @user_soce.email,
+        status: :updatable},
+      {title: "Télephone portable",field_name: "tel_mobile",
+        platal: info_platal['search_tel'],
+        soce:  @user_soce.tel_mobile,
+        status: :updatable},
+      {title: "Fam's",field_name: "famille1",
+        platal: info_platal['gadz_fams'],
+        soce:   @user_soce.famille1,
+        status: :updatable},
+      {title: "Fam's Zaloeil",field_name: "famille1zal",
+        platal: info_platal['gadz_fams_display'],
+        soce:   "champ à ajouter dans bdd SOCE",
+        status: :updatable},
+      {title: "Date de naissance",field_name: "date_naissance",
+        platal: info_platal['birthdate'].strftime("%d %b %Y"),
+        soce:   @user_soce.date_naissance.strftime("%d %b %Y"),
+        status: :updatable},
+      {title: "date_declaration_deces",field_name: "date_declaration_deces",
+        platal: info_platal['deathdate'],
+        soce:   @user_soce.date_declaration_deces,
+        status: :updatable},
     ]
+
+    #Calcul des données identiques
+    @infos.each{|i| i.status = :same if i[:platal] == i[:soce]}
+
+    #On remplace les valeurs nil bar des ""
+    @infos.each do |i|
+      i[:platal] ||= ""
+      i[:soce]   ||= ""
+    end
+
+    #On affiche pas  si les infos sont vides
+    @infos.reject!{|i| i[:status] == :same && i[:platal].blank? }
+
+    #On affiche pas les infos fixes
+    @infos.reject!{|i| i[:status] == :fixed }    
+
 
     @phones_platal = get_phones_from_platal(hruid)
 
