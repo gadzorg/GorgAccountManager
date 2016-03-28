@@ -135,7 +135,7 @@ class Module::MergeController < ApplicationController
     @phones_adresse_platal = @phones_platal.select{|n| (n["link_type"].include? "address")}
 
     @socials_platal = get_socials_from_platal(hruid)
-    @socials_soce = get_socials_from_soce(hruid)
+    @socials_soce = Soce::User.find_by(hruid: hruid).reseaux_sociaux
 
 
     @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
@@ -151,7 +151,8 @@ class Module::MergeController < ApplicationController
     linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
     if linkedin_hash.present?
       linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
-      @linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
+      #@linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
+      @linkedin_past_companies = Linkedin::Profile.get_profile(linkedin_url).past_companies
     end
 
 
@@ -235,8 +236,6 @@ class Module::MergeController < ApplicationController
         where hruid = '#{hruid}'"
 
       custom_sql_query(sql,PlatalDatabaseConnection)
-
-
     end
 
     def get_phones_from_platal(hruid)
@@ -246,17 +245,6 @@ class Module::MergeController < ApplicationController
         left JOIN profile_phones AS pp ON (pp.pid=ap.pid)
         where hruid = '#{hruid}'"
       custom_sql_query(sql,PlatalDatabaseConnection)
-    end
-
-    # TODO: change for new model
-    def get_socials_from_soce(hruid)
-      sql = "SELECT urs.*, lrs.*
-        FROM users as u
-        left join users_reseaux_sociaux as urs on u.id_user = urs.id_user
-        left join liste_reseaux_sociaux as lrs on lrs.id_reseau_social = urs.id_reseau_social
-        where hruid = '#{hruid}'"
-      custom_sql_query(sql,SoceDatabaseConnection)
-
     end
 
 
