@@ -101,7 +101,7 @@
 
 
 
--if @diploma_platal.map{|a| a.compact.present? }.include?(true) || @diploma_soce.map{|a| a.compact.present? }.include?(true)
+-if @diploma_platal.map{|a| a.compact.present? }.include?(true) || !@diploma_soce.nil?
   %h3.txtcenter Diplômes
   = render 'layouts/module/merge/merge_banner'
   .grid-2
@@ -130,7 +130,7 @@
               = radio_button_tag "diploma_"+i.to_s, "non"
               = label_tag "diploma_"+i.to_s+"_non", "Oublier", :class => "black"
     .box.pam
-      -if @diploma_soce.map{|a| a.compact.present? }.include? true
+      -if !@diploma_soce.nil?
         -@diploma_soce.each_with_index do |diploma, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
@@ -165,7 +165,7 @@
             = radio_button_tag "job_"+i.to_s, "non"
             = label_tag "job_"+i.to_s+"_non", "Oublier", :class => "black"
   .box.pam
-    -if @jobs_soce.map{|a| a.compact.present? }.include? true
+    -unless @jobs_soce.nil?
       -@jobs_soce.each_with_index do |job, i|
         .box.box-light.shadow-1.mtm
           .box-top.box-top-light.pam
@@ -250,7 +250,7 @@
                 .address-fields=field[1]
 
 
--if @medal_platal.map{|a| a.compact.present? }.include?(true) || @diploma_soce.map{|a| a.compact.present? }.include?(true)
+-if @medal_platal.map{|a| a.compact.present? }.include?(true) || !@medal_soce.nil?
   %h3.txtcenter Médaille
   = render 'layouts/module/merge/merge_banner'
   .grid-2
@@ -272,7 +272,7 @@
               = radio_button_tag "medal_"+i.to_s, "non"
               = label_tag "medal_"+i.to_s+"_non", "Oublier", :class => "black"
     .box.pam
-      -if @medal_soce.map{|a| a.compact.present? }.include? true
+      -unless @medal_soce.nil?
         -@medal_soce.each_with_index do |medal, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam

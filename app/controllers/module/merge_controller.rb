@@ -7,7 +7,7 @@ class Module::MergeController < ApplicationController
     # select current user if no params
     if params[:hruid]
       hruid = params[:hruid]
-      @user = User.find_by(hruid: hruid) || User.new # If user never logged in before, his acccount doesn't exist
+      @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
     else
       @user=current_user
       hruid = @user && @user.hruid
@@ -139,13 +139,13 @@ class Module::MergeController < ApplicationController
 
 
     @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
-    @jobs_soce = Soce::User.find_by(hruid: hruid).job.serialize
+    @jobs_soce = Soce::User.find_by(hruid: hruid).job.serialize unless Soce::User.find_by(hruid: hruid).job.empty?
 
     @diploma_platal = get_diploma_from_platal(hruid)
-    @diploma_soce = Soce::User.find_by(hruid: hruid).diploma.serialize
+    @diploma_soce = Soce::User.find_by(hruid: hruid).diploma.serialize unless Soce::User.find_by(hruid: hruid).diploma.empty?
 
     @medal_platal = get_medal_from_platal(hruid)
-    @medal_soce = Soce::User.find_by(hruid: hruid).medal.serialize
+    @medal_soce = Soce::User.find_by(hruid: hruid).medal.serialize unless Soce::User.find_by(hruid: hruid).medal.empty?
 
     #linkedintest
     linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
