@@ -162,6 +162,16 @@ class Module::MergeController < ApplicationController
   end
 
   def update_soce_user
+    if params[:hruid]
+      hruid = params[:hruid]
+      @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
+    else
+      @user=current_user
+      hruid = @user && @user.hruid
+    end
+    authorize! :merge, @user
+    @hruid = hruid
+    
     @params = params
   end
 

@@ -1,5 +1,12 @@
 $(document).ready(function() {
-     fixForms();
+	fixForms();
+	var elements = document.querySelectorAll('input,select,textarea');
+
+	for (var i = elements.length; i--;) {
+		elements[i].addEventListener('invalid', function () {
+			this.scrollIntoView(false);
+		});
+	}
 });
 $(document).bind('DOMNodeInserted',function(){
 	fixForms();
@@ -17,7 +24,7 @@ function fixForms(){
 
 	$('input, textarea').focus(function () {
 		$(this).addClass( 'notempty');
-			console.log($(this));
+		console.log($(this));
 
 	});
 
@@ -28,3 +35,5 @@ function fixForms(){
 		
 	});
 }
+
+

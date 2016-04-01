@@ -166,3 +166,8 @@ input[type=submit]:hover {
 input[type=submit]:disabled {
         background-color: $primary-light-disabled;
 }
+
+.group-m-form input.notempty ~ label[id$="-error"], label[id$="-error"] {
+  top: 40;
+  color: #c0392b;
+}
