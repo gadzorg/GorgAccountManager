@@ -27,9 +27,9 @@
             -if address[1]
               Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus. 
             Que veux-tu faire de cette adresse ?
-          = radio_button_tag "address_" + i.to_s + "[recuperer]", "oui"
+          = radio_button_tag "address_" + i.to_s + "[recuperer]", "oui", false, :required => true
           = label_tag "address_" + i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-          = radio_button_tag "address_" + i.to_s + "[recuperer]", "non"
+          = radio_button_tag "address_" + i.to_s + "[recuperer]", "non", false, :required => true
           = label_tag "address_" + i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
 
   .box.pam
@@ -83,9 +83,9 @@
                 .span.highlight.w100
                 .span.bar.w100
             .box.pam
-              = radio_button_tag "social_"+i.to_s + "[recuperer]", "oui"
+              = radio_button_tag "social_"+i.to_s + "[recuperer]", "oui", false, :required => true
               = label_tag "social_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "social_"+i.to_s + "[recuperer]", "non"
+              = radio_button_tag "social_"+i.to_s + "[recuperer]", "non", false, :required => true
               = label_tag "social_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
     .box.pam
       -unless @socials_soce.empty?
@@ -126,9 +126,9 @@
                 .span.bar.w100
 
             .box.pam
-              = radio_button_tag "diploma_"+i.to_s + "[recuperer]", "oui"
+              = radio_button_tag "diploma_"+i.to_s + "[recuperer]", "oui", false, :required => true
               = label_tag "diploma_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "diploma_"+i.to_s + "[recuperer]", "non"
+              = radio_button_tag "diploma_"+i.to_s + "[recuperer]", "non", false, :required => true
               = label_tag "diploma_"+i.to_s + "[recuperer]" +"_non", "Oublier", :class => "black"
     .box.pam
       -if !@diploma_soce.nil?
@@ -161,9 +161,9 @@
                   .span.highlight.w100
                   .span.bar.w100
           .box.pam
-            = radio_button_tag "job_"+i.to_s + "[recuperer]", "oui"
+            = radio_button_tag "job_"+i.to_s + "[recuperer]", "oui", false, :required => true
             = label_tag "job_"+i.to_s+ "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-            = radio_button_tag "job_"+i.to_s + "[recuperer]", "non"
+            = radio_button_tag "job_"+i.to_s + "[recuperer]", "non", false, :required => true
             = label_tag "job_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
   .box.pam
     -unless @jobs_soce.nil?
@@ -268,9 +268,9 @@
                 / = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim mbs"
 
             .box.pam
-              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "oui"
+              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "oui",false, :required => true, :checked => false
               = label_tag "medal_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "non"
+              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "non",false,  :required => true, :checked => false
               = label_tag "medal_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
     .box.pam
       -unless @medal_soce.nil?

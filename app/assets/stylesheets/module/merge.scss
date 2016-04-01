@@ -19,8 +19,8 @@
 .box-merge input[type="radio"] {
 	visibility: hidden;
 	position: absolute;
-	top: -9999px;
-	left: -9999px;
+	/*top: -9999px;*/
+	/*left: -9999px;*/
 }
 .box-merge label.black {
 	padding: 10px;
@@ -40,6 +40,7 @@
 	border: $violet-dark 3px solid;
 }
 
+.mtm  input[type="radio"]:required:invalid + label.black { color: red; }
 .bottom-merge{
 	position: fixed;
 	bottom: 0;

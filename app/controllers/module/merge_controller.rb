@@ -152,7 +152,9 @@ class Module::MergeController < ApplicationController
     if linkedin_hash.present?
       linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
       #@linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
-      @linkedin_past_companies = Linkedin::Profile.get_profile(linkedin_url).past_companies
+      begin @linkedin_past_companies = Linkedin::Profile.get_profile(linkedin_url).past_companies
+        rescue
+        end
     end
 
 
@@ -160,7 +162,7 @@ class Module::MergeController < ApplicationController
   end
 
   def update_soce_user
-    dd=ddd
+    @params = params
   end
 
   def user_merged
