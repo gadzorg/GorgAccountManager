@@ -25,32 +25,33 @@
     =form_tag module_merge_update_soce_user_path do
       #hruid=hidden_field_tag @hruid, :class => "hruid"
       .mtm.box-merge
-        .grid-2
-          .box-merge-left.prm
-            %span.prm Annuaire Gadz.org
-            / %i.zmdi.zmdi-long-arrow-down
-            =image_tag "gadzorg-favicon1.png",:size => "50", :class => "vertical-center"
-          .box-merge-right.plm
-            =image_tag "logo_alumni.png", :class => "vertical-center"
-            / %i.zmdi.zmdi-long-arrow-down
-            %span.plm Annuaire SOCE
-        -@infos.each do |info|
-          -case info[:status]
-          -when :same 
-            / .box-merge-left= label_tag info[3],nil, :class => 'label-uniq black'
-            / .box-merge-right= label_tag info[3],nil, :class => 'label-uniq black'
-          -when :updatable
-            %h3.txtcenter=info[:title]
-            .grid-2.box-merge
-              .box-merge-left
-                = radio_button_tag info[:field_name], "platal"
-                = label_tag info[:field_name]+"_platal", info[:platal], :class => "black"
-              .box-merge-right
-                = radio_button_tag info[:field_name], "soce"
-                = label_tag info[:field_name]+"_soce", info[:soce], :class => "black"
-          -when :fixed
-            / .box-merge-left Info fixe:  
-            / .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'
+        =fields_for :user_soce do |ff|
+          .grid-2
+            .box-merge-left.prm
+              %span.prm Annuaire Gadz.org
+              / %i.zmdi.zmdi-long-arrow-down
+              =image_tag "gadzorg-favicon1.png",:size => "50", :class => "vertical-center"
+            .box-merge-right.plm
+              =image_tag "logo_alumni.png", :class => "vertical-center"
+              / %i.zmdi.zmdi-long-arrow-down
+              %span.plm Annuaire SOCE
+          -@infos.each do |info|
+            -case info[:status]
+            -when :same 
+              / .box-merge-left= label_tag info[3],nil, :class => 'label-uniq black'
+              / .box-merge-right= label_tag info[3],nil, :class => 'label-uniq black'
+            -when :updatable
+              %h3.txtcenter=info[:title]
+              .grid-2.box-merge
+                .box-merge-left
+                  = ff.radio_button info[:field_name], "platal"
+                  = ff.label info[:field_name]+"_platal", info[:platal], :class => "black"
+                .box-merge-right
+                  = ff.radio_button info[:field_name], "soce"
+                  = ff.label info[:field_name]+"_soce", info[:soce], :class => "black"
+            -when :fixed
+              / .box-merge-left Info fixe:  
+              / .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'
         #addresses
           .box.box-light.shadow-1.mtm.w50.pam.center
             .txtcenter=image_tag "Preloader_3.gif"
@@ -59,4 +60,4 @@
 
         
 
-    =submit_tag 'Envoyer',:class => "bouton bouton_bleu"
+      =submit_tag 'Envoyer',:class => "bouton bouton_bleu"

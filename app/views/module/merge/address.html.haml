@@ -10,13 +10,14 @@
           %div
             -address[0].each do |key, field|
               .group-m-form
-                = text_field_tag key, field, :placeholder => " ", :class => "w100 slim"
-                = label_tag key
+                = text_field_tag "address_"+ i.to_s + "[" + key+ "]", field, :placeholder => " ", :class => "w100 slim"
+                = label_tag "address_"+ i.to_s + key
                 .span.highlight.w100
                 .span.bar.w100
             -@phones_adresse_platal.select{|n| (n["link_id"].equal? i)}.each do |phone|
               .mts.group-m-form
-                = text_field_tag "phone", phone["display_tel"], :placeholder => " ", :class => "w100 slim"
+                -#attention formulaire à modifier si on gere plusieurs telephones
+                = text_field_tag "address_"+ i.to_s + "[phone]", phone["display_tel"], :placeholder => " ", :class => "w100 slim"
                 = label_tag "Téléphone"
                 .span.highlight.w100
                 .span.bar.w100
@@ -26,10 +27,10 @@
             -if address[1]
               Une adresse similaire semble déjà exister et ne sera pas remplacée si tu ajoutes celle ci-dessus. 
             Que veux-tu faire de cette adresse ?
-          = radio_button_tag "address_" + i.to_s, "oui"
-          = label_tag "address_" + i.to_s+"_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-          = radio_button_tag "address_" + i.to_s, "non"
-          = label_tag "address_" + i.to_s+"_non", "Oublier", :class => "black"
+          = radio_button_tag "address_" + i.to_s + "[recuperer]", "oui"
+          = label_tag "address_" + i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+          = radio_button_tag "address_" + i.to_s + "[recuperer]", "non"
+          = label_tag "address_" + i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
 
   .box.pam
     -@addresses_soce.each_with_index do |address, i|
@@ -74,18 +75,18 @@
             .box-bottom.pam
               .group-m-form
                 -if social["link"].include? "%s"
-                  = text_field_tag "social_field_"+i.to_s, social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim"
+                  = text_field_tag "social_"+i.to_s + "[link]", social["link"].gsub("%s", social["address"]), :placeholder => " ", :class => "w100 slim"
                   
                 -else
-                  = text_field_tag "social_field_"+i.to_s, social["address"], :placeholder => " ", :class => "w100 slim mbs"
+                  = text_field_tag "social_"+i.to_s + "[address]", social["address"], :class => "w100 slim mbs"
                 = label_tag "Adresse / Pseudo"
                 .span.highlight.w100
                 .span.bar.w100
             .box.pam
-              = radio_button_tag "social_"+i.to_s, "oui"
-              = label_tag "social_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "social_"+i.to_s, "non"
-              = label_tag "social_"+i.to_s+"_non", "Oublier", :class => "black"
+              = radio_button_tag "social_"+i.to_s + "[recuperer]", "oui"
+              = label_tag "social_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+              = radio_button_tag "social_"+i.to_s + "[recuperer]", "non"
+              = label_tag "social_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
     .box.pam
       -unless @socials_soce.empty?
         -@socials_soce.each_with_index do |social, i|
@@ -114,21 +115,21 @@
               =diploma["name"]
             .box-bottom.pam
               .group-m-form
-                = text_field_tag "diploma_field_"+i.to_s, diploma["program"], :placeholder => "program", :class => "w100 slim"
+                = text_field_tag "diploma_"+ i.to_s + "[program]", diploma["program"], :class => "w100 slim"
                 =label_tag "Intitulé formation"
                 .span.highlight.w100
                 .span.bar.w100
               .group-m-form
-                = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim"
+                = text_field_tag "diploma_" + i.to_s + "[grad_year]", diploma["grad_year"], :class => "w100 slim"
                 =label_tag "Année d'obtention"
                 .span.highlight.w100
                 .span.bar.w100
 
             .box.pam
-              = radio_button_tag "diploma_"+i.to_s, "oui"
-              = label_tag "diploma_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "diploma_"+i.to_s, "non"
-              = label_tag "diploma_"+i.to_s+"_non", "Oublier", :class => "black"
+              = radio_button_tag "diploma_"+i.to_s + "[recuperer]", "oui"
+              = label_tag "diploma_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+              = radio_button_tag "diploma_"+i.to_s + "[recuperer]", "non"
+              = label_tag "diploma_"+i.to_s + "[recuperer]" +"_non", "Oublier", :class => "black"
     .box.pam
       -if !@diploma_soce.nil?
         -@diploma_soce.each_with_index do |diploma, i|
@@ -155,15 +156,15 @@
             %div
               -job.each do |field|
                 .group-m-form
-                  = text_field_tag field[0], field[1], :placeholder => " ", :class => "w100 slim"
-                  =label_tag field[0]
+                  = text_field_tag "job_"+i.to_s + "[" + field[0] + "]", field[1], :placeholder => " ", :class => "w100 slim"
+                  =label_tag "job_"+i.to_s + field[0]
                   .span.highlight.w100
                   .span.bar.w100
           .box.pam
-            = radio_button_tag "job_"+i.to_s, "oui"
-            = label_tag "job_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-            = radio_button_tag "job_"+i.to_s, "non"
-            = label_tag "job_"+i.to_s+"_non", "Oublier", :class => "black"
+            = radio_button_tag "job_"+i.to_s + "[recuperer]", "oui"
+            = label_tag "job_"+i.to_s+ "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+            = radio_button_tag "job_"+i.to_s + "[recuperer]", "non"
+            = label_tag "job_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
   .box.pam
     -unless @jobs_soce.nil?
       -@jobs_soce.each_with_index do |job, i|
@@ -267,10 +268,10 @@
                 / = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim mbs"
 
             .box.pam
-              = radio_button_tag "medal_"+i.to_s, "oui"
-              = label_tag "medal_"+i.to_s+"_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "medal_"+i.to_s, "non"
-              = label_tag "medal_"+i.to_s+"_non", "Oublier", :class => "black"
+              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "oui"
+              = label_tag "medal_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "non"
+              = label_tag "medal_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
     .box.pam
       -unless @medal_soce.nil?
         -@medal_soce.each_with_index do |medal, i|

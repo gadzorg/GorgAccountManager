@@ -38,7 +38,7 @@ class Module::MergeController < ApplicationController
         status: :updatable},
       {title: "Buque Zaloeil",field_name: "bukzal",
         platal: info_platal['bukzal'],
-        soce:   "champ à ajouter dans bdd SOCE", # TODO
+        soce:   @user_soce.bukzal, 
         status: :updatable},
       {title: "Tabagn's",field_name: "centre1",
         platal: info_platal['tbk'],
@@ -58,7 +58,7 @@ class Module::MergeController < ApplicationController
         status: :updatable},
       {title: "Fam's Zaloeil",field_name: "famille1zal",
         platal: info_platal['gadz_fams_display'],
-        soce:   "champ à ajouter dans bdd SOCE",
+        soce:   @user_soce.famille1zal,
         status: :updatable},
       {title: "Date de naissance",field_name: "date_naissance",
         platal: info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime("%d %b %Y") ,
@@ -160,6 +160,7 @@ class Module::MergeController < ApplicationController
   end
 
   def update_soce_user
+    dd=ddd
   end
 
   def user_merged
@@ -297,5 +298,9 @@ class Module::MergeController < ApplicationController
       else
         return(Array.new())
       end
+    end
+
+    def merge_param
+      params.permit!
     end
 end
