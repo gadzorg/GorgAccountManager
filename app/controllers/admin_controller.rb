@@ -59,7 +59,7 @@ class AdminController < ApplicationController
     @user = User.new
   	hruid = params[:hruid]
   	@user_from_gram = GramAccount.find(hruid)
-	@user_from_soce = Usersoce.where(hruid: hruid).take
+	@user_from_soce = Soce::User.where(hruid: hruid).take
 	@user_from_platal = Userplatal.where(hruid: hruid).take
 
   end
@@ -84,7 +84,7 @@ class AdminController < ApplicationController
     hruids.each do |hruid|
       # pour chaque ligne on créé un nouveau lien de récup
 
-      user_from_soce = Usersoce.where(hruid: hruid).take
+      user_from_soce = Soce::User.where(hruid: hruid).take
       email = user_from_soce.email
       recovery_link = Uniqlink.new(
         hruid: hruid,

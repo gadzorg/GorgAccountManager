@@ -14,6 +14,8 @@
 //= require jquery_ujs
 //= require bootstrap/bootstrap-tooltip
 //= require jquery-ui
+//= require jquery.validate
+//= require jquery.validate.additional-methods
 //= require autocomplete-rails
 //= require unobtrusive_flash
 //= require unobtrusive_flash_ui
@@ -36,8 +38,10 @@ $(document).ready(function () {
 
     button.click( function()
            {
+             if ($('#new_user').valid()) {
              loadingmessage.show();
              button.hide();
+             };
            }
     );
     
