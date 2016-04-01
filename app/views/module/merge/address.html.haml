@@ -60,7 +60,7 @@
             %i.zmdi.zmdi-info-outline
             Cette adresse sera conservée et ne sera pas modifiée
 
--if @socials_platal.map{|a| a.compact.present? }.include?(true) || !@socials_soce.nil?
+-if @socials_platal.map{|a| a.compact.present? }.include?(true) || !@socials_soce.empty?
   %h3.txtcenter Réseaux sociaux
   = render 'layouts/module/merge/merge_banner'
   .grid-2
@@ -87,7 +87,7 @@
               = radio_button_tag "social_"+i.to_s, "non"
               = label_tag "social_"+i.to_s+"_non", "Oublier", :class => "black"
     .box.pam
-      -unless @socials_soce.nil?
+      -unless @socials_soce.empty?
         -@socials_soce.each_with_index do |social, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
@@ -97,7 +97,7 @@
             .box.pbm.plm.prm
               .small
                 %i.zmdi.zmdi-info-outline
-                Ce réseau social sera conservée et ne sera pas modifiée
+                Ce réseau social sera conservée et ne sera pas modifié
 
 
 
@@ -233,7 +233,7 @@
           .box.pbm.plm.prm
             .small
               %i.zmdi.zmdi-info-outline
-              Cet emploi sera conservée et ne sera pas modifiée
+              Cet emploi sera conservée et ne sera pas modifié
 
 
 -if @linkedin_past_companies.present?        
