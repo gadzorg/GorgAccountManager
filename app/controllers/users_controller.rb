@@ -101,8 +101,8 @@ class UsersController < ApplicationController
 	end
 
 	def create_recovery_session
-		#on genere ici un token de session pour povoir tranmettre les info d'un page à une autre sans exposer l'hrui à l'utilisateur
-		a = params[:user][:hruid].to_s
+		# on elimine les espaces en dùebut/fin du mot recherché 
+		a = params[:user][:hruid].to_s.strip
 		#on enregistre les recherches pour les stats
 		search = Search.new(term: a)
 		respond_to do |format|
@@ -150,6 +150,7 @@ class UsersController < ApplicationController
 
 				end
 
+				#on genere ici un token de session pour povoir tranmettre les info d'un page à une autre sans exposer l'hrui à l'utilisateur
 				session = Recoverysession.new
 				session.generate_token
 				session.hruid = @hruid

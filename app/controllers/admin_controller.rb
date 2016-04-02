@@ -26,7 +26,7 @@ class AdminController < ApplicationController
     
       if user.present?
         respond_to do |format|
-        a = params[:user][:hruid].to_s
+        a = params[:user][:hruid].to_s.strip
         begin
         @hruid = GramEmail.find(a).hruid
         rescue #ArgumentError ||  ActiveResource::ResourceNotFound
