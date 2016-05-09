@@ -22,6 +22,9 @@ class Soce::User < Soce::Base
 	def bukzal
 		"champ à ajouter dans bdd SOCE + retirer du model" # TODO
 	end
+	def buktxt
+		surnom # TODO
+	end
 
 	attr_accessor :famille1zal
 	def famille1zal
