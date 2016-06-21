@@ -602,7 +602,9 @@ class UsersController < ApplicationController
   		end
 
   		def phone_parse(phone)
-	    	if phone.length == 14 || phone.length == 10 #10 et les points ou sans
+	    	if phone[0] == "+"
+	    		internat_phone = phone
+	    	elsif phone.length == 14 || phone.length == 10 #10 et les points ou sans
 	    		internat_phone = "0033"+phone.gsub(".","").split(//).join[1..9] 
 	    	elsif phone.length > 15 # pour les numeros de tel étranger 0033.123.456.789 avec la possibilité d'avoir un indicatif à 3 chiffres et des point tous les 2 chiffre
 	    		internat_phone = phone.gsub(".","")
