@@ -92,7 +92,7 @@ gem "premailer-rails"
 
 gem "nokogiri"
 
-gem "geocoder"
+gem "geocoder", "~> 1.3.7"
 
 gem "fuzzy-string-match"
 
