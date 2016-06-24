@@ -102,11 +102,12 @@ GEM
     css_parser (1.4.1)
       addressable
     debug_inspector (0.0.2)
-    devise (4.1.1)
+    devise (3.5.10)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 4.1.0, < 5.1)
+      railties (>= 3.2.6, < 5)
       responders
+      thread_safe (~> 0.1)
       warden (~> 1.2.3)
     diff-lcs (1.2.5)
     domain_name (0.5.20160310)
@@ -332,7 +333,7 @@ DEPENDENCIES
   chartkick
   coffee-rails (~> 4.1.0)
   configurable_engine
-  devise
+  devise (~> 3.5.10)
   email_validator
   execjs
   faker
@@ -373,4 +374,4 @@ DEPENDENCIES
   yaml_db!
 
 BUNDLED WITH
-   1.11.2
+   1.12.5
