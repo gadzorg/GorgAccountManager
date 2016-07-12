@@ -96,7 +96,7 @@ gem "geocoder", "~> 1.3.7"
 
 gem "fuzzy-string-match"
 
-gem "linkedin-scraper"
+#gem "linkedin-scraper"
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

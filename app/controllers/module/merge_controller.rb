@@ -1,7 +1,7 @@
 class Module::MergeController < ApplicationController
 
   require 'fuzzystringmatch'
-  require 'linkedin_scraper'
+  #require 'linkedin_scraper'
 
   def user
     # select current user if no params
@@ -148,14 +148,14 @@ class Module::MergeController < ApplicationController
     @medal_soce = Soce::User.find_by(hruid: hruid).medal.serialize unless Soce::User.find_by(hruid: hruid).medal.empty?
 
     #linkedintest
-    linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
-    if linkedin_hash.present?
-      linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
-      #@linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
-      begin @linkedin_past_companies = Linkedin::Profile.get_profile(linkedin_url).past_companies
-        rescue
-        end
-    end
+    # linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
+    # if linkedin_hash.present?
+    #   linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
+    #   #@linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
+    #   begin @linkedin_past_companies = Linkedin::Profile.get_profile(linkedin_url).past_companies
+    #     rescue
+    #     end
+    # end
 
 
     render :layout => false
