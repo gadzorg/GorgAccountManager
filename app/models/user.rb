@@ -77,19 +77,20 @@ class User < ActiveRecord::Base
     self.synced_with_gram = false
     if self.syncable?
       begin
-        gram_data=GramAccount.find(self.hruid)
+        gram_data= GramV2Client::Account.find(self.uuid)
         self.email=gram_data.email
         self.firstname=gram_data.firstname
         self.lastname=gram_data.lastname
         self.last_gram_sync_at = Time.now
+        self.hruid = gram_data.hruid
         if self.save
-          self.synced_with_gram = true 
+          self.synced_with_gram = true
           return self
         else
           return false
         end
       rescue ActiveResource::ResourceNotFound
-        logger.error "[GrAM] Utilisateur introuvable : #{self.hruid}"
+        logger.error "[GrAM] Utilisateur introuvable : hruid = #{self.hruid} uuid = #{self.uuid}"
         return false
       rescue ActiveResource::ServerError
         logger.error "[GrAM] Connexion au serveur impossible"
@@ -105,7 +106,7 @@ class User < ActiveRecord::Base
   end
 
   def syncable?
-    hruid.present?
+    uuid.present?
   end
 
   def next_sync_allowed_at
@@ -123,13 +124,14 @@ class User < ActiveRecord::Base
     logger.debug auth_data.inspect
 
     # auth_data : take a look on Users::OmniauthCallbacksController
-    unless user = User.find_by_hruid(auth_data[:uid])
+    unless user = User.find_by_uuid(auth_data[:extra][:uuid])
       user = User.new(
           email: auth_data[:info][:email],
           password: Devise.friendly_token[0,20],
           hruid: auth_data[:uid],
           firstname: auth_data[:extra][:firstname],
           lastname: auth_data[:extra][:lastname],
+          uuid: auth_data[:extra][:uuid],
       )
       user.save
     end

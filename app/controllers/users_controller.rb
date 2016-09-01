@@ -111,34 +111,27 @@ class UsersController < ApplicationController
 				if verify_recaptcha
 				#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
 				begin
-					@hruid = GramEmail.find(a).hruid
+					@uuid = GramV2Client::Account.where(email: a).first.uuid
 					search.term_type = "Email GrAM"
 					search.save
-					rescue #ArgumentError ||  ActiveResource::ResourceNotFound
+				rescue #ArgumentError ||  ActiveResource::ResourceNotFound
+					begin
+						@uuid = GramV2Client::Account.where(hruid: a).first.uuid
+						search.term_type = "Hruid"
+						search.save
+					rescue #ActiveResource::ResourceNotFound || ArgumentError
 						begin
-							@hruid = GramAccount.find(a).hruid
-							search.term_type = "Hruid"
-							search.save
-						rescue #ActiveResource::ResourceNotFound || ArgumentError
-							begin
-								@hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
+							@uuid = GramV2Client::Account.where(id_soce: a.gsub(/[a-zA-Z]/,'')).first.uuid
 								search.term_type = "idSoce"
 								search.save
 							rescue #ActiveResource::ServerError
 								#@hruid = "on t'as pas trouvé :-("
 
 								#Si on ne trouve rien, on cherche dans platal l'adresse mail
-								redirect = Redirectplatal.where(redirect: a).take
-								if !redirect.nil?
-									@hruid = Userplatal.find(redirect.uid).hruid
-									search.term_type = "Email Platal"
-									search.save
-								else
 					    			# format.html { redirect_to recovery_support_path() }
-					    			search.term_type = "Non trouvé"
-									search.save
-					    			format.html { redirect_to recovery_path(:retry => true) }
-					    		end
+					    	search.term_type = "Non trouvé"
+								search.save
+								format.html { redirect_to recovery_path(:retry => true) }
 
 					    		
 					    	end
@@ -146,14 +139,14 @@ class UsersController < ApplicationController
 
 					end
 				else
-					format.html { redirect_to recovery_path(help: true), notice: 'As-tu bien coché la case "je ne suis pas un rotot?"'}
+					format.html { redirect_to recovery_path(help: true), notice: 'As-tu bien coché la case "je ne suis pas un robot?"'}
 
 				end
 
 				#on genere ici un token de session pour povoir tranmettre les info d'un page à une autre sans exposer l'hrui à l'utilisateur
 				session = Recoverysession.new
 				session.generate_token
-				session.hruid = @hruid
+				session.uuid = @uuid
 				session.expire_date = DateTime.now + 15.minute # on definit la durée de vie d'un token à 15 minutes
 				session.save
 
@@ -173,12 +166,13 @@ class UsersController < ApplicationController
 		@session_token = params[:token_session]
 		session = Recoverysession.find_by(token: @session_token)
 		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
-		hruid = session.hruid
-		user_from_gram = GramAccount.find(hruid)
+		uuid = session.uuid
+		user_from_gram = GramV2Client::Account.find(uuid)
+		hruid = user_from_gram.hruid
 
 		if !session.nil? && session.usable?
 			#on recupere l'utilisateur dans le site soce
-			soce_user = Soce::User.where(hruid: session.hruid).take
+			soce_user = Soce::User.where(hruid: hruid).take
 
 			# cherche le numéro de téléhpone sur le site soce
 			!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
@@ -212,10 +206,11 @@ class UsersController < ApplicationController
 		@session_token = params[:token_session]
 		# on recupère l'hruid à partir du token de session
 		session = Recoverysession.find_by(token: @session_token)
-		@hruid = session.hruid
+		@uuid = session.uuid
 
 		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
-		user_from_gram = GramAccount.find(@hruid)
+		user_from_gram = GramV2Client::Account.find(@uuid)
+		@hruid = user_from_gram.hruid
 
 		#on recupere l'utilisateur dans le site soce
 		soce_user = Soce::User.where(hruid: @hruid).take
@@ -237,7 +232,7 @@ class UsersController < ApplicationController
 
 
 		#generation d'un token
-		recovery_link = gen_uniq_link(@hruid)
+		recovery_link = gen_uniq_link(@uuid)
 
 
 		@r= recovery_link.get_url
@@ -276,8 +271,9 @@ class UsersController < ApplicationController
 					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
 				else
 
-					@hruid = recovery_link.hruid
-					user_from_gram = GramAccount.find(@hruid)
+					uuid = recovery_link.uuid
+					user_from_gram = GramV2Client::Account.find(uuid)
+					@hruid = user_from_gram.hruid
 					user_from_soce = Soce::User.where(hruid: @hruid).take
 
 					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
@@ -351,8 +347,9 @@ class UsersController < ApplicationController
 						format.html { redirect_to user_recovery_inscription_path(:token => token), notice: 'Les mots de passe ne correspondents pas ou sont vides' }
 					else
 
-						@hruid = recovery_link.hruid
-						user_from_gram = GramAccount.find(@hruid)
+						uuid = recovery_link.uuid
+						user_from_gram = GramV2Client::Account.find(uuid)
+						@hruid = user_from_gram.hruid
 						soce_user = Soce::User.where(hruid: @hruid).take
 
 						passwd_hash = Digest::SHA1.hexdigest password_confirmation
@@ -415,9 +412,12 @@ class UsersController < ApplicationController
 
 	def create_sms
 		session_token = params[:token_session]
-		# on recupère l'hruid à partir du token de session
+		# on recupère l'uuid à partir du token de session
 		session = Recoverysession.find_by(token: session_token)
-		hruid = session.hruid
+		uuid = session.uuid
+		user_from_gram = GramV2Client::Account.find(@uuid)
+		hruid = user_from_gram.hruid
+
 		soce_user = Soce::User.where(hruid: hruid).take
 		phone = soce_user.tel_mobile
 
@@ -434,7 +434,7 @@ class UsersController < ApplicationController
 
 				#generation d'un token parce qu'on va en avoir besoin 
 				# quand on sera redirigé sur la pase de changement de mdp
-				recovery_link = gen_uniq_link(hruid)
+				recovery_link = gen_uniq_link(uuid)
 
 				#ici code envoi sms
 				#On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
@@ -530,8 +530,9 @@ class UsersController < ApplicationController
 
 	def dashboard
 		authorize! :read, @user
-		hruid = @user.hruid
-		@user_from_gram = GramAccount.find(hruid)
+		uuid = @user.uuid
+		@user_from_gram = GramV2Client::Account.find(uuid)
+		@hruid = user_from_gram.hruid
 		@user_from_soce = Soce::User.where(hruid: hruid).take
 		@user_from_platal = Userplatal.where(hruid: hruid).take
 
@@ -565,10 +566,10 @@ class UsersController < ApplicationController
 	    	params[:user].permit(:hruid)
 	    end
 
-	    def gen_uniq_link(hruid)
+	    def gen_uniq_link(uuid)
 			recovery_link = Uniqlink.new
 			recovery_link.generate_token
-			recovery_link.hruid = hruid
+			recovery_link.uuid = uuid
 			recovery_link.used = false
 			recovery_link.inscription = false
 			recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
@@ -649,7 +650,7 @@ class UsersController < ApplicationController
 
 			#@list_emails.push(user_from_gram.mail_alias)
 			list_emails.push(user_from_gram.email) if user_from_gram.email.present? && user_from_gram.respond_to?(:email)
-			list_emails.push(user_from_gram.email_forge) if user_from_gram.email_forge.present? && user_from_gram.respond_to?(:email_forge)
+			#list_emails.push(user_from_gram.email_forge) if user_from_gram.email_forge.present? && user_from_gram.respond_to?(:email_forge)
 			#email du site soce
 			list_emails.push(soce_user.emails_valides) unless soce_user.blank?
 
