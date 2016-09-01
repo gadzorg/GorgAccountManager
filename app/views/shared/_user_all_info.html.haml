@@ -4,44 +4,36 @@
     .box-top.box-top-color.pam
       GrAM
     .box-bottom.pam
+      %p=@user_from_gram.uuid
       %p=@user_from_gram.hruid
       %p=@user_from_gram.firstname if @user_from_gram.respond_to?(:firstname)
       %p=@user_from_gram.lastname if @user_from_gram.respond_to?(:lastname)
-      %p=@user_from_gram.id_soce if @user_from_gram.respond_to?(:id_soce)
-      %p=@user_from_gram.enable
-      %p=@user_from_gram.id
-      %p=@user_from_gram.uid_number
-      %p=@user_from_gram.home_directory
+      %p
+        %b ID soce
+        =@user_from_gram.id_soce if @user_from_gram.respond_to?(:id_soce)
+      %p=@user_from_gram.enabled
       %h2 Alias
-      -if @user_from_gram.respond_to?(:alias)
+      -if @user_from_gram.respond_to?(:aliases)
         %ul
-        -@user_from_gram.alias.each do |a|
-          %li=a
-      %h2 Mail forwarding
-      -if @user_from_gram.respond_to?(:mail_forwarding)
-        %ul
-        -@user_from_gram.mail_forwarding.each do |m|
-          %li=m
-      %h2 Mail alias
-      -if @user_from_gram.respond_to?(:mail_alias)
-        %ul
-        -@user_from_gram.mail_alias.each do |m|
-          %li=m
-
+        -@user_from_gram.aliases.each do |a|
+          %li=a.name
       %p
         %b Email
         =@user_from_gram.email if @user_from_gram.respond_to?(:email)
       %p
-        %b email forge
-        =@user_from_gram.email_forge
       %p=@user_from_gram.birthdate if @user_from_gram.respond_to?(:birthdate)
-      %p=@user_from_gram.login_validation_check
       %p=@user_from_gram.description if @user_from_gram.respond_to?(:description)
-      %h2 Entité
-      %ul
-      -@user_from_gram.entities.each do |e|
-        %li=e
+
       %p=@user_from_gram.entite if @user_from_gram.respond_to?(:entite)
+
+      %h2 Groupes
+      -if @user_from_gram.respond_to?(:groups)
+        %ul
+        -@user_from_gram.groups.each do |a|
+          %li=a.name
+          %ul
+            %li=a.short_name
+            %li=a.uuid
       
 
   -if @user_from_soce.present?
@@ -86,9 +78,9 @@
         Gadz.org
       .box-bottom.pam
         %p=@user_from_platal.hruid
-        %p=
+        %p
           UID:
-          @user_from_platal.uid
+          =@user_from_platal.uid
         %p=@user_from_platal.type
         %p=@user_from_platal.is_admin
         %p=@user_from_platal.state

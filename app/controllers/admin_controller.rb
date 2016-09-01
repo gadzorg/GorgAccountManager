@@ -28,28 +28,22 @@ class AdminController < ApplicationController
         respond_to do |format|
         a = params[:user][:hruid].to_s.strip
         begin
-        @hruid = GramEmail.find(a).hruid
+          @uuid = GramV2Client::Account.where(email: a).first.uuid
         rescue #ArgumentError ||  ActiveResource::ResourceNotFound
           begin
-            @hruid = GramAccount.find(a).hruid
+            @uuid = GramV2Client::Account.where(hruid: a).first.uuid
           rescue #ActiveResource::ResourceNotFound || ArgumentError
             begin
-              @hruid = GramSearch.where(:idSoce => a.gsub(/[a-zA-Z]/,'')).first.hruid
+              @uuid = GramV2Client::Account.where(id_soce: a.gsub(/[a-zA-Z]/,'')).first.uuid
             rescue #ActiveResource::ServerError
               #@hruid = "on t'as pas trouvé :-("
 
-              #Si on ne trouve rien, on cherche dans platal l'adresse mail
-              redirect = Redirectplatal.where(redirect: a).take
-              if !redirect.nil?
-                @hruid = Userplatal.find(redirect.uid).hruid
-              else
-                  # format.html { redirect_to recovery_support_path() }
                   format.html { redirect_to admin_search_user_path , notice: "Désol's, j'ai rien trouvé"}
-              end   
+
             end
           end
         end
-        format.html { redirect_to admin_info_user_path(:hruid => @hruid) }
+        format.html { redirect_to admin_info_user_path(:uuid => @uuid) }
       end
     end #end repond_to 
   end
@@ -57,10 +51,11 @@ class AdminController < ApplicationController
   def info_user
   	authorize! :read, :admin
     @user = User.new
-  	hruid = params[:hruid]
-  	@user_from_gram = GramAccount.find(hruid)
-	@user_from_soce = Soce::User.where(hruid: hruid).take
-	@user_from_platal = Userplatal.where(hruid: hruid).take
+  	uuid = params[:uuid]
+  	@user_from_gram = GramV2Client::Account.find(uuid)
+    hruid = @user_from_gram.hruid
+	  @user_from_soce = Soce::User.where(hruid: hruid).take
+	  @user_from_platal = Userplatal.where(hruid: hruid).take
 
   end
 
