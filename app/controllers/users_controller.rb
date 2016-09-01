@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 	require 'net/http'
-	before_action :set_user, only: [:show, :edit, :update, :destroy, :dashboard, :flag  ]
+	before_action :set_user, only: [:show, :edit, :update, :destroy, :dashboard, :flag, :password_change_logged, :password_change_logged_step2 ]
   	autocomplete :user, :hruid , :full => true, :display_value =>:hruid, extra_data: [:id, :firstname ] #, :scopes => [:search_by_name]
 
 # GET /users
@@ -279,10 +279,6 @@ class UsersController < ApplicationController
 					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
 					user_from_gram.password = passwd_hash
 					user_from_soce.pass_crypt = passwd_hash
-					
-
-
-
 
 					if user_from_gram.save && user_from_soce.save
 		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
@@ -300,6 +296,48 @@ class UsersController < ApplicationController
 				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
 			end
 		end
+	end
+
+	def password_change_logged
+		authorize! :update, @user
+	end
+
+	def password_change_logged_step2
+		authorize! :update, @user
+		respond_to do |format|
+			# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
+			if params[:user][:password] != params[:user][:password_confirmation]
+				format.html { redirect_to user_password_change_logged_path(), notice: 'Les mots de passe ne correspondents pas' }
+			else
+
+				uuid = @user.uuid
+				current_password_hash_from_gram = GramV2Client::Account.find(uuid, :params => {show_password_hash: true}).password
+				puts current_password_hash_from_gram
+				current_password_hash = Digest::SHA1.hexdigest params[:user][:password_current]
+				if current_password_hash == current_password_hash_from_gram
+					user_from_gram = GramV2Client::Account.find(uuid)
+					@hruid = user_from_gram.hruid
+					user_from_soce = Soce::User.where(hruid: @hruid).take
+
+					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
+					user_from_gram.password = passwd_hash
+					user_from_soce.pass_crypt = passwd_hash
+
+					if user_from_gram.save && user_from_soce.save
+						# si on a reussi à changer le mdp, on mraue le lien comme utilisé
+						recovery_link.set_used
+						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+
+					else
+						format.html { redirect_to user_password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+
+					end
+				else
+					format.html { redirect_to user_password_change_logged_path(), notice: 'Le mot de passe actuel du compte ne correspond pas' }
+				end
+			end
+		end
+
 	end
 
 	def recovery_inscription

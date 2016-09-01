@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   get 'recovery_step1/:token_session', to: "users#recovery_step1", as: :recovery_step1
   get 'password_reset/:token', to: "users#password_reset", as: :password_change
   post 'password_reset/:token'=>"users#password_change"
+
+  get 'password_change_u', to: "users#password_change_logged", as: :password_change_u
   post 'create_sms' => 'users#create_sms'
   #get 'validate_sms/:token', to: 'users#validate_sms', as: :validate_sms
   post 'validate_sms' => 'users#validate_sms'
@@ -41,6 +43,9 @@ Rails.application.routes.draw do
   get 'admin/recovery_sessions' => "admin#recovery_sessions"
   resources :users do
     get "dashboard"
+    get 'password_change_logged'
+    post 'password_change_logged_step2'
+    patch 'password_change_logged_step2'
   end
 
   namespace :module do

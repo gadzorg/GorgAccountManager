@@ -15,7 +15,10 @@
             %p
               = link_to recovery_path(), title: "Récupère ton mot de passe" do
                 Récupèrer mon mot de passe
-            %p.grey Changer mon mot de passe (bientôt disponible)
+            -if true #@user.present?
+              %p
+                = link_to password_change_u_path(), title: "Changer mon mot de passe"  do
+                  Changer mon mot de passe
             %p.grey Mes options de récupérations (bientôt disponible)
 
 
