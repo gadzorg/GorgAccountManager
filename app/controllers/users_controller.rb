@@ -299,11 +299,11 @@ class UsersController < ApplicationController
 	end
 
 	def password_change_logged
-		authorize! :update, @user
+		authorize! :update_password, @user
 	end
 
 	def password_change_logged_step2
-		authorize! :update, @user
+		authorize! :update_password, @user
 		respond_to do |format|
 			# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 			if params[:user][:password] != params[:user][:password_confirmation]
