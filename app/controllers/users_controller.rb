@@ -451,7 +451,7 @@ class UsersController < ApplicationController
 		# on recupère l'uuid à partir du token de session
 		session = Recoverysession.find_by(token: session_token)
 		uuid = session.uuid
-		user_from_gram = GramV2Client::Account.find(@uuid)
+		user_from_gram = GramV2Client::Account.find(uuid)
 		hruid = user_from_gram.hruid
 
 		soce_user = Soce::User.where(hruid: hruid).take
