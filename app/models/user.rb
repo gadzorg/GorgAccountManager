@@ -131,6 +131,8 @@ class User < ActiveRecord::Base
       user = user_from_uuid
     elsif user_from_hruid
       user = user_from_hruid
+      user.uuid = auth_data[:extra][:uuid]
+      user.save
     else
       user = User.new(
           email: auth_data[:info][:email],
