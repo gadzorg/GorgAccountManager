@@ -124,7 +124,7 @@ class User < ActiveRecord::Base
     logger.debug auth_data.inspect
 
     # auth_data : take a look on Users::OmniauthCallbacksController
-    unless user = User.find_by_uuid(auth_data[:extra][:uuid])
+    unless user = User.where.not(uuid: nil).find_by_uuid(auth_data[:extra][:uuid]) or user = User.where(uuid: nil).find_by_hruid(auth_data[:extra][:uid])
       user = User.new(
           email: auth_data[:info][:email],
           password: Devise.friendly_token[0,20],
