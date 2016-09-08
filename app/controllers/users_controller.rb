@@ -324,8 +324,6 @@ class UsersController < ApplicationController
 					user_from_soce.pass_crypt = passwd_hash
 
 					if user_from_gram.save && user_from_soce.save
-						# si on a reussi à changer le mdp, on mraue le lien comme utilisé
-						recovery_link.set_used
 						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
 
 					else
