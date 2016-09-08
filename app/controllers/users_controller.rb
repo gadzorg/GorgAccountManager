@@ -464,6 +464,7 @@ class UsersController < ApplicationController
 				recovery_sms = Uniqsms.new
 				recovery_sms.generate_token
 				recovery_sms.hruid = hruid
+				recovery_sms.uuid = uuid
 				recovery_sms.used = false
 				recovery_sms.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
 				recovery_sms.save
@@ -498,10 +499,10 @@ class UsersController < ApplicationController
 		session = Recoverysession.find_by(token: token_session)
 
 		respond_to do |format|
-			if !sms_uniq.nil? && sms_uniq.usable? && !session.nil? && session.usable? && session.hruid == sms_uniq.hruid
+			if !sms_uniq.nil? && sms_uniq.usable? && !session.nil? && session.usable? && session.uuid == sms_uniq.uuid
 				if sms_uniq.check_count < 4 #nombre max de verifications add_check ajoute et renvoie le nombre de verif
-					hruid = sms_uniq.hruid
-					token = Uniqlink.where(hruid: hruid).where(used: false).last.token
+					uuid = sms_uniq.uuid
+					token = Uniqlink.where(uuid: uuid).where(used: false).last.token
 					sms_uniq.set_used
 					sms_uniq.save
 
