@@ -524,10 +524,12 @@ class UsersController < ApplicationController
 		@session_token = params[:token_session]
 		# on recupère l'hruid à partir du token de session
 		session = Recoverysession.find_by(token: @session_token)
-		@hruid = session.hruid
+		uuid = session.uuid
+		user_from_gram = GramV2Client::Account.find(uuid)
+		hruid = user_from_gram.hruid
 
 		#on recupere l'utilisateur dans le site soce
-		soce_user = Soce::User.where(hruid: @hruid).take
+		soce_user = Soce::User.where(hruid: hruid).take
 		phone = soce_user.tel_mobile
 		@phone_hidden = hide_phone(phone)
 
