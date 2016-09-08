@@ -124,7 +124,14 @@ class User < ActiveRecord::Base
     logger.debug auth_data.inspect
 
     # auth_data : take a look on Users::OmniauthCallbacksController
-    unless user = User.where.not(uuid: nil).find_by_uuid(auth_data[:extra][:uuid]) or user = User.where(uuid: nil).find_by_hruid(auth_data[:extra][:uid])
+    user_from_uuid = User.where.not(uuid: nil).find_by_uuid(auth_data[:extra][:uuid])
+    user_from_hruid = User.where(uuid: nil).find_by_hruid(auth_data[:uid])
+
+    if user_from_uuid
+      user = user_from_uuid
+    elsif user_from_hruid
+      user = user_from_hruid
+    else
       user = User.new(
           email: auth_data[:info][:email],
           password: Devise.friendly_token[0,20],
@@ -135,7 +142,6 @@ class User < ActiveRecord::Base
       )
       user.save
     end
-
     if user.persisted?
       user.update_from_gram
       user
