@@ -278,14 +278,18 @@ class UsersController < ApplicationController
 
 					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
 					user_from_gram.password = passwd_hash
-					user_from_soce.pass_crypt = passwd_hash
+					user_from_soce.pass_crypt = passwd_hash unless user_from_soce.nil?
 
-					if user_from_gram.save && user_from_soce.save
-		        	  # si on a reussi à changer le mdp, on mraue le lien comme utilisé
-		        	  recovery_link.set_used
-		        	  format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
-
-		        	else
+					user_from_gram_saved = user_from_gram.save
+					user_from_soce_saved = user_from_soce.save unless user_from_soce.nil?
+					if user_from_gram_saved && user_from_soce_saved
+						# si on a reussi à changer le mdp, on mraue le lien comme utilisé
+						recovery_link.set_used
+						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+					elsif user_from_gram_saved && !user_from_soce_saved
+						recovery_link.set_used
+						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé mais compte SOCE introuvable' }
+					else
 		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
 
 		        	end
