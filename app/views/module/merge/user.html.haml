@@ -22,7 +22,7 @@
       .small Temps estimé : 2 minutes
 
 
-    =form_tag module_merge_update_soce_user_path do
+    =form_tag module_merge_update_soce_user_path(@hruid) do
       #hruid=hidden_field_tag @hruid, :class => "hruid"
       .mtm.box-merge
         =fields_for :user_soce do |ff|

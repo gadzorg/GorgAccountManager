@@ -72,6 +72,7 @@
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
               =social["name"]
+              =hidden_field_tag "social_"+i.to_s + "[name]", social["name"]
             .box-bottom.pam
               .group-m-form
                 -if social["link"].include? "%s"
@@ -113,6 +114,7 @@
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
               =diploma["name"]
+              =hidden_field_tag "diploma_"+i.to_s + "[name]", diploma["name"]
             .box-bottom.pam
               .group-m-form
                 = text_field_tag "diploma_"+ i.to_s + "[program]", diploma["program"], :class => "w100 slim"
@@ -262,6 +264,7 @@
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
               =medal["medal_text"]
+              =hidden_field_tag "medal_"+i.to_s + "[name]", medal["medal_text"]
             .box-bottom.pam
               %div
                 / = text_field_tag "diploma_field_"+i.to_s, diploma["program"], :placeholder => "program", :class => "w100 slim mbs"

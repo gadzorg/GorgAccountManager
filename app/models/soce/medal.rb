@@ -14,5 +14,12 @@ class Soce::Medal < Soce::Base
         SoceDatabaseConnection.custom_sql_query(sql,SoceDatabaseConnection)
 	end
 
+	def self.get_id_medal_for!(name)
+		safe_name=Mysql2::Client.escape(name)
+		sql="SELECT id_medaille FROM int_anakrys_soce.medailles WHERE libelle='#{safe_name}';"
+		obj=SoceDatabaseConnection.custom_sql_query(sql,SoceDatabaseConnection).first
+		obj && obj['id_medaille']
+	end
+
 
 end

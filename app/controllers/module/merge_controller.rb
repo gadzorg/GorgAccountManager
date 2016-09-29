@@ -173,12 +173,111 @@ class Module::MergeController < ApplicationController
     @hruid = hruid
     
     @params = params
+
+    soce_user=Soce::User.find_by(hruid: hruid)
+
+    #user_soce
+      params_user=params["user_soce"]
+      info_platal=get_info_from_platal(hruid).first
+      user_attr={}
+      user_attr[:prenom] = formate_name(info_platal['firstname']) if params_user["prenom"] == 'platal'
+      user_attr[:nom] = formate_name(info_platal['lastname']) if params_user["nom"] == 'platal'
+      user_attr[:surnom] = info_platal['buktxt'] if params_user["buktxt"] == 'platal'
+      user_attr[:buque_zaloeil] = info_platal['bukzal'] if params_user["bukzal"] == 'platal'
+      user_attr[:email] = info_platal['email'] if params_user["email"] == 'platal'
+      user_attr[:tel_mobile] = info_platal['search_tel'] if params_user["tel_mobile"] == 'platal'
+      user_attr[:famille1] = info_platal['gadz_fams'] if params_user["famille1"] == 'platal'
+      user_attr[:famille_zaloeil] = info_platal['gadz_fams_display'] if params_user["famille1zal"] == 'platal'
+      user_attr[:date_declaration_deces] = info_platal['deathdate'] if params_user["date_declaration_deces"] == 'platal'
+      user_attr[:date_naissance] = info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime("%d %b %Y")  if params_user["date_naissance"] == 'platal'
+      if params_user["centre1"] == 'platal'
+        user_attr[:centre1] = case info_platal['tbk']
+                                when "ch"; 1
+                                when "an"; 2
+                                when "ai";3
+                                when "cl";4
+                                when "li";5
+                                when "pa";6
+                                when "bo";7
+                                when "ka";8
+                                when "me";9
+                                when "am";10
+                                else; nil
+                              end
+      end
+      soce_user.update_attributes!(user_attr)
+
+    #addresses
+      loop_through_h_key(params,"address") do |ad_h|
+        if ad_h['recuperer']=="oui"
+          ad=soce_user.address.create!(
+              id_adresse_type: soce_user.address.count > 0 ? 3 : 1,
+              adresse_1: ad_h["Adresse 1"],
+              adresse_2: ad_h["Adresse 2"],
+              adresse_3: "",
+              modified_data:"",
+              code_postal: ad_h["Code postal"],
+              ville: ad_h["Ville"],
+              tel_fixe: ad_h["phone"],
+              id_pays: Soce::Address.get_pays_id_from_name(ad_h["Pays"]),
+              id_etat_validation: -4,
+          )
+
+        end
+      end
+
+    #social
+      loop_through_h_key(params,"social") do |s_h|
+        if s_h['recuperer']=="oui"
+          soce_user.reseaux_sociaux.create!(
+              id_reseau_social: Soce::ListReseauxSociaux.find_by(libelle: s_h['name']) || 0,
+              adresse: s_h['link']
+          )
+        end
+      end
+
+    #diploma
+      loop_through_h_key(params,"diploma") do |d_h|
+        if d_h['recuperer']=="oui"
+          libelle=d_h['name']
+          libelle+=" - #{d_h['program']}" if d_h['program'].present?
+          soce_user.diploma.create!(
+              libelle: libelle,
+              annee: d_h['grad_year']||0,
+              id_etat_validation: -4,
+              ordre: 0, filiere: 0, sous_filiere: 0, niveau: 0,
+          )
+        end
+      end
+
+    #medal
+      loop_through_h_key(params,"medal") do |m_h|
+        if m_h['recuperer']=="oui"
+          if id_medal=Soce::Medal.get_id_medal_for!(m_h['name'])
+            soce_user.medal.create!(
+                id_medaille: id_medal,
+                id_etat_validation: -4,
+            )
+          end
+
+        end
+      end
+
   end
 
   def user_merged
   end
 
   private
+
+    def loop_through_h_key(params,key_prefix,&block)
+      i=0
+      while h=params["#{key_prefix}_#{i}"]
+        yield(h)
+        i+=1
+      end
+    end
+
     def get_info_from_platal(hruid)
       sql = "select *, hruid, firstname, lastname, pgn.name as buktxt, pgn2.name as bukzal, email, gadz_fams, gadz_fams_display, birthdate, deathdate, search_tel, IF (tbk = 'kin', 'ai', tbk) as tbk
         from accounts as a
@@ -246,7 +345,8 @@ class Module::MergeController < ApplicationController
         left JOIN profile_medals AS pm ON (ap.pid=pm.pid ) 
         left JOIN profile_medal_enum AS pme ON (pme.id=pm.mid ) 
         left JOIN profile_medal_grade_enum AS pmge ON (pmge.mid=pm.mid and pmge.gid = pm.gid )  
-        where hruid = '#{hruid}'"
+        where hruid = '#{hruid}'
+        ORDER BY medal_text ASC"
 
       custom_sql_query(sql,PlatalDatabaseConnection)
     end
