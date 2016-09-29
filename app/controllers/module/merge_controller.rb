@@ -229,8 +229,9 @@ class Module::MergeController < ApplicationController
     #social
       loop_through_h_key(params,"social") do |s_h|
         if s_h['recuperer']=="oui"
+          list_reseau=Soce::ListReseauxSociaux.find_by(libelle: s_h['name'])
           soce_user.reseaux_sociaux.create!(
-              id_reseau_social: Soce::ListReseauxSociaux.find_by(libelle: s_h['name']) || 0,
+              id_reseau_social: list_reseau && list_reseau.id || 0,
               adresse: s_h['link']
           )
         end
