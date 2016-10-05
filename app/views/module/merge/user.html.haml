@@ -22,7 +22,7 @@
       .small Temps estimé : 2 minutes
 
 
-    =form_tag module_merge_update_soce_user_path do
+    =form_tag module_merge_update_soce_user_path(@hruid) do
       #hruid=hidden_field_tag @hruid, :class => "hruid"
       .mtm.box-merge
         =fields_for :user_soce do |ff|
@@ -30,9 +30,9 @@
             .box-merge-left.prm
               %span.prm Annuaire Gadz.org
               / %i.zmdi.zmdi-long-arrow-down
-              =image_tag "gadzorg-favicon1.png",:size => "50", :class => "vertical-center"
+              =image_tag "gadzorg-favicon1.png",:size => "50"
             .box-merge-right.plm
-              =image_tag "logo_alumni.png", :class => "vertical-center"
+              =image_tag "logo_alumni.png"
               / %i.zmdi.zmdi-long-arrow-down
               %span.plm Annuaire SOCE
           -@infos.each do |info|

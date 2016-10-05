@@ -13,6 +13,7 @@
         / %th Email
         %th= User.human_attribute_name('fullname')
         %th= User.human_attribute_name('hruid')
+        %th= User.human_attribute_name('uuid')
         %th
 
 
@@ -22,6 +23,7 @@
           / %td= user.email
           %td= user.fullname+(user.role ? " - #{user.role.name}" : "")
           %td= user.hruid
+          %td= user.uuid
           %td
             = link_to t('users.forms.buttons.show'), user
             -if can? :update, user

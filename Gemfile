@@ -96,6 +96,9 @@ gem "geocoder", "~> 1.3.7"
 
 gem "fuzzy-string-match"
 
+# Gadz.org Gems Gram v2 client
+gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git'
+
 #gem "linkedin-scraper"
 
 # Use ActiveModel has_secure_password
@@ -137,6 +140,7 @@ group :development, :test do
   # gem 'flamegraph'
   # gem 'stackprof' # ruby 2.1+ only
   # gem 'memory_profiler'
+  gem 'quiet_assets'
 
 end
 
