@@ -85,18 +85,19 @@ class UsersController < ApplicationController
 
   def recovery
   	@user = User.new
-	re_try = params[:retry] #true si on vient d'écoucher. la page est appellée en POST
-	help = params[:help]
-	if !re_try.nil? || re_try == true 
-		@first_attempt = false
-	else
-		@first_attempt = true
-	end
-	if help.nil? || help == false
-		@help = false
-	else
-		@help = true
-	end	 		
+		re_try = params[:retry] #true si on vient d'échoucher. la page est appellée en POST
+		help = params[:help]
+		if !re_try.nil? || re_try == true
+			@first_attempt = false
+		else
+			@first_attempt = true
+		end
+		if help.nil? || help == false
+			@help = false
+		else
+			@help = true
+		end
+		@hruid = params[:hruid]
 	render :layout => 'recovery'
 	end
 
@@ -304,6 +305,12 @@ class UsersController < ApplicationController
 
 	def password_change_logged
 		authorize! :update_password, @user
+		re_try = params[:retry] #true si on vient d'échoucher
+		if !re_try.nil? || re_try == true
+			@first_attempt = false
+		else
+			@first_attempt = true
+		end
 	end
 
 	def password_change_logged_step2
@@ -311,7 +318,8 @@ class UsersController < ApplicationController
 		respond_to do |format|
 			# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 			if params[:user][:password] != params[:user][:password_confirmation]
-				format.html { redirect_to user_password_change_logged_path(), notice: 'Les mots de passe ne correspondents pas' }
+				flash[:error] = 'Les mots de passe ne correspondents pas'
+				format.html { redirect_to user_password_change_logged_path() }
 			else
 
 				uuid = @user.uuid
@@ -331,11 +339,13 @@ class UsersController < ApplicationController
 						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
 
 					else
-						format.html { redirect_to user_password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+						flash[:error] = 'Erreur lors de la mise à jour du mot de passe'
+						format.html { redirect_to user_password_change_path(:token => token), :layout => 'recovery'}
 
 					end
 				else
-					format.html { redirect_to user_password_change_logged_path(), notice: 'Le mot de passe actuel du compte ne correspond pas' }
+					flash[:error] = 'Le mot de passe actuel du compte ne correspond pas'
+					format.html { redirect_to user_password_change_logged_path(retry: true)}
 				end
 			end
 		end
