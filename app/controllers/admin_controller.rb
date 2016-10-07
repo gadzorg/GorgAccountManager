@@ -34,7 +34,9 @@ class AdminController < ApplicationController
             @uuid = GramV2Client::Account.where(hruid: a).first.uuid
           rescue #ActiveResource::ResourceNotFound || ArgumentError
             begin
-              @uuid = GramV2Client::Account.where(id_soce: a.gsub(/[a-zA-Z]/,'')).first.uuid
+              id_soce = a.gsub(/[a-zA-Z]/,'')
+              id_soce.to_i.to_s.to_i == id_soce ? (id_soce_to_search = id_soce) : (id_soce_to_search = nil)
+              @uuid = GramV2Client::Account.where(id_soce: id_soce_to_search).first.uuid
             rescue #ActiveResource::ServerError
               #@hruid = "on t'as pas trouvé :-("
 
