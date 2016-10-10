@@ -7,11 +7,11 @@
 
 
         .mtm 
-          =form_for  [@user], :url=> admin_search_user_path()  do |f|
-            =f.text_field :hruid, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
-            =f.submit 'Chercher',:class => "bouton bouton_bleu mtm", :id => "button_loading"
+          =form_tag admin_search_user_path, :method => :post do
+            =text_field_tag :hruid, nil, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
+            =submit_tag 'Chercher',:class => "bouton bouton_bleu mtm", :id => "button_loading"
             %span#loading
               =image_tag "Preloader_3.gif"
               Recherche en cours...
 
-        %p.small Entre une adresse @gadz.org, un indentifiant, un numéro de sociétaire ou un email soce
+        %p.small Entre une adresse @gadz.org, un indentifiant, un numéro de sociétaire, un email soce ou un UUID

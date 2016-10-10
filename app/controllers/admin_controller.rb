@@ -21,27 +21,30 @@ class AdminController < ApplicationController
 
   def search_user
     authorize! :read, :admin
-    @user = User.new
-    user = params[:user]
-    
-      if user.present?
+    #@user = User.new
+    #user = params[:user]
+    a = params[:hruid].to_s.strip
+      if a.present?
         respond_to do |format|
-        a = params[:user][:hruid].to_s.strip
         begin
-          @uuid = GramV2Client::Account.where(email: a).first.uuid
-        rescue #ArgumentError ||  ActiveResource::ResourceNotFound
+          @uuid = GramV2Client::Account.find(a).uuid
+        rescue
           begin
-            @uuid = GramV2Client::Account.where(hruid: a).first.uuid
-          rescue #ActiveResource::ResourceNotFound || ArgumentError
+            @uuid = GramV2Client::Account.where(email: a).first.uuid
+          rescue #ArgumentError ||  ActiveResource::ResourceNotFound
             begin
-              id_soce = a.gsub(/[a-zA-Z]/,'')
-              id_soce.to_i.to_s.to_i == id_soce ? (id_soce_to_search = id_soce) : (id_soce_to_search = nil)
-              @uuid = GramV2Client::Account.where(id_soce: id_soce_to_search).first.uuid
-            rescue #ActiveResource::ServerError
-              #@hruid = "on t'as pas trouvé :-("
+              @uuid = GramV2Client::Account.where(hruid: a).first.uuid
+            rescue #ActiveResource::ResourceNotFound || ArgumentError
+              begin
+                id_soce = a.gsub(/[a-zA-Z]/,'')
+                id_soce.to_i.to_s.to_i == id_soce ? (id_soce_to_search = id_soce) : (id_soce_to_search = nil)
+                @uuid = GramV2Client::Account.where(id_soce: id_soce_to_search).first.uuid
+              rescue #ActiveResource::ServerError
+                #@hruid = "on t'as pas trouvé :-("
 
-                  format.html { redirect_to admin_search_user_path , notice: "Désol's, j'ai rien trouvé"}
+                    format.html { redirect_to admin_search_user_path , notice: "Désol's, j'ai rien trouvé"}
 
+              end
             end
           end
         end
