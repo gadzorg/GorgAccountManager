@@ -9,6 +9,9 @@
           - if user_signed_in?
             - if can? :read, :admin
               %li
+                =form_tag admin_search_user_path, :method => :post ,class: "mtm"do
+                  =text_field_tag :hruid, nil, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w80 login", :autofocus => true
+              %li
                 =link_to "Administration", admin_path
 
           = render 'layouts/user_widget'

@@ -21,12 +21,11 @@ class AdminController < ApplicationController
 
   def search_user
     authorize! :read, :admin
-    @user = User.new
-    user = params[:user]
-    
-      if user.present?
+    #@user = User.new
+    #user = params[:user]
+    a = params[:hruid].to_s.strip
+      if a.present?
         respond_to do |format|
-        a = params[:user][:hruid].to_s.strip
         begin
           @uuid = GramV2Client::Account.find(a).uuid
         rescue

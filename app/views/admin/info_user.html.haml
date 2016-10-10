@@ -1,6 +1,9 @@
 %section.pam
-	=form_for  [@user], :url=> admin_search_user_path()  do |f|
-		=f.text_field :hruid, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w80 login", :autofocus => true
-		=f.submit 'Chercher!',:class => "bouton bouton_bleu", :id => "button_loading"
+  =form_tag admin_search_user_path, :method => :post do
+    =text_field_tag :hruid, nil, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w80 login", :autofocus => true
+    =submit_tag 'Chercher',:class => "bouton bouton_bleu mtm", :id => "button_loading"
+    %span#loading
+      =image_tag "Preloader_3.gif"
+      Recherche en cours...
 
 =render partial: "shared/user_all_info"
