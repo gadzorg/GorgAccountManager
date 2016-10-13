@@ -122,7 +122,7 @@ class UsersController < ApplicationController
 						search.save
 					rescue #ActiveResource::ResourceNotFound || ArgumentError
 						begin
-							id_soce = Integer(a.gsub(/[a-zA-Z]/,'')
+							id_soce = Integer(a.gsub(/[a-zA-Z]/,''))
 							@uuid = GramV2Client::Account.where(id_soce: id_soce).first.uuid
 							search.term_type = "idSoce"
 							search.save
