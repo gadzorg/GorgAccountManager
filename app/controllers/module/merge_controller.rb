@@ -189,7 +189,9 @@ class Module::MergeController < ApplicationController
       user_attr[:famille1] = info_platal['gadz_fams'] if params_user["famille1"] == 'platal'
       user_attr[:famille_zaloeil] = info_platal['gadz_fams_display'] if params_user["famille1zal"] == 'platal'
       user_attr[:date_declaration_deces] = info_platal['deathdate'] if params_user["date_declaration_deces"] == 'platal'
-      user_attr[:date_naissance] = info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime("%d %b %Y")  if params_user["date_naissance"] == 'platal'
+      user_attr[:date_naissance] = info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime  if params_user["date_naissance"] == 'platal'
+      user_attr[:migration_platal]=1
+      user_attr[:date_migration_platal]=Date.today.strftime
       if params_user["centre1"] == 'platal'
         user_attr[:centre1] = case info_platal['tbk']
                                 when "ch"; 1
