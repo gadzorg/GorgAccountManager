@@ -122,20 +122,18 @@ class UsersController < ApplicationController
 						search.save
 					rescue #ActiveResource::ResourceNotFound || ArgumentError
 						begin
-							id_soce = a.gsub(/[a-zA-Z]/,'')
-							id_soce.to_i.to_s.to_i == id_soce ? (id_soce_to_search = id_soce) : (id_soce_to_search = nil)
-							@uuid = GramV2Client::Account.where(id_soce: id_soce_to_search).first.uuid
+							id_soce = Integer(a.gsub(/[a-zA-Z]/,''))
+							@uuid = GramV2Client::Account.where(id_soce: id_soce).first.uuid
 							search.term_type = "idSoce"
 							search.save
-							rescue #ActiveResource::ServerError
-								#@hruid = "on t'as pas trouvé :-("
+						rescue #ActiveResource::ServerError
+							#@hruid = "on t'as pas trouvé :-("
 
-								#Si on ne trouve rien, on cherche dans platal l'adresse mail
-					    			# format.html { redirect_to recovery_support_path() }
-					    	search.term_type = "Non trouvé"
-								search.save
-								format.html { redirect_to recovery_path(:retry => true) }
-
+							#Si on ne trouve rien, on cherche dans platal l'adresse mail
+					    		# format.html { redirect_to recovery_support_path() }
+					    		search.term_type = "Non trouvé"
+							search.save
+							format.html { redirect_to recovery_path(:retry => true) }
 					    		
 					    	end
 					    end

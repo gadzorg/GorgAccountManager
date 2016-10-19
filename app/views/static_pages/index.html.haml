@@ -14,12 +14,12 @@
           .box-bottom.box-light.pam
             %p
               = link_to recovery_path(), title: "Récupère ton mot de passe" do
-                Récupèrer mon mot de passe
+                Récupérer mon mot de passe
             -if true #@user.present?
               %p
                 = link_to password_change_u_path(), title: "Changer mon mot de passe"  do
                   Changer mon mot de passe
-            %p.grey Mes options de récupérations (bientôt disponible)
+            %p.grey Mes options de récupération (bientôt disponible)
 
 
         .box.box-light.shadow-1.mtm
@@ -29,7 +29,7 @@
               Site en bêta
           .box-bottom.pam
             %p 
-              nomcompte.gadz.org est encore 
+              moncompte.gadz.org est encore 
               %b en cours de développement 
               et est régulièrement mis à jour.
-            %p Si tu veux nous faire part de bug ou de remarques, tu peux envoyer un mail à support@gadz.org .
+            %p Si tu veux nous faire part de bugs ou de remarques, tu peux envoyer un mail à support@gadz.org .
