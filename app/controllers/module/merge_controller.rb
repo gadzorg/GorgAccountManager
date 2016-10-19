@@ -232,7 +232,7 @@ class Module::MergeController < ApplicationController
           list_reseau=Soce::ListReseauxSociaux.find_by(libelle: s_h['name'])
           soce_user.reseaux_sociaux.create!(
               id_reseau_social: list_reseau && list_reseau.id || 0,
-              adresse: s_h['link']
+              adresse: s_h['link'] || s_h['address']
           )
         end
       end
