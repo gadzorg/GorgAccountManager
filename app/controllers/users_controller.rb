@@ -270,6 +270,9 @@ class UsersController < ApplicationController
 				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 				if params[:user][:password] != params[:user][:password_confirmation] 
 					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
+				elsif not PasswordService.validate_password_rules params[:user][:password]
+					flash[:error] = 'Le mot de passe est trop court ou contient des accents'
+					format.html { redirect_to user_password_change_logged_path() }
 				else
 
 					uuid = recovery_link.uuid
@@ -319,6 +322,9 @@ class UsersController < ApplicationController
 			# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 			if params[:user][:password] != params[:user][:password_confirmation]
 				flash[:error] = 'Les mots de passe ne correspondents pas'
+				format.html { redirect_to user_password_change_logged_path() }
+			elsif not PasswordService.validate_password_rules params[:user][:password]
+				flash[:error] = 'Le mot de passe est trop court ou contient des accents'
 				format.html { redirect_to user_password_change_logged_path() }
 			else
 
