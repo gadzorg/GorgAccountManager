@@ -116,13 +116,10 @@ group :development, :test do
   
   gem "letter_opener"
 
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
-  gem 'better_errors'
 
   #pour les diagramme UML
   gem 'rails-erd' 
@@ -143,6 +140,14 @@ group :development, :test do
   gem 'quiet_assets'
 
 end
+
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'web-console', '~> 2.0'
+  
+  gem 'better_errors'
+end
+
 
 group :test do
   gem 'faker'
