@@ -61,12 +61,12 @@ class Module::MergeController < ApplicationController
         soce:   @user_soce.famille_zaloeil,
         status: :updatable},
       {title: "Date de naissance",field_name: "date_naissance",
-        platal: info_platal['birthdate'].nil? ? nil : I18n.l(info_platal['birthdate'].to_date),
-        soce:   @user_soce.date_naissance.nil? ? nil : I18n.l(@user_soce.date_naissance.to_date) ,
+        platal: info_platal['birthdate']&&I18n.l(info_platal['birthdate'].to_date),
+        soce:   @user_soce.date_naissance &&I18n.l(@user_soce.date_naissance.to_date) ,
         status: :updatable},
       {title: "date_declaration_deces",field_name: "date_declaration_deces",
-        platal: I18n.l(info_platal['deathdate'].to_date),
-        soce:   I18n.l(@user_soce.date_declaration_deces.to_date),
+        platal: info_platal['deathdate']&&I18n.l(info_platal['deathdate'].to_date),
+        soce:   @user_soce.date_declaration_deces&&I18n.l(@user_soce.date_declaration_deces.to_date),
         status: :updatable},
     ]
 
