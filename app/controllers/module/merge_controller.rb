@@ -4,20 +4,14 @@ class Module::MergeController < ApplicationController
   #require 'linkedin_scraper'
 
   def user
-    # select current user if no params
-    if params[:hruid]
-      hruid = params[:hruid]
-      @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
-    else
-      @user=current_user
-      hruid = @user && @user.hruid
-    end
+    set_user_and_hruid
     authorize! :merge, @user
-    @hruid = hruid
 
-    @user_soce = Soce::User.where(hruid: hruid).take
+    @user_soce = Soce::User.where(hruid: @hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {:same = déjà la meme valeur, :updatable=choix possible, :fixed=non modifiable}]
-    info_platal=get_info_from_platal(hruid).first
+    info_platal=get_info_from_platal(@hruid).first
+
+    return redirect_to module_merge_platal_account_not_found_path unless info_platal
 
     @infos = [
       {title: "Identifiant",field_name: "hruid",
@@ -86,7 +80,7 @@ class Module::MergeController < ApplicationController
     @infos.reject!{|i| i[:status] == :fixed }    
 
 
-    @phones_platal = get_phones_from_platal(hruid)
+    @phones_platal = get_phones_from_platal(@hruid)
 
 
   end
@@ -162,23 +156,16 @@ class Module::MergeController < ApplicationController
   end
 
   def update_soce_user
-    if params[:hruid]
-      hruid = params[:hruid]
-      @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
-    else
-      @user=current_user
-      hruid = @user && @user.hruid
-    end
+    set_user_and_hruid
     authorize! :merge, @user
-    @hruid = hruid
     
     @params = params
 
-    soce_user=Soce::User.find_by(hruid: hruid)
+    soce_user=Soce::User.find_by(hruid: @hruid)
 
     #user_soce
       params_user=params["user_soce"]
-      info_platal=get_info_from_platal(hruid).first
+      info_platal=get_info_from_platal(@hruid).first
       user_attr={}
       user_attr[:prenom] = formate_name(info_platal['firstname']) if params_user["prenom"] == 'platal'
       user_attr[:nom] = formate_name(info_platal['lastname']) if params_user["nom"] == 'platal'
@@ -268,10 +255,22 @@ class Module::MergeController < ApplicationController
 
   end
 
-  def user_merged
+  def platal_account_not_found
+    set_user_and_hruid
   end
 
   private
+
+    def set_user_and_hruid
+      # select current user if no params
+      if params[:hruid]
+        hruid = params[:hruid]
+        @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
+      else
+        @user=current_user
+        hruid = @user && @user.hruid
+      end
+    end
 
     def loop_through_h_key(params,key_prefix,&block)
       i=0
