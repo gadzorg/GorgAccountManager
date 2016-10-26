@@ -131,7 +131,7 @@ class Module::MergeController < ApplicationController
     @phones_adresse_platal = @phones_platal.select{|n| (n["link_type"].include? "address")}
 
     @socials_platal = get_socials_from_platal(hruid)
-    @socials_soce = soce_user.reseaux_sociaux.serialize unless soce_user.reseaux_sociaux.empty?
+    @socials_soce = soce_user.reseaux_sociaux
 
     @diploma_platal = get_diploma_from_platal(hruid)
     @diploma_soce = soce_user.diploma.serialize unless soce_user.diploma.empty?
@@ -262,11 +262,11 @@ class Module::MergeController < ApplicationController
     def set_user_and_hruid
       # select current user if no params
       if params[:hruid]
-        hruid = params[:hruid]
+        @hruid = params[:hruid]
         @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
       else
         @user=current_user
-        hruid = @user && @user.hruid
+        @hruid = @user && @user.hruid
       end
     end
 
