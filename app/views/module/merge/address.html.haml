@@ -93,9 +93,9 @@
         -@socials_soce.each_with_index do |social, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
-              =social.libelle
+              =social["libelle"]
             .box-bottom.pam
-              .address-fields=social.adresse
+              .address-fields=social["adresse"]
             .box.pbm.plm.prm
               .small
                 %i.zmdi.zmdi-info-outline

@@ -97,9 +97,11 @@ class Module::MergeController < ApplicationController
     @user = User.where(hruid: hruid).take
     authorize! :merge, @user
 
+    soce_user=Soce::User.find_by(hruid: hruid)
+
     @phones_platal = get_phones_from_platal(hruid)
 
-    @addresses_soce=Soce::User.find_by(hruid: hruid).address.serialize
+    @addresses_soce=soce_user.address.serialize
 
     addresses_soce_formated = @addresses_soce.map do |a| 
       b=Geocoder.search(a.map(&:last)[0...-1].join(" ")).first
@@ -129,17 +131,17 @@ class Module::MergeController < ApplicationController
     @phones_adresse_platal = @phones_platal.select{|n| (n["link_type"].include? "address")}
 
     @socials_platal = get_socials_from_platal(hruid)
-    @socials_soce = Soce::User.find_by(hruid: hruid).reseaux_sociaux
+    @socials_soce = soce_user.reseaux_sociaux.serialize unless soce_user.reseaux_sociaux.empty?
 
 
     @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
-    @jobs_soce = Soce::User.find_by(hruid: hruid).job.serialize unless Soce::User.find_by(hruid: hruid).job.empty?
+    @jobs_soce = soce_user.job.serialize unless soce_user.job.empty?
 
     @diploma_platal = get_diploma_from_platal(hruid)
-    @diploma_soce = Soce::User.find_by(hruid: hruid).diploma.serialize unless Soce::User.find_by(hruid: hruid).diploma.empty?
+    @diploma_soce = soce_user.diploma.serialize unless soce_user.diploma.empty?
 
     @medal_platal = get_medal_from_platal(hruid)
-    @medal_soce = Soce::User.find_by(hruid: hruid).medal.serialize unless Soce::User.find_by(hruid: hruid).medal.empty?
+    @medal_soce = soce_user.medal.serialize unless soce_user.medal.empty?
 
     #linkedintest
     # linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
