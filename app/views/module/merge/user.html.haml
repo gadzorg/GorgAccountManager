@@ -23,7 +23,7 @@
 
 
     =form_tag module_merge_update_soce_user_path(@hruid) do
-      #hruid=hidden_field_tag @hruid, :class => "hruid"
+      #hruid-field=hidden_field_tag @hruid, :class => "hruid"
       .mtm.box-merge
         =fields_for :user_soce do |ff|
           .grid-2
@@ -52,11 +52,12 @@
             -when :fixed
               / .box-merge-left Info fixe:  
               / .box-merge-right= label_tag info[3], info[3], :class => 'label-uniq black'
-        #addresses
+        #addresses{"data-hruid"=>@hruid} 
           .box.box-light.shadow-1.mtm.w50.pam.center
             .txtcenter=image_tag "Preloader_3.gif"
             %p.txtcenter
               Holà ! J'ai plein d'informations à charger, laisse-moi 2 secondes le temps de traiter tout ça...
+        }
 
         
 

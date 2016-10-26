@@ -133,10 +133,6 @@ class Module::MergeController < ApplicationController
     @socials_platal = get_socials_from_platal(hruid)
     @socials_soce = soce_user.reseaux_sociaux.serialize unless soce_user.reseaux_sociaux.empty?
 
-
-    @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
-    @jobs_soce = soce_user.job.serialize unless soce_user.job.empty?
-
     @diploma_platal = get_diploma_from_platal(hruid)
     @diploma_soce = soce_user.diploma.serialize unless soce_user.diploma.empty?
 

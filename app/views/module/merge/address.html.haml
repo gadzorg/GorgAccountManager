@@ -145,98 +145,98 @@
                 %i.zmdi.zmdi-info-outline
                 Ce diplome sera conservé et ne sera pas modifié
 
-%h3.txtcenter Emploi
-= render 'layouts/module/merge/merge_banner'
-.grid-2
-  .box.pam
-    -if @jobs_platal.map{|a| a.compact.present? }.include? true
-      -@jobs_platal.each_with_index do |job, i|
-        .box.box-light.shadow-1.mtm
-          .box-top.box-top-light.pam
-            #{job["cpny_name"]} (#{job["entry_year"]})
-          .box-bottom.pam
-            %div
-              -job.each do |field|
-                .group-m-form
-                  = text_field_tag "job_"+i.to_s + "[" + field[0] + "]", field[1], :placeholder => " ", :class => "w100 slim"
-                  =label_tag "job_"+i.to_s + field[0]
-                  .span.highlight.w100
-                  .span.bar.w100
-          .box.pam
-            = radio_button_tag "job_"+i.to_s + "[recuperer]", "oui", false, :required => true
-            = label_tag "job_"+i.to_s+ "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-            = radio_button_tag "job_"+i.to_s + "[recuperer]", "non", false, :required => true
-            = label_tag "job_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
-  .box.pam
-    -unless @jobs_soce.nil?
-      -@jobs_soce.each_with_index do |job, i|
-        .box.box-light.shadow-1.mtm
-          .box-top.box-top-light.pam
-            #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
-          .box-bottom.pam
-            .address-fields=job["fonction_texte"]
-            -if job["date_debut"].present? && job["date_fin"].present?
-              Du #{job["date_debut"].strftime("%d %b %Y")} à #{job["date_fin"].strftime("%d %b %Y")}
-            -elsif job["date_debut"].present?
-              Depuis #{job["date_debut"].strftime("%d %b %Y")}
+/ %h3.txtcenter Emploi
+/ = render 'layouts/module/merge/merge_banner'
+/ .grid-2
+/   .box.pam
+/     -if @jobs_platal.map{|a| a.compact.present? }.include? true
+/       -@jobs_platal.each_with_index do |job, i|
+/         .box.box-light.shadow-1.mtm
+/           .box-top.box-top-light.pam
+/             #{job["cpny_name"]} (#{job["entry_year"]})
+/           .box-bottom.pam
+/             %div
+/               -job.each do |field|
+/                 .group-m-form
+/                   = text_field_tag "job_"+i.to_s + "[" + field[0] + "]", field[1], :placeholder => " ", :class => "w100 slim"
+/                   =label_tag "job_"+i.to_s + field[0]
+/                   .span.highlight.w100
+/                   .span.bar.w100
+/           .box.pam
+/             = radio_button_tag "job_"+i.to_s + "[recuperer]", "oui", false, :required => true
+/             = label_tag "job_"+i.to_s+ "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+/             = radio_button_tag "job_"+i.to_s + "[recuperer]", "non", false, :required => true
+/             = label_tag "job_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
+/   .box.pam
+/     -unless @jobs_soce.nil?
+/       -@jobs_soce.each_with_index do |job, i|
+/         .box.box-light.shadow-1.mtm
+/           .box-top.box-top-light.pam
+/             #{job["nom_entreprise"].present? ? job["nom_entreprise"].titleize : ""} (#{job["date_debut"]})
+/           .box-bottom.pam
+/             .address-fields=job["fonction_texte"]
+/             -if job["date_debut"].present? && job["date_fin"].present?
+/               Du #{job["date_debut"].strftime("%d %b %Y")} à #{job["date_fin"].strftime("%d %b %Y")}
+/             -elsif job["date_debut"].present?
+/               Depuis #{job["date_debut"].strftime("%d %b %Y")}
 
-            -if job["id_etat_validation"] == -1
-              .red.small Tu as effectué récement une modification sur cet emploi, il est en attente de validation
-            .ptm.small
-              %i.zmdi.zmdi-tag
-              =job["libelle"]
+/             -if job["id_etat_validation"] == -1
+/               .red.small Tu as effectué récement une modification sur cet emploi, il est en attente de validation
+/             .ptm.small
+/               %i.zmdi.zmdi-tag
+/               =job["libelle"]
             
 
-            =job["raison_sociale"]
-            =job["activite_texte"]
-            .ptm
-              .address-fields
-                %i.zmdi.zmdi-phone
-                =job["tel_direct"]
-              .address-fields
-                %i.zmdi.zmdi-phone 
-                (Standard) 
-                =job["tel_standard"]
-              .address-fields
-                %i.zmdi.zmdi-email
-                =job["email"]
-              .address-fields
-                %i.zmdi.zmdi-smartphone-iphone
-                =job["gsm"]
-              .address-fields
-                %i.zmdi.zmdi-file
-                Fax 
-                =job["fax"]
-            .ptm  
-              %i.zmdi.zmdi-pin
-              Bureau
-              .address-fields=job["adresse"]
-              .address-fields=job["adresse2"]
-              .address-fields=job["adresse3"]
-              .address-fields
-                =job["code_postal"]
-                =job["ville"]
-              .address-fields.small=job["nompays"]
+/             =job["raison_sociale"]
+/             =job["activite_texte"]
+/             .ptm
+/               .address-fields
+/                 %i.zmdi.zmdi-phone
+/                 =job["tel_direct"]
+/               .address-fields
+/                 %i.zmdi.zmdi-phone 
+/                 (Standard) 
+/                 =job["tel_standard"]
+/               .address-fields
+/                 %i.zmdi.zmdi-email
+/                 =job["email"]
+/               .address-fields
+/                 %i.zmdi.zmdi-smartphone-iphone
+/                 =job["gsm"]
+/               .address-fields
+/                 %i.zmdi.zmdi-file
+/                 Fax 
+/                 =job["fax"]
+/             .ptm  
+/               %i.zmdi.zmdi-pin
+/               Bureau
+/               .address-fields=job["adresse"]
+/               .address-fields=job["adresse2"]
+/               .address-fields=job["adresse3"]
+/               .address-fields
+/                 =job["code_postal"]
+/                 =job["ville"]
+/               .address-fields.small=job["nompays"]
 
-            .ptm
-              %i.zmdi.zmdi-pin
-              Siège social
-              .address-fields=job["adresse_siege_1"]
-              .address-fields=job["adresse_siege_2"]
-              .address-fields=job["adresse_siege_3"]
-              .address-fields
-                =job["code_postal_entreprise"]
-                =job["ville_entreprise"]
-              .address-fields.small=job["pays_entreprise"]
+/             .ptm
+/               %i.zmdi.zmdi-pin
+/               Siège social
+/               .address-fields=job["adresse_siege_1"]
+/               .address-fields=job["adresse_siege_2"]
+/               .address-fields=job["adresse_siege_3"]
+/               .address-fields
+/                 =job["code_postal_entreprise"]
+/                 =job["ville_entreprise"]
+/               .address-fields.small=job["pays_entreprise"]
             
             
-            / \#######################
-            / -job.each do |field|
-            /   .address-fields=field[1]
-          .box.pbm.plm.prm
-            .small
-              %i.zmdi.zmdi-info-outline
-              Cet emploi sera conservée et ne sera pas modifié
+/             / \#######################
+/             / -job.each do |field|
+/             /   .address-fields=field[1]
+/           .box.pbm.plm.prm
+/             .small
+/               %i.zmdi.zmdi-info-outline
+/               Cet emploi sera conservée et ne sera pas modifié
 
 
 -#-if @linkedin_past_companies.present?
