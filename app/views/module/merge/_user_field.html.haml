@@ -1,0 +1,8 @@
+-case info[:status]
+-when :updatable
+  %h3.txtcenter=info[:title]
+  .grid-2.box-merge
+    .box-merge-left
+      = render partial: 'user_field_value', locals: {f: ff, name: info[:field_name], value: info[:platal], source: "platal"}
+    .box-merge-right
+      = render partial: 'user_field_value', locals: {f: ff, name: info[:field_name], value: info[:soce], source: "soce"}

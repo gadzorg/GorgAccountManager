@@ -68,10 +68,10 @@ class Module::MergeController < ApplicationController
     @infos.each{|i| i[:status] = :same if i[:platal] == i[:soce]}
 
     #On remplace les valeurs nil bar des ""
-    @infos.each do |i|
-      i[:platal] ||= ""
-      i[:soce]   ||= ""
-    end
+    # @infos.each do |i|
+    #   i[:platal] ||= ""
+    #   i[:soce]   ||= ""
+    # end
 
     #On affiche pas  si les infos sont vides
     @infos.reject!{|i| i[:status] == :same && i[:platal].blank? }
