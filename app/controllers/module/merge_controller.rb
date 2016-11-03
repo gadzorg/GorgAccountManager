@@ -197,7 +197,7 @@ class Module::MergeController < ApplicationController
     #addresses
       loop_through_h_key(params,"address") do |ad_h|
         if ad_h['recuperer']=="oui"
-          ad=soce_user.address.create!(
+          soce_user.address.create!(
               id_adresse_type: soce_user.address.count > 0 ? 3 : 1,
               adresse_1: ad_h["Adresse 1"],
               adresse_2: ad_h["Adresse 2"],
@@ -263,7 +263,7 @@ class Module::MergeController < ApplicationController
       # select current user if no params
       if params[:hruid]
         @hruid = params[:hruid]
-        @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
+        @user = User.find_by(hruid: @hruid) ||User.new # If user never logged in before, his account doesn't exist
       else
         @user=current_user
         @hruid = @user && @user.hruid
