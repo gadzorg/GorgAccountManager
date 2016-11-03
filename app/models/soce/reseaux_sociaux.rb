@@ -7,6 +7,6 @@ class Soce::ReseauxSociaux < Soce::Base
 	has_one :list_reseaux_sociaux, foreign_key: "id_reseau_social"
 
 	def libelle
-		self.list_reseaux_sociaux.libelle
+		res=self.list_reseaux_sociaux ? res.libelle : "Adresse"
 	end
 end

@@ -4,20 +4,14 @@ class Module::MergeController < ApplicationController
   #require 'linkedin_scraper'
 
   def user
-    # select current user if no params
-    if params[:hruid]
-      hruid = params[:hruid]
-      @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
-    else
-      @user=current_user
-      hruid = @user && @user.hruid
-    end
+    set_user_and_hruid
     authorize! :merge, @user
-    @hruid = hruid
 
-    @user_soce = Soce::User.where(hruid: hruid).take
+    @user_soce = Soce::User.where(hruid: @hruid).take
     # info [titre, nom_du_champ, valeur_platal, valeur_soce, status {:same = déjà la meme valeur, :updatable=choix possible, :fixed=non modifiable}]
-    info_platal=get_info_from_platal(hruid).first
+    info_platal=get_info_from_platal(@hruid).first
+
+    return redirect_to module_merge_platal_account_not_found_path unless info_platal
 
     @infos = [
       {title: "Identifiant",field_name: "hruid",
@@ -74,10 +68,10 @@ class Module::MergeController < ApplicationController
     @infos.each{|i| i[:status] = :same if i[:platal] == i[:soce]}
 
     #On remplace les valeurs nil bar des ""
-    @infos.each do |i|
-      i[:platal] ||= ""
-      i[:soce]   ||= ""
-    end
+    # @infos.each do |i|
+    #   i[:platal] ||= ""
+    #   i[:soce]   ||= ""
+    # end
 
     #On affiche pas  si les infos sont vides
     @infos.reject!{|i| i[:status] == :same && i[:platal].blank? }
@@ -86,7 +80,7 @@ class Module::MergeController < ApplicationController
     @infos.reject!{|i| i[:status] == :fixed }    
 
 
-    @phones_platal = get_phones_from_platal(hruid)
+    @phones_platal = get_phones_from_platal(@hruid)
 
 
   end
@@ -103,9 +97,11 @@ class Module::MergeController < ApplicationController
     @user = User.where(hruid: hruid).take
     authorize! :merge, @user
 
+    soce_user=Soce::User.find_by(hruid: hruid)
+
     @phones_platal = get_phones_from_platal(hruid)
 
-    @addresses_soce=Soce::User.find_by(hruid: hruid).address.serialize
+    @addresses_soce=soce_user.address.serialize
 
     addresses_soce_formated = @addresses_soce.map do |a| 
       b=Geocoder.search(a.map(&:last)[0...-1].join(" ")).first
@@ -135,17 +131,13 @@ class Module::MergeController < ApplicationController
     @phones_adresse_platal = @phones_platal.select{|n| (n["link_type"].include? "address")}
 
     @socials_platal = get_socials_from_platal(hruid)
-    @socials_soce = Soce::User.find_by(hruid: hruid).reseaux_sociaux
-
-
-    @jobs_platal = get_jobs_from_platal(hruid).sort_by{ |k| k["entry_year"]}.reverse
-    @jobs_soce = Soce::User.find_by(hruid: hruid).job.serialize unless Soce::User.find_by(hruid: hruid).job.empty?
+    @socials_soce = soce_user.reseaux_sociaux
 
     @diploma_platal = get_diploma_from_platal(hruid)
-    @diploma_soce = Soce::User.find_by(hruid: hruid).diploma.serialize unless Soce::User.find_by(hruid: hruid).diploma.empty?
+    @diploma_soce = soce_user.diploma.serialize unless soce_user.diploma.empty?
 
     @medal_platal = get_medal_from_platal(hruid)
-    @medal_soce = Soce::User.find_by(hruid: hruid).medal.serialize unless Soce::User.find_by(hruid: hruid).medal.empty?
+    @medal_soce = soce_user.medal.serialize unless soce_user.medal.empty?
 
     #linkedintest
     # linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
@@ -162,23 +154,16 @@ class Module::MergeController < ApplicationController
   end
 
   def update_soce_user
-    if params[:hruid]
-      hruid = params[:hruid]
-      @user = User.find_by(hruid: hruid) ||User.new # If user never logged in before, his acccount doesn't exist
-    else
-      @user=current_user
-      hruid = @user && @user.hruid
-    end
+    set_user_and_hruid
     authorize! :merge, @user
-    @hruid = hruid
     
     @params = params
 
-    soce_user=Soce::User.find_by(hruid: hruid)
+    soce_user=Soce::User.find_by(hruid: @hruid)
 
     #user_soce
       params_user=params["user_soce"]
-      info_platal=get_info_from_platal(hruid).first
+      info_platal=get_info_from_platal(@hruid).first
       user_attr={}
       user_attr[:prenom] = formate_name(info_platal['firstname']) if params_user["prenom"] == 'platal'
       user_attr[:nom] = formate_name(info_platal['lastname']) if params_user["nom"] == 'platal'
@@ -189,7 +174,9 @@ class Module::MergeController < ApplicationController
       user_attr[:famille1] = info_platal['gadz_fams'] if params_user["famille1"] == 'platal'
       user_attr[:famille_zaloeil] = info_platal['gadz_fams_display'] if params_user["famille1zal"] == 'platal'
       user_attr[:date_declaration_deces] = info_platal['deathdate'] if params_user["date_declaration_deces"] == 'platal'
-      user_attr[:date_naissance] = info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime("%d %b %Y")  if params_user["date_naissance"] == 'platal'
+      user_attr[:date_naissance] = info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime  if params_user["date_naissance"] == 'platal'
+      user_attr[:migration_platal]=1
+      user_attr[:date_migration_platal]=Date.today.strftime
       if params_user["centre1"] == 'platal'
         user_attr[:centre1] = case info_platal['tbk']
                                 when "ch"; 1
@@ -210,7 +197,7 @@ class Module::MergeController < ApplicationController
     #addresses
       loop_through_h_key(params,"address") do |ad_h|
         if ad_h['recuperer']=="oui"
-          ad=soce_user.address.create!(
+          soce_user.address.create!(
               id_adresse_type: soce_user.address.count > 0 ? 3 : 1,
               adresse_1: ad_h["Adresse 1"],
               adresse_2: ad_h["Adresse 2"],
@@ -266,10 +253,22 @@ class Module::MergeController < ApplicationController
 
   end
 
-  def user_merged
+  def platal_account_not_found
+    set_user_and_hruid
   end
 
   private
+
+    def set_user_and_hruid
+      # select current user if no params
+      if params[:hruid]
+        @hruid = params[:hruid]
+        @user = User.find_by(hruid: @hruid) ||User.new # If user never logged in before, his account doesn't exist
+      else
+        @user=current_user
+        @hruid = @user && @user.hruid
+      end
+    end
 
     def loop_through_h_key(params,key_prefix,&block)
       i=0

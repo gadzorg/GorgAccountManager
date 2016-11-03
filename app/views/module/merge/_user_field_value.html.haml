@@ -1,0 +1,6 @@
+-if value.blank?
+  .placeholder
+    Aucune valeur
+-else
+  = f.radio_button name, source, :required => true
+  = f.label name+"_"+source, value, :class => "black"

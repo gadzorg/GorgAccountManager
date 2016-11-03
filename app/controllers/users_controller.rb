@@ -185,7 +185,7 @@ class UsersController < ApplicationController
 			end
 
 		
-		list_emails = get_emails(user_from_gram,soce_user)
+		list_emails = RecoveryService.get_emails(user_from_gram,soce_user)
 		@list_emails_to_display = list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
 
 
@@ -227,13 +227,13 @@ class UsersController < ApplicationController
 		# TODO mettres des if not nil
 		#emails du gram
 		
-		@list_emails = get_emails(user_from_gram,soce_user)
+		@list_emails = RecoveryService.get_emails(user_from_gram,soce_user)
 
 		@list_emails_to_display = @list_emails.delete_if{|e| e.include?("gadz.fr")}.map{|c|  /gadz.org/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
 
 
 		#generation d'un token
-		recovery_link = gen_uniq_link(@uuid)
+		recovery_link = Uniqlink.generate_for_uuid(@uuid)
 
 
 		@r= recovery_link.get_url
@@ -276,16 +276,8 @@ class UsersController < ApplicationController
 				else
 
 					uuid = recovery_link.uuid
-					user_from_gram = GramV2Client::Account.find(uuid)
-					@hruid = user_from_gram.hruid
-					user_from_soce = Soce::User.where(hruid: @hruid).take
 
-					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
-					user_from_gram.password = passwd_hash
-					user_from_soce.pass_crypt = passwd_hash unless user_from_soce.nil?
-
-					user_from_gram_saved = user_from_gram.save
-					user_from_soce_saved = user_from_soce.save unless user_from_soce.nil?
+					user_from_gram_saved, user_from_soce_saved = PasswordService.update_soce_and_gram_password(uuid, params[:user][:password])
 					if user_from_gram_saved && user_from_soce_saved
 						# si on a reussi à changer le mdp, on mraue le lien comme utilisé
 						recovery_link.set_used
@@ -333,15 +325,10 @@ class UsersController < ApplicationController
 				puts current_password_hash_from_gram
 				current_password_hash = Digest::SHA1.hexdigest params[:user][:password_current]
 				if current_password_hash == current_password_hash_from_gram
-					user_from_gram = GramV2Client::Account.find(uuid)
-					@hruid = user_from_gram.hruid
-					user_from_soce = Soce::User.where(hruid: @hruid).take
 
-					passwd_hash = Digest::SHA1.hexdigest params[:user][:password]
-					user_from_gram.password = passwd_hash
-					user_from_soce.pass_crypt = passwd_hash
+					user_from_gram_saved, user_from_soce_saved = PasswordService.update_soce_and_gram_password(uuid, params[:user][:password])
 
-					if user_from_gram.save && user_from_soce.save
+					if user_from_gram_saved && user_from_soce_saved
 						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
 
 					else
@@ -491,12 +478,12 @@ class UsersController < ApplicationController
 
 				#generation d'un token parce qu'on va en avoir besoin 
 				# quand on sera redirigé sur la pase de changement de mdp
-				recovery_link = gen_uniq_link(uuid)
+				recovery_link = Uniqlink.generate_for_uuid(uuid)
 
 				#ici code envoi sms
 				#On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
-				internat_phone = phone_parse(phone)
-				send_sms(internat_phone.to_s,recovery_sms.token.to_s)
+				internat_phone = SmsService.phone_parse(phone)
+				SmsService.send_sms(internat_phone.to_s,recovery_sms.token.to_s)
 
 				# ou ajoute un au compteur
 				session.sms_count.nil? ? session.sms_count = 1 : session.sms_count +=1
@@ -582,8 +569,8 @@ class UsersController < ApplicationController
 				    		#format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
 
 		#Supportmailer.support_email(name,firstname,email,birthdate,phone,desc).deliver_now
-		message = support_message(name,firstname,email,birthdate,phone,desc)
-		create_jira_ticket(email,message,email)
+		message = JiraService.support_message(name,firstname,email,birthdate,phone,desc)
+		JiraService.create_recovery_ticket(email,message,email)
 		render :layout => 'recovery'
 	end
 
@@ -625,103 +612,12 @@ class UsersController < ApplicationController
 	    	params[:user].permit(:hruid)
 	    end
 
-	    def gen_uniq_link(uuid)
-			recovery_link = Uniqlink.new
-			recovery_link.generate_token
-			recovery_link.uuid = uuid
-			recovery_link.used = false
-			recovery_link.inscription = false
-			recovery_link.expire_date = DateTime.now + 1.day # on definit la durée de vie d'un token à 1 jour
-			recovery_link.save
-			return recovery_link
-		end
-
-		def send_sms(phone_number,code)
-			base_url = "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?"
-			account = Rails.application.secrets.ovh_sms_account
-			login = Rails.application.secrets.ovh_sms_login
-			password = Rails.application.secrets.ovh_sms_password
-			from = Rails.application.secrets.ovh_sms_from
-			message = "Ton code de validation Gadz.org est: " + code
-
-			full_url = base_url + "account=" + account + "&login=" + login + "&password=" + password + "&from=" + from + "&to=" + phone_number + "&message=" + message + "&noStop=1"
-
-  			# on envoie la requete get en https 
-  			# TODO il serait bien de regarder le code de réponse
-  			encoded_url = URI.encode(full_url)
-  			uri = URI.parse(encoded_url)
-
-  			http = Net::HTTP.new(uri.host, uri.port)
-  			http.use_ssl = true if uri.scheme == 'https'
-
-  			http.start do |h|
-  				h.request Net::HTTP::Get.new(uri.request_uri)
-  				logger.info "#--------------------------------------------------------------------URL"
-  				logger.info(h)
-  			end
-  		end
-
-  		def phone_parse(phone)
-	    	if phone[0] == "+"
-	    		internat_phone = phone.gsub("+","00")
-	    	elsif phone.length == 14 || phone.length == 10 #10 et les points ou sans
-	    		internat_phone = "0033"+phone.gsub(".","").split(//).join[1..9] 
-	    	elsif phone.length > 15 # pour les numeros de tel étranger 0033.123.456.789 avec la possibilité d'avoir un indicatif à 3 chiffres et des point tous les 2 chiffre
-	    		internat_phone = phone.gsub(".","")
-	    	else
-	    		return false 
-	    	end
-	    	return internat_phone
-	    end
-
 	    def hide_phone(phone)
-	    	internat_phone = phone_parse(phone)
+	    	internat_phone = SmsService.phone_parse(phone)
 	    	return false if internat_phone == false #on quite la fonction si le numéro de télephone n'est pas reconnu ou parsable
 	    	hiden_phone = "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
 	    end
 
-	    def create_jira_ticket(user, description, sender)
-	    	newjira = JiraIssue.new(
-	    		fields: { 
-	    			project: { id: "10001" }, 
-	    			summary: "L'utilisateur #{user} signale ne pas arriver à se connecter", 
-	    			description: description, 
-	    			customfield_10000: sender , 
-	    			issuetype: { id: "1" }, 
-	    			labels: [ "mdp" ] 
-	    			})
-	    	newjira.save
-	    end
-
-	    def support_message(name,firstname,email,birthdate,phone,desc)
-	    	message = (
-	    		"Nom: " + name +
-	    		"\nPrenom: " + firstname +
-	    		"\nEmail: " + email +
-	    		"\nDate de naissance: " + birthdate +
-	    		"\nTéléphone: " + phone +
-	    		"\n\n" + desc )
-	    end
-
-	    def get_emails(user_from_gram,soce_user)
-			list_emails = Array.new
-			list_emails.push(user_from_gram.mail_forwarding) if user_from_gram.respond_to?(:mail_forwarding)
-
-			#@list_emails.push(user_from_gram.mail_alias)
-			list_emails.push(user_from_gram.email) if user_from_gram.email.present? && user_from_gram.respond_to?(:email)
-			#list_emails.push(user_from_gram.email_forge) if user_from_gram.email_forge.present? && user_from_gram.respond_to?(:email_forge)
-			#email du site soce
-			list_emails.push(soce_user.emails_valides) unless soce_user.blank?
-
-			list_emails = list_emails.flatten.uniq
-			list_emails = list_emails.reject(&:blank?) #on supprime les emails vides
-
-			# on supprime les adresses en gadz.org pour éviter d'avoir des doublons
-			# je l'ai commenté parce que les emails du gram ne sont pas forcement à jour
-			# @list_emails = @list_emails.drop_while{|e| /gadz.org/.match(e)}
-
-			#@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"*")[1..c.length-3]+c[c.length-2..c.length-1]}
-	    end
 
 	    # retourne true si valide
 	    def validate_alpha_accent str

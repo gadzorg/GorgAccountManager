@@ -117,6 +117,8 @@ group :development, :test do
   gem "letter_opener"
 
 
+
+
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
@@ -131,8 +133,8 @@ group :development, :test do
   gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
 
   gem 'rspec-rails'
-
-  #performance test
+  gem 'factory_girl_rails'
+  gem 'faker'
   gem 'rack-mini-profiler'
   # gem 'flamegraph'
   # gem 'stackprof' # ruby 2.1+ only
@@ -150,7 +152,6 @@ end
 
 
 group :test do
-  gem 'faker'
   gem 'capybara'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.0'
