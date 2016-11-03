@@ -205,7 +205,7 @@ class Module::MergeController < ApplicationController
               modified_data:"",
               code_postal: ad_h["Code postal"],
               ville: ad_h["Ville"],
-              tel_fixe: ad_h["phone"],
+              tel_fixe: ad_h["phone"] == "other" ? ad_h["phone_other"] : ad_h["phone"],
               id_pays: Soce::Address.get_pays_id_from_name(ad_h["Pays"]),
               id_etat_validation: -4,
           )
