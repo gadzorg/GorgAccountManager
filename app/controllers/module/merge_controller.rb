@@ -110,13 +110,13 @@ class Module::MergeController < ApplicationController
 
     addresses_platal=get_addresses_from_platal(hruid)
     
-    jarow = FuzzyStringMatch::JaroWinkler.create( :native )
+    jarow = FuzzyStringMatch::JaroWinkler.create( :pure )
     # retourne un tableau [ [tableau adresse soce], true si correspondace avec une adresse soce false sinon ]
     @addresses_platal=addresses_platal.map do |a|
       adresse_to_formate =  a["formatted_address"].present? ? a["formatted_address"] : a["postalText"]
       [
       formate_address_soce(Geocoder.search(adresse_to_formate).first), 
-      addresses_soce_formated.map{ |b| jarow.getDistance(adresse_to_formate, b)}.max > 0.75,
+      addresses_soce_formated.map{ |b|jarow.getDistance(adresse_to_formate, b.to_s)}.max > 0.75,
       a["type"],
       case a["flags"]
       when /current/
@@ -161,8 +161,45 @@ class Module::MergeController < ApplicationController
 
     soce_user=Soce::User.find_by(hruid: @hruid)
 
-    #user_soce
-      params_user=params["user_soce"]
+    params_user=params["user_soce"]
+
+    Soce::Base.transaction do
+      Rails.logger.debug "=== Start SQL transaction"
+      update_soce_user_infos(params_user,soce_user)
+      update_adresses(params,soce_user)
+      update_social_links(params,soce_user)
+      update_diploma(params,soce_user)
+      update_medals(params,soce_user)
+      begin
+        update_gram(soce_user)
+      rescue => e
+        JiraService.gaccount_not_synced_fusion(@user, soce_user.email)
+        raise e
+      end
+    end
+    Rails.logger.debug "=== SQL transaction finished"
+  end
+
+  def platal_account_not_found
+    set_user_and_hruid
+  end
+
+  private
+
+    def set_user_and_hruid
+      # select current user if no params
+      if params[:hruid]
+        @hruid = params[:hruid]
+        @user = User.find_by(hruid: @hruid) ||User.new # If user never logged in before, his account doesn't exist
+      else
+        @user=current_user
+        @hruid = @user && @user.hruid
+      end
+    end
+
+    def update_soce_user_infos(params_user,soce_user)
+      Rails.logger.debug "= Start update soce user info"
+      Rails.logger.debug "Retrieve platal info"
       info_platal=get_info_from_platal(@hruid).first
       user_attr={}
       user_attr[:prenom] = formate_name(info_platal['firstname']) if params_user["prenom"] == 'platal'
@@ -192,11 +229,15 @@ class Module::MergeController < ApplicationController
                                 else; nil
                               end
       end
+      Rails.logger.debug "Save user"
       soce_user.update_attributes!(user_attr)
+    end
 
-    #addresses
+    def update_adresses(params,soce_user)
+      Rails.logger.debug "= Start update addresses"
       loop_through_h_key(params,"address") do |ad_h|
         if ad_h['recuperer']=="oui"
+          Rails.logger.debug "Create new address"
           soce_user.address.create!(
               id_adresse_type: soce_user.address.count > 0 ? 3 : 1,
               adresse_1: ad_h["Adresse 1"],
@@ -212,23 +253,29 @@ class Module::MergeController < ApplicationController
 
         end
       end
+    end
 
-    #social
+    def update_social_links(params,soce_user)
+      Rails.logger.debug "= Start update social"
       loop_through_h_key(params,"social") do |s_h|
         if s_h['recuperer']=="oui"
           list_reseau=Soce::ListReseauxSociaux.find_by(libelle: s_h['name'])
+          Rails.logger.debug "create social link"
           soce_user.reseaux_sociaux.create!(
               id_reseau_social: list_reseau && list_reseau.id || 0,
               adresse: s_h['link'] || s_h['address']
           )
         end
       end
+    end
 
-    #diploma
+    def update_diploma(params,soce_user)
+      Rails.logger.debug "= Start update diploma"
       loop_through_h_key(params,"diploma") do |d_h|
         if d_h['recuperer']=="oui"
           libelle=d_h['name']
           libelle+=" - #{d_h['program']}" if d_h['program'].present?
+          Rails.logger.debug "Create diploma"
           soce_user.diploma.create!(
               libelle: libelle,
               annee: d_h['grad_year']||0,
@@ -237,11 +284,14 @@ class Module::MergeController < ApplicationController
           )
         end
       end
+    end
 
-    #medal
+    def update_medals(params,soce_user)
+      Rails.logger.debug "= Start update medals"
       loop_through_h_key(params,"medal") do |m_h|
         if m_h['recuperer']=="oui"
           if id_medal=Soce::Medal.get_id_medal_for!(m_h['name'])
+            Rails.logger.debug "Add medal"
             soce_user.medal.create!(
                 id_medaille: id_medal,
                 id_etat_validation: -4,
@@ -250,24 +300,23 @@ class Module::MergeController < ApplicationController
 
         end
       end
+    end
 
-  end
+    def update_gram(soce_user)
+      gram_user=GramV2Client::Account.where(hruid: @hruid).first
 
-  def platal_account_not_found
-    set_user_and_hruid
-  end
+      gram_user.lastname= soce_user.nom
+      gram_user.firstname= soce_user.prenom
+      gram_user.email= soce_user.email
+      gram_user.birthdate= soce_user.date_naissance
+      gram_user.deathdate= soce_user.date_declaration_deces
+      gram_user.buque_texte= soce_user.surnom
+      gram_user.buque_zaloeil= soce_user.buque_zaloeil
+      gram_user.gadz_fams= soce_user.famille1
+      gram_user.gadz_fams_zaloeil= soce_user.famille_zaloeil
 
-  private
+      gram_user.save!
 
-    def set_user_and_hruid
-      # select current user if no params
-      if params[:hruid]
-        @hruid = params[:hruid]
-        @user = User.find_by(hruid: @hruid) ||User.new # If user never logged in before, his account doesn't exist
-      else
-        @user=current_user
-        @hruid = @user && @user.hruid
-      end
     end
 
     def loop_through_h_key(params,key_prefix,&block)
