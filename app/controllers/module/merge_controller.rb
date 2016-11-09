@@ -139,17 +139,6 @@ class Module::MergeController < ApplicationController
     @medal_platal = get_medal_from_platal(hruid)
     @medal_soce = soce_user.medal.serialize unless soce_user.medal.empty?
 
-    #linkedintest
-    # linkedin_hash = @socials_platal.select{|n| (n["name"].include? "LinkedIn") if n["name"].present?}.first if @socials_platal.present?
-    # if linkedin_hash.present?
-    #   linkedin_url = linkedin_hash["link"].gsub("%s",linkedin_hash["address"])
-    #   #@linkedin_profile = Linkedin::Profile.get_profile(linkedin_url)
-    #   begin @linkedin_past_companies = Linkedin::Profile.get_profile(linkedin_url).past_companies
-    #     rescue
-    #     end
-    # end
-
-
     render :layout => false
   end
 
