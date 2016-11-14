@@ -287,8 +287,8 @@ class UsersController < ApplicationController
               format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
             end
           else
-            flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(, )}"
-            format.html { redirect_to user_password_change_logged_path() }
+            flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(", ")}"
+            format.html { redirect_to password_change_path(token) }
           end
         end
       end
@@ -315,7 +315,7 @@ class UsersController < ApplicationController
 			# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 			if params[:user][:password] != params[:user][:password_confirmation]
 				flash[:error] = 'Les mots de passe ne correspondents pas'
-				format.html { redirect_to user_password_change_logged_path() }
+				format.html { redirect_to user_password_change_logged_path(@user) }
       else
         ps=PasswordService.new(params[:user][:password])
 			  if ps.validate
@@ -340,8 +340,8 @@ class UsersController < ApplicationController
             format.html { redirect_to user_password_change_logged_path(retry: true)}
           end
         else
-          flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(, )}"
-          format.html { redirect_to user_password_change_logged_path() }
+          flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(", ")}"
+          format.html { redirect_to user_password_change_logged_path(@user) }
 				end
 			end
 		end
