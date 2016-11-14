@@ -34,8 +34,8 @@ class SmsService
 
     http.start do |h|
       h.request Net::HTTP::Get.new(uri.request_uri)
-      logger.info "#--------------------------------------------------------------------URL"
-      logger.info(h)
+      Rails.logger.info "#--------------------------------------------------------------------URL"
+      Rails.logger.info(h)
     end
   end
 
