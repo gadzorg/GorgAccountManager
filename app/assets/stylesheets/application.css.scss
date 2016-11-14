@@ -375,3 +375,8 @@ li{
     color : #27ae60;
 }
 
+input[type="radio"]:required + label:after {
+  content:" *";
+  font-weight: bold;
+  color: red;
+}

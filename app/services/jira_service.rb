@@ -1,3 +1,4 @@
+include Rails.application.routes.url_helpers
 
 class JiraService
   def self.create_recovery_ticket(user, description, sender)
@@ -22,4 +23,52 @@ class JiraService
         "\nTéléphone: " + phone +
         "\n\n" + desc )
   end
+
+  def self.gaccount_not_synced_fusion(user, email)
+    title="#{user.hruid} - La synchronisation avec votre compte GrAM a échoué"
+    message=message_for_user(user,"
+    Bonjour #{user.firstname},
+
+    Une erreur est survenue lors de la synchronisation avec ton compte GrAM suite à la fusion de tes données Soce et Gadz.org.
+    Cela signifie que tes informations ont bien été enregistrées mais n'ont pas pu être propagées sur l'ensemble de nos application.
+    Un membre de l'équipe support interviendra bientot pour rétablir la situation et te tenir au courant.
+
+    h3. Instructions à destination de l'équipe support
+    Page confluence de diagnostique et de résolution du problème : https://confluence.gadz.org/pages/viewpage.action?pageId=18907243
+    Developeur référent: @ratatosk")
+
+    newjira = JiraIssue.new(
+        fields: {
+            project: { id: "10001" },
+            summary: title,
+            description: message,
+            customfield_10000: email ,
+            issuetype: { id: "1" },
+            labels: [ "fusion", "synchro" ]
+        })
+
+    newjira.save
+  end
+
+  def self.message_layout(message)
+    "#{message}
+
+    ----
+    Ceci est un message automatisé généré par #{root_url} et sera prochainement traité par un membre de l'équipe support Gadz.org.
+    Tu peux répondre à ce mail si tu souhaites ajouter des informations complémentaires"
+    end
+
+  def self.message_for_user(user,message)
+
+    message_layout("#{message}
+
+    h3. Informations utilisateur
+    | UUID | [#{user.uuid}|https://moncompte.gadz.org/admin/info_user?uuid=#{user.uuid}] |
+    | Hruid | #{user.hruid} |
+    | Prenom | #{user.firstname} |
+    | Nom | #{user.lastname} |")
+    end
+
+
+
 end

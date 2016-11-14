@@ -216,7 +216,7 @@ class UsersController < ApplicationController
 		#on recupere l'utilisateur dans le site soce
 		soce_user = Soce::User.where(hruid: @hruid).take
 
-		!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
+		phone = soce_user&&soce_user.tel_mobile
 		if phone.present?
 			@phone_hidden = hide_phone(phone)
 			!@phone_hidden == false ? @have_phone = true : @have_phone = false

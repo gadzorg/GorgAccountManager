@@ -42,7 +42,9 @@ class Ability
       can :read, Role
     end
 
-    can [:read, :sync, :merge, :update_password], User, :id => user.id
+    can [:read, :sync, :merge, :update_password], User do |u|
+      user.id&&user.id==u.id
+    end
 
 
 
