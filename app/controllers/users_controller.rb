@@ -270,27 +270,28 @@ class UsersController < ApplicationController
 				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 				if params[:user][:password] != params[:user][:password_confirmation] 
 					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
-				elsif not PasswordService.validate_password_rules params[:user][:password]
-					flash[:error] = 'Le mot de passe est trop court ou contient des accents'
-					format.html { redirect_to user_password_change_logged_path() }
-				else
+        else
+          ps=PasswordService.new(params[:user][:password])
+          if ps.validate
+            uuid = recovery_link.uuid
 
-					uuid = recovery_link.uuid
-
-					user_from_gram_saved, user_from_soce_saved = PasswordService.update_soce_and_gram_password(uuid, params[:user][:password])
-					if user_from_gram_saved && user_from_soce_saved
-						# si on a reussi à changer le mdp, on mraue le lien comme utilisé
-						recovery_link.set_used
-						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
-					elsif user_from_gram_saved && !user_from_soce_saved
-						recovery_link.set_used
-						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé mais compte SOCE introuvable' }
-					else
-		        		format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
-
-		        	end
-		        end
-		    end
+            user_from_gram_saved, user_from_soce_saved = ps.update_soce_and_gram_password(uuid)
+            if user_from_gram_saved && user_from_soce_saved
+              # si on a reussi à changer le mdp, on mraue le lien comme utilisé
+              recovery_link.set_used
+              format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+            elsif user_from_gram_saved && !user_from_soce_saved
+              recovery_link.set_used
+              format.html { redirect_to recovery_final_path, notice: 'mot de passe changé mais compte SOCE introuvable' }
+            else
+              format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
+            end
+          else
+            flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(", ")}"
+            format.html { redirect_to password_change_path(token) }
+          end
+        end
+      end
 		else
 			respond_to do |format|
 				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
@@ -314,31 +315,33 @@ class UsersController < ApplicationController
 			# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
 			if params[:user][:password] != params[:user][:password_confirmation]
 				flash[:error] = 'Les mots de passe ne correspondents pas'
-				format.html { redirect_to user_password_change_logged_path() }
-			elsif not PasswordService.validate_password_rules params[:user][:password]
-				flash[:error] = 'Le mot de passe est trop court ou contient des accents'
-				format.html { redirect_to user_password_change_logged_path() }
-			else
+				format.html { redirect_to user_password_change_logged_path(@user.id) }
+      else
+        ps=PasswordService.new(params[:user][:password])
+			  if ps.validate
+          uuid = @user.uuid
+          current_password_hash_from_gram = GramV2Client::Account.find(uuid, :params => {show_password_hash: true}).password
+          puts current_password_hash_from_gram
+          current_password_hash = Digest::SHA1.hexdigest params[:user][:password_current]
+          if current_password_hash == current_password_hash_from_gram
 
-				uuid = @user.uuid
-				current_password_hash_from_gram = GramV2Client::Account.find(uuid, :params => {show_password_hash: true}).password
-				puts current_password_hash_from_gram
-				current_password_hash = Digest::SHA1.hexdigest params[:user][:password_current]
-				if current_password_hash == current_password_hash_from_gram
+            user_from_gram_saved, user_from_soce_saved = ps.update_soce_and_gram_password(uuid)
 
-					user_from_gram_saved, user_from_soce_saved = PasswordService.update_soce_and_gram_password(uuid, params[:user][:password])
+            if user_from_gram_saved && user_from_soce_saved
+              format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
 
-					if user_from_gram_saved && user_from_soce_saved
-						format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
+            else
+              flash[:error] = 'Erreur lors de la mise à jour du mot de passe'
+              format.html { redirect_to user_password_change_path(:token => token), :layout => 'recovery'}
 
-					else
-						flash[:error] = 'Erreur lors de la mise à jour du mot de passe'
-						format.html { redirect_to user_password_change_path(:token => token), :layout => 'recovery'}
-
-					end
-				else
-					flash[:error] = 'Le mot de passe actuel du compte ne correspond pas'
-					format.html { redirect_to user_password_change_logged_path(retry: true)}
+            end
+          else
+            flash[:error] = 'Le mot de passe actuel du compte ne correspond pas'
+            format.html { redirect_to user_password_change_logged_path(retry: true)}
+          end
+        else
+          flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(", ")}"
+          format.html { redirect_to user_password_change_logged_path() }
 				end
 			end
 		end
