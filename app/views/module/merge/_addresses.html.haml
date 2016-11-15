@@ -1,10 +1,11 @@
 %h3.txtcenter Adresses
 = render 'layouts/module/merge/merge_banner'
-.grid-2
+.grid-2-small-1
   .box.pam
     -addresses_platal.select{|a| a[2]=="home"}.each_with_index do |address, i|
       .box.box-light.shadow-1.mtm
         .box-top.box-top-light.pam
+          = render 'layouts/module/merge/merge_logo_gorg'
           #{address.first["Ville"]} #{address.last}
         .box-bottom.pam
           %div
@@ -30,6 +31,7 @@
     -addresses_soce.each_with_index do |address, i|
       .box.box-light.shadow-1.mtm
         .box-top.box-top-light.pam
+          = render 'layouts/module/merge/merge_logo_soce'
           #{address["ville"]} (#{address["libelle"]})
         / = radio_button_tag "address_main" , i.to_s
         / = label_tag "address_main_" + i.to_s, "Principale"

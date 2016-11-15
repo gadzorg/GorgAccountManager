@@ -94,3 +94,15 @@ form:invalid input[type="submit"]{
 input:required {
   border-color: #14BFCC;
 }
+
+.mini-images img{
+  height: 40px;
+  width: auto;
+}
+
+@media (min-width: 321px) and (max-width: 640px) {
+  .box-merge-left, .box-merge-right{
+    text-align: center;
+    margin: 13px;
+  }
+}
