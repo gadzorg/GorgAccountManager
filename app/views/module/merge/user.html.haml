@@ -8,17 +8,24 @@
 /   .txtcenter.pas
 /     .i.zmdi.zmdi-arrow-right.vertical-center
 
-%section.pam
+%section
   .mw960p.center
-    %h1.txtcenter Ton compte Gadz.org et Soce ne font plus qu'un!
+    .pam
+      %h1.txtcenter Ton compte Gadz.org et Soce ne font plus qu'un!
 
     .pam
       .bottom-bar
         Les deux annuaires 
         %b fusionnent
         enfin ! Afin que tes 
-        %b infos personnelles soient à jour
-        , tu peux choisir ci-dessous lesquelles tu souhaites garder. Tu trouveras à gauche celles qui proviennent de l'annuaire gadz.org et à droite celle de l'annuaire Soce.
+        %b infos personnelles soient à jour,
+        tu peux choisir ci-dessous lesquelles tu souhaites garder.
+        %span.small-hidden Tu trouveras à gauche celles qui proviennent de l'annuaire gadz.org et à droite celles de l'annuaire Soce.
+        %span.large-hidden
+          Tu trouveras celles qui proviennent de l'annuaire gadz.org
+          =image_tag "gadzorg-favicon1.png", :size => "20"
+          et celles de l'annuaire Soce
+          =image_tag "logo_alumni_icono.png", :size => "20"
       .small Temps estimé : 2 minutes
 
 
@@ -27,10 +34,10 @@
       .mtm.box-merge
         =fields_for :user_soce do |ff|
           .grid-2
-            .box-merge-left.prm
+            .box-merge-left.prm.small-hidden
               %span.prm Annuaire Gadz.org
               =image_tag "gadzorg-favicon1.png",:size => "50"
-            .box-merge-right.plm
+            .box-merge-right.plm.small-hidden
               =image_tag "logo_alumni.png"
               %span.plm Annuaire SOCE
           -@infos.each do |info|
@@ -40,6 +47,6 @@
             .txtcenter=image_tag "Preloader_3.gif"
             %p.txtcenter
               Holà ! J'ai plein d'informations à charger, laisse-moi 2 secondes le temps de traiter tout ça...
-
-      =submit_tag 'Envoyer',:class => "bouton bouton_bleu"
-      .not-complete-form Il reste des choix à faire dans les données ci-dessus.
+      .pam
+        =submit_tag 'Envoyer',:class => "bouton bouton_bleu"
+        .not-complete-form Il reste des choix à faire dans les données ci-dessus.

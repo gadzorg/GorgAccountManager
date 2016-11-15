@@ -3,13 +3,14 @@
 -if @socials_platal.map{|a| a.compact.present? }.include?(true) || !@socials_soce.empty?
   %h3.txtcenter Réseaux sociaux
   = render 'layouts/module/merge/merge_banner'
-  .grid-2
+  .grid-2-small-1
     .box.pam
       -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
       -if @socials_platal.map{|a| a.compact.present? }.include? true
         -@socials_platal.each_with_index do |social, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_gorg'
               =social["name"]
               =hidden_field_tag "social_"+i.to_s + "[name]", social["name"]
             .box-bottom.pam
@@ -32,6 +33,7 @@
         -@socials_soce.each_with_index do |social, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_soce'
               =social["libelle"]
             .box-bottom.pam
               .address-fields=social["adresse"]
@@ -45,13 +47,14 @@
 -if @diploma_platal.map{|a| a.compact.present? }.include?(true) || !@diploma_soce.nil?
   %h3.txtcenter Diplômes
   = render 'layouts/module/merge/merge_banner'
-  .grid-2
+  .grid-2-small-1
     .box.pam
       -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
       -if @diploma_platal.map{|a| a.compact.present? }.include? true
         -@diploma_platal.each_with_index do |diploma, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_gorg'
               =diploma["name"]
               =hidden_field_tag "diploma_"+i.to_s + "[name]", diploma["name"]
             .box-bottom.pam
@@ -76,6 +79,7 @@
         -@diploma_soce.each_with_index do |diploma, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_soce'
               =diploma["libelle"]
             .box-bottom.pam
               .address-fields=diploma["annee"]
@@ -88,13 +92,14 @@
 -if @medal_platal.map{|a| a.compact.present? }.include?(true) || !@medal_soce.nil?
   %h3.txtcenter Médaille
   = render 'layouts/module/merge/merge_banner'
-  .grid-2
+  .grid-2-small-1
     .box.pam
       -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
       -if @medal_platal.map{|a| a.compact.present? }.include? true
         -@medal_platal.each_with_index do |medal, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_gorg'
               =medal["medal_text"]
               =hidden_field_tag "medal_"+i.to_s + "[name]", medal["medal_text"]
             .box-bottom.pam
@@ -112,6 +117,7 @@
         -@medal_soce.each_with_index do |medal, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_soce'
               =medal["libelle"]
             .box-bottom.pam
               .address-fields=medal["annee"]
