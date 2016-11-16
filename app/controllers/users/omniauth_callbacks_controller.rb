@@ -30,14 +30,13 @@ class Users::OmniauthCallbacksController < ApplicationController
     #       "soce_id"=>"66273",
     #       "full_name"=>"Thomas Fuzeau"}}
     data = request.env['omniauth.auth']
-
         @user = User.omniauth(data)
-    if @user.persisted?
+    if @user&&@user.persisted?
         flash[:notice] = I18n.t "devise.omniauth_callbacks.success"
         sign_in_and_redirect @user, :event => :authentication
     else
-        flash[:alert] = I18n.t 'omniauth.error'
-        redirect_to new_user_registration_url
+        flash[:error] = I18n.t 'omniauth.error'
+        redirect_to root_path
     end
 
 end

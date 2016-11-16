@@ -1,0 +1,57 @@
+%h3.txtcenter Adresses
+= render 'layouts/module/merge/merge_banner'
+.grid-2-small-1
+  .box.pam
+    -addresses_platal.select{|a| a[2]=="home"}.each_with_index do |address, i|
+      .box.box-light.shadow-1.mtm
+        .box-top.box-top-light.pam
+          = render 'layouts/module/merge/merge_logo_gorg'
+          #{address.first["Ville"]} #{address.last}
+        .box-bottom.pam
+          %div
+            -address[0].each do |key, field|
+              .group-m-form
+                = text_field_tag "address_#{i.to_s}[#{key}]", field, :placeholder => " ", :class => "w100 slim"
+                = label_tag "address_#{i.to_s}_#{key}", key
+                .span.highlight.w100
+                .span.bar.w100
+            =render partial: 'adresses_phones', locals: {id_prefix: "address_#{i.to_s}",phones: phones_adresse_platal.select{|n| (n["link_id"].equal? i)}}
+        .box.pbm.plm.prm
+          .mbm
+            -if address[1]
+              .warning.small.pas
+                Une adresse similaire semble déjà exister dans la base de données Soce. Cet outil ne permet pas de les fusionner et créera un doublon. Si tu souhaites modifier l'adresse déjà enregistrée <a href="https://www.arts-et-metiers.asso.fr/index.php/espaceMembre">rends-toi sur le site Soce</a>
+            Que veux-tu faire de cette adresse ?
+          = radio_button_tag "address_" + i.to_s + "[recuperer]", "oui", false, :required => true
+          = label_tag "address_" + i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+          = radio_button_tag "address_" + i.to_s + "[recuperer]", "non", false, :required => true
+          = label_tag "address_" + i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
+
+  .box.pam
+    -addresses_soce.each_with_index do |address, i|
+      .box.box-light.shadow-1.mtm
+        .box-top.box-top-light.pam
+          = render 'layouts/module/merge/merge_logo_soce'
+          #{address["ville"]} (#{address["libelle"]})
+        / = radio_button_tag "address_main" , i.to_s
+        / = label_tag "address_main_" + i.to_s, "Principale"
+        .box-bottom.pam
+          .address-fields
+            %i.zmdi.zmdi-phone
+            =address["tel_fixe"]
+          .address-fields
+            %i.zmdi.zmdi-file-text
+            Fax :
+            =address["fax"]
+          .ptm
+            %i.zmdi.zmdi-pin
+            .address-fields=address["adresse_1"]
+            .address-fields=address["adresse_2"]
+            .address-fields
+              =address["code_postal"]
+              =address["ville"]
+            .address-fields.small=address["nompays"]
+
+        .box.pbm.plm.prm
+          .small
+            %i.zmdi.zmdi-info-outline

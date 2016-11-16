@@ -124,7 +124,8 @@ class User < ActiveRecord::Base
     logger.debug auth_data.inspect
 
     # auth_data : take a look on Users::OmniauthCallbacksController
-    user_from_uuid = User.where.not(uuid: nil).find_by_uuid(auth_data[:extra][:uuid])
+
+    user_from_uuid = User.find_by_uuid(auth_data[:extra][:uuid])
     user_from_hruid = User.where(uuid: nil).find_by_hruid(auth_data[:uid])
 
     if user_from_uuid

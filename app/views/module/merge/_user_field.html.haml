@@ -1,8 +1,11 @@
 -case info[:status]
 -when :updatable
   %h3.txtcenter=info[:title]
-  .grid-2.box-merge
+  .grid-2-small-1.box-merge
     .box-merge-left
+      .mini-images= render 'layouts/module/merge/merge_logo_gorg'
       = render partial: 'user_field_value', locals: {f: ff, name: info[:field_name], value: info[:platal], source: "platal"}
-    .box-merge-right
+    %span.box-merge-right
+      .mini-images
+        .large-hidden.medium-hidden=image_tag "logo_alumni_icono.png"
       = render partial: 'user_field_value', locals: {f: ff, name: info[:field_name], value: info[:soce], source: "soce"}

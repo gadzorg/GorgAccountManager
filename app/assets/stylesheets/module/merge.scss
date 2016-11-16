@@ -17,7 +17,7 @@
 .box-merge-right{}
 
 .box-merge input[type="radio"] {
-	visibility: hidden;
+	opacity: 0;
 	position: absolute;
 	/*top: -9999px;*/
 	/*left: -9999px;*/
@@ -72,4 +72,37 @@ label.black, .box-merge label.black:hover{
 
 .box-merge-right .label-uniq.black, .box-merge-left .label-uniq.black {
 	border: #27ae60 3px solid;
+}
+
+.warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
+}
+
+.not-complete-form {
+  display: none;
+}
+
+form:invalid .not-complete-form{
+  display: block;
+}
+
+form:invalid input[type="submit"]{
+  background-color: #D5D5D5;
+}
+
+input:required {
+  border-color: #14BFCC;
+}
+
+.mini-images img{
+  height: 40px;
+  width: auto;
+}
+
+@media (min-width: 321px) and (max-width: 640px) {
+  .box-merge-left, .box-merge-right{
+    text-align: center;
+    margin: 13px;
+  }
 }
