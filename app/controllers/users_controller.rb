@@ -248,8 +248,8 @@ class UsersController < ApplicationController
 	end
 
 	def password_reset
-		token = params[:token]
-		recovery_link = Uniqlink.find_by(token: token)
+		@token = params[:token]
+		recovery_link = Uniqlink.find_by(token: @token)
 		if !recovery_link.nil? && recovery_link.usable?
 			@hruid = recovery_link.hruid
 			@user = User.new
