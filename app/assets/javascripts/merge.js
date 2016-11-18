@@ -3,7 +3,7 @@
 // # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready(function () {
-  var target = $("#addresses")
+  var target = $("#addresses");
   var hruid = target.data("hruid");
 	$.ajax({
 		url: "/module/merge/address/" + hruid,

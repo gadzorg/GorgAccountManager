@@ -158,7 +158,7 @@ class Module::MergeController < ApplicationController
       update_adresses(params,soce_user)
       update_social_links(params,soce_user)
       update_diploma(params,soce_user)
-      update_medals(params,soce_user)
+      #update_medals(params,soce_user)
       begin
         update_gram(soce_user)
       rescue => e

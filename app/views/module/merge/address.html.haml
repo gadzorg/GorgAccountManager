@@ -112,16 +112,16 @@
               = label_tag "medal_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
               = radio_button_tag "medal_"+i.to_s + "[recuperer]", "non",false,  :required => true, :checked => false
               = label_tag "medal_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
-    .box.pam
-      -unless @medal_soce.nil?
-        -@medal_soce.each_with_index do |medal, i|
-          .box.box-light.shadow-1.mtm
-            .box-top.box-top-light.pam
-              = render 'layouts/module/merge/merge_logo_soce'
-              =medal["libelle"]
-            .box-bottom.pam
-              .address-fields=medal["annee"]
-            .box.pbm.plm.prm
-              .small
-                %i.zmdi.zmdi-info-outline
-                Ce médaille sera conservée et ne sera pas modifiée
+    -#.box.pam
+    -#  -unless @medal_soce.nil?
+    -#    -@medal_soce.each_with_index do |medal, i|
+    -#      .box.box-light.shadow-1.mtm
+    -#        .box-top.box-top-light.pam
+    -#          =medal["libelle"]
+    -#        .box-bottom.pam
+    -#          .address-fields=medal["annee"]
+    -#        .box.pbm.plm.prm
+    -#          .small
+    -#            %i.zmdi.zmdi-info-outline
+    -#            Ce médaille sera conservée et ne sera pas modifiée
+
