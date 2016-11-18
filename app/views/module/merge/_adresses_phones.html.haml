@@ -4,13 +4,13 @@
     Le site Soce ne permet de conserver qu'un seul numéro de téléphone associé à cette adresse. Lequel souhaites-tu conserver ?
   -phones.each do |phone|
     -#attention formulaire à modifier si on gere plusieurs telephones
-    .radio-option.pas
+    .radio-option
       = radio_button_tag "#{id_prefix}[phone]", phone["display_tel"], false
       = label_tag "#{id_prefix}_phone_#{phone["display_tel"]}", phone["display_tel"], :class => "black"
-  .radio-option.pas
+  .radio-option
     = radio_button_tag "#{id_prefix}[phone]", "other", false
     = label_tag "#{id_prefix}_phone_other", "Autre :", :class => "black"
-    = text_field_tag "#{id_prefix}[phone_other]", "", :placeholder => " ", :class => "slim inbl"
+    = text_field_tag "#{id_prefix}[phone_other]", "", :placeholder => " ", :class => "slim inbl", style: "vertical-align: middle;"
 -else
   .mts.group-m-form
     -#attention formulaire à modifier si on gere plusieurs telephones
