@@ -76,6 +76,7 @@
         -@diploma_soce.each_with_index do |diploma, i|
           .box.box-light.shadow-1.mtm
             .box-top.box-top-light.pam
+              = render 'layouts/module/merge/merge_logo_soce'
               =diploma["libelle"]
             .box-bottom.pam
               .address-fields=diploma["annee"]
@@ -85,28 +86,29 @@
                 Ce diplome sera conservé et ne sera pas modifié
 
 
--if @medal_platal.map{|a| a.compact.present? }.include?(true) || !@medal_soce.nil?
-  %h3.txtcenter Médaille
-  = render 'layouts/module/merge/merge_banner'
-  .grid-2
-    .box.pam
-      -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
-      -if @medal_platal.map{|a| a.compact.present? }.include? true
-        -@medal_platal.each_with_index do |medal, i|
-          .box.box-light.shadow-1.mtm
-            .box-top.box-top-light.pam
-              =medal["medal_text"]
-              =hidden_field_tag "medal_"+i.to_s + "[name]", medal["medal_text"]
-            .box-bottom.pam
-              %div
-                / = text_field_tag "diploma_field_"+i.to_s, diploma["program"], :placeholder => "program", :class => "w100 slim mbs"
-                / = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim mbs"
-
-            .box.pam
-              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "oui",false, :required => true, :checked => false
-              = label_tag "medal_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
-              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "non",false,  :required => true, :checked => false
-              = label_tag "medal_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
+-#-if @medal_platal.map{|a| a.compact.present? }.include?(true) || !@medal_soce.nil?
+-#  %h3.txtcenter Médaille
+-#  = render 'layouts/module/merge/merge_banner'
+-#  .grid-2-small-1
+-#    .box.pam
+-#      -# on verifie si il existe des RS ( attention on peu avoir des hash de nil)
+-#      -if @medal_platal.map{|a| a.compact.present? }.include? true
+-#        -@medal_platal.each_with_index do |medal, i|
+-#          .box.box-light.shadow-1.mtm
+-#            .box-top.box-top-light.pam
+-#              = render 'layouts/module/merge/merge_logo_gorg'
+-#              =medal["medal_text"]
+-#              =hidden_field_tag "medal_"+i.to_s + "[name]", medal["medal_text"]
+-#            .box-bottom.pam
+-#              %div
+-#                / = text_field_tag "diploma_field_"+i.to_s, diploma["program"], :placeholder => "program", :class => "w100 slim mbs"
+-#                / = text_field_tag "diploma_field_"+i.to_s, diploma["grad_year"], :placeholder => "grad_year", :class => "w100 slim mbs"
+-#
+-#            .box.pam
+-#              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "oui",false, :required => true, :checked => false
+-#              = label_tag "medal_"+i.to_s + "[recuperer]" + "_oui", "Transférer dans l'annuaire SOCE", :class => "black"
+-#              = radio_button_tag "medal_"+i.to_s + "[recuperer]", "non",false,  :required => true, :checked => false
+-#              = label_tag "medal_"+i.to_s + "[recuperer]" + "_non", "Oublier", :class => "black"
     -#.box.pam
     -#  -unless @medal_soce.nil?
     -#    -@medal_soce.each_with_index do |medal, i|
