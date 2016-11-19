@@ -41,6 +41,7 @@
       .box-top.box-top-color.pam
         SOCE
       .box-bottom.pam
+        %p= link_to "Voir sur le site soce", "#{Configurable[:url_site_soce_admin_user]}/#{@user_from_soce.id_user}"
         %p=@user_from_soce.hruid
         %p=@user_from_soce.id_user
         %p=@user_from_soce.id_civilite
