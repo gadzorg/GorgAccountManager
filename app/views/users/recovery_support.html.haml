@@ -34,6 +34,6 @@
                 = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
               .group-m-form
                 = text_area_tag :issue,"", :class => "w100"
-                = label_tag :issue, "Déscription du problème"
+                = label_tag :issue, "Description du problème"
 
               %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"
