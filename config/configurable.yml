@@ -22,3 +22,7 @@ legacy_auth_enabled:
   name: "Afficher la page d'authentification interne aux utilisateur"
   default: true
   type: boolean
+
+url_site_soce_admin_user:
+  name: Url admin des user du site soce
+  default: https://www.arts-et-metiers.asso.fr/index.php/adminMembres/index/id_user
