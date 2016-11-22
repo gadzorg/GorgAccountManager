@@ -110,6 +110,15 @@ gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'phonelib'
+
+group :production do
+  #HEROKU
+  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+  gem 'rails_12factor'
+  gem 'puma'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger consolep
   gem 'byebug'
