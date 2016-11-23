@@ -103,7 +103,7 @@ class UsersController < ApplicationController
 
 	def create_recovery_session
 		# on elimine les espaces en dùebut/fin du mot recherché 
-		a = params[:user][:hruid].to_s.strip
+		a = params[:user][:hruid].to_s.strip.downcase
 		#on enregistre les recherches pour les stats
 		search = Search.new(term: a)
 		respond_to do |format|
