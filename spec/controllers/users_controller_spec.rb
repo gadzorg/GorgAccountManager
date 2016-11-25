@@ -164,7 +164,7 @@ include Devise::TestHelpers
     end
   end
 
-  describe "GET #update" do
+  describe "PUT #update" do
     before :each do
         @user=FactoryGirl.create(:user, firstname:'Bob',email:'bob@hotmail.com')
     end
@@ -180,12 +180,13 @@ include Devise::TestHelpers
 
       context 'With valid data' do
         before :each do
-          post :update, :id => @user.id, user: FactoryGirl.attributes_for(:user, firstname:'Bobby')
+          put :update, :id => @user.id, user: FactoryGirl.attributes_for(:user, firstname:'Bobby')
         end
         it "update user data" do
           expect(User.find(@user.id).firstname).to eq('Bobby')
         end
         it "populate @user list expected user" do
+          byebug
           expect(assigns(:user)).to eq(@user)
         end
         it {is_expected.to respond_with :redirect}
@@ -194,7 +195,7 @@ include Devise::TestHelpers
 
       context 'With invalid data' do
         before :each do
-          post :update, :id => @user.id, user: FactoryGirl.attributes_for(:user, firstname:'Bobby', email:'')
+          put :update, :id => @user.id, user: FactoryGirl.attributes_for(:user, firstname:'Bobby', email:'')
         end
 
         it "doesn't update user data" do

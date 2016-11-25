@@ -53,6 +53,8 @@ class UsersController < ApplicationController
     authorize! :update, @user
     authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
 
+    byebug
+
     respond_to do |format|
       if @user.update(user_params)
         format.html { redirect_to @user, notice: I18n.translate('users.flash.update.success', user: @user.fullname) }
