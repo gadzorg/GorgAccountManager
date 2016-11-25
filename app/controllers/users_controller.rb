@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
   	@users = User.accessible_by(current_ability)
-  	authorize! :read, User
+  	authorize! :update, @users
   end
 
   # GET /users/1
@@ -52,8 +52,6 @@ class UsersController < ApplicationController
   def update
     authorize! :update, @user
     authorize! :update, (user_params[:role_id].present? ? Role.find(user_params[:role_id]) : Role)
-
-    byebug
 
     respond_to do |format|
       if @user.update(user_params)
@@ -610,7 +608,8 @@ class UsersController < ApplicationController
 
 		    # Use callbacks to share common setup or constraints between actions.
 		    def set_user
-		    	@user =(params[:user_id] ?  User.find(params[:user_id]) : current_user)
+					id=params[:user_id]||params[:id]
+		    	@user =(id ?  User.find(id) : current_user)
 		    end
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def user_params_pub

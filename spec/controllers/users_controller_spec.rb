@@ -9,11 +9,55 @@ include Devise::TestHelpers
     sign_in user
   end
 
-  shared_examples_for "an admin only endpoint" do |destination, params|
-    context "user login as basic user" do
+  shared_examples_for "an admin only endpoint" do |destination|
+    let! (:params) {}
+    context "user login as target user" do
       before :each do
         @user||=FactoryGirl.create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
         login @user
+        get destination, params
+      end
+
+      it { is_expected.to respond_with :forbidden }
+    end
+
+    context "user login as other user" do
+      before :each do
+        @user2=FactoryGirl.create(:user, firstname: 'Didier', email:'Didier@hotmail.com')
+        login @user2
+        get destination, params
+      end
+
+      it { is_expected.to respond_with :forbidden }
+    end
+
+    context "user not login" do
+      before :each do
+        @user=FactoryGirl.create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
+        get destination, params
+      end
+
+      it { is_expected.to respond_with :redirect}
+      it { is_expected.to redirect_to new_user_session_path}
+    end
+  end
+
+  shared_examples_for "an target user or admin only endpoint" do |destination|
+    let! (:params) {}
+    context "user login as target user" do
+      before :each do
+        @user||=FactoryGirl.create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
+        login @user
+        get destination, params
+      end
+
+      it { is_expected.to respond_with :success }
+    end
+
+    context "user login as other user" do
+      before :each do
+        @user2=FactoryGirl.create(:user, firstname: 'Didier', email:'Didier@hotmail.com')
+        login @user2
         get destination, params
       end
 
@@ -63,7 +107,9 @@ include Devise::TestHelpers
         @user=FactoryGirl.create(:user)
     end
 
-    it_should_behave_like "an admin only endpoint", :show , :id => 1
+    it_should_behave_like "an target user or admin only endpoint", :show do
+      let! (:params) {{:id => @user.id}}
+    end
 
     context "user login as admin" do
       
@@ -145,7 +191,9 @@ include Devise::TestHelpers
         @user=FactoryGirl.create(:user)
     end
 
-    it_should_behave_like "an admin only endpoint", :edit, :id => 1
+    it_should_behave_like "an admin only endpoint", :edit do
+      let! (:params) {{:id => @user.id}}
+    end
 
     context "user login as admin" do
       
@@ -169,7 +217,9 @@ include Devise::TestHelpers
         @user=FactoryGirl.create(:user, firstname:'Bob',email:'bob@hotmail.com')
     end
 
-    it_should_behave_like "an admin only endpoint", :update, :id => 1
+    it_should_behave_like "an admin only endpoint", :update do
+      let! (:params) {{:id => @user.id}}
+    end
 
     context "user login as admin" do
       
@@ -186,7 +236,6 @@ include Devise::TestHelpers
           expect(User.find(@user.id).firstname).to eq('Bobby')
         end
         it "populate @user list expected user" do
-          byebug
           expect(assigns(:user)).to eq(@user)
         end
         it {is_expected.to respond_with :redirect}
@@ -219,7 +268,9 @@ include Devise::TestHelpers
         @user=FactoryGirl.create(:user)
     end
 
-    it_should_behave_like "an admin only endpoint", :destroy, :id => 1
+    it_should_behave_like "an admin only endpoint", :destroy do
+      let! (:params) {{:id => @user.id}}
+    end
 
     context "user login as admin" do
       
