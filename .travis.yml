@@ -12,3 +12,4 @@ before_script:
 script:  
   - RAILS_ENV=test bundle exec rake db:migrate
   - RAILS_ENV=test bundle exec rspec spec/
+  - RAILS_ENV=test bundle exec rspec cucumber
