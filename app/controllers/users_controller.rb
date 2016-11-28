@@ -166,13 +166,14 @@ class UsersController < ApplicationController
 	def recovery_step1
 		@session_token = params[:token_session]
 		session = Recoverysession.find_by(token: @session_token)
-		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
-		uuid = session.uuid
-		user_from_gram = GramV2Client::Account.find(uuid)
-		hruid = user_from_gram.hruid
 
-		if !session.nil? && session.usable?
-			#on recupere l'utilisateur dans le site soce
+    if !session.nil? && session.usable?
+      #ok bon on l'a trouvé, maintenant on liste ses adresses mail
+      uuid = session.uuid
+      user_from_gram = GramV2Client::Account.find(uuid)
+      hruid = user_from_gram.hruid
+
+      #on recupere l'utilisateur dans le site soce
 			soce_user = Soce::User.where(hruid: hruid).take
 
 			# cherche le numéro de téléhpone sur le site soce
@@ -194,7 +195,7 @@ class UsersController < ApplicationController
 			render :layout => 'recovery'
 		else
 			respond_to do |format|
-				format.html { redirect_to root_path, notice: 'Délais dépassé' }
+				format.html { redirect_to recovery_path, notice: 'Session expirée' }
 			end
 		end
 

@@ -3,7 +3,7 @@ When(/^he search "([^"]*)" in password recovery$/) do |arg|
   click_button('Recuperer')
 end
 
-When(/^he connect to the password recovery system$/) do
+When(/^he connect to the password recovery entry-point$/) do
   visit('/recovery')
 end
 
@@ -14,4 +14,32 @@ end
 
 Then(/^he is redirected to choose his recovering method$/) do
   expect(page).to have_current_path(/recovery_step1\/(.*)/)
+end
+
+When(/^he visit step 1 of the recovery session(?: "([^"]*)")?$/) do |token|
+  token||=@recovery_session.token
+  visit(recovery_step1_path(:token_session => token))
+end
+
+Then(/^he is redirected to the password recovery entry\-point$/) do
+  expect(page).to have_current_path("/recovery")
+end
+
+And(/^he see his email addresses$/) do
+  expect(page).to have_content('@gadz.org')
+end
+
+And(/^this emails contains a link to recover its session$/) do
+  @email = ActionMailer::Base.deliveries.last
+  @email.body.parts.each do |p|
+    expect(p.body.decoded).to match(/password_reset\/[a-zA-Z0-9_-]+/)
+  end
+end
+
+And(/^he has a recovery session recovering link$/) do
+  @uniq_link=Uniqlink.generate_for_uuid(@uuid)
+end
+
+And(/^he is visiting his recovery session recovering link$/) do
+  visit(password_change_path(token: @uniq_link.token))
 end
