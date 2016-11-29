@@ -7,8 +7,10 @@ services:
   - mysql
 before_script:
   - mysql -e 'create database myapp_test;'
+  - mysql < db/soce_test_db_schema.sql
   - cp config/database.travis.yml config/database.yml
   - cp config/secrets.travis.yml config/secrets.yml
 script:  
   - RAILS_ENV=test bundle exec rake db:migrate
   - RAILS_ENV=test bundle exec rspec spec/
+  - RAILS_ENV=test bundle exec cucumber

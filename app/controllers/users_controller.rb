@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
   	@users = User.accessible_by(current_ability)
-  	authorize! :read, User
+  	authorize! :update, @users
   end
 
   # GET /users/1
@@ -166,13 +166,15 @@ class UsersController < ApplicationController
 	def recovery_step1
 		@session_token = params[:token_session]
 		session = Recoverysession.find_by(token: @session_token)
-		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
-		uuid = session.uuid
-		user_from_gram = GramV2Client::Account.find(uuid)
-		hruid = user_from_gram.hruid
 
-		if !session.nil? && session.usable?
-			#on recupere l'utilisateur dans le site soce
+    if !session.nil? && session.usable?
+      #ok bon on l'a trouvé, maintenant on liste ses adresses mail
+      uuid = session.uuid
+      user_from_gram = GramV2Client::Account.find(uuid)
+      hruid = user_from_gram.hruid
+
+
+      #on recupere l'utilisateur dans le site soce
 			soce_user = Soce::User.where(hruid: hruid).take
 
 			# cherche le numéro de téléhpone sur le site soce
@@ -194,7 +196,7 @@ class UsersController < ApplicationController
 			render :layout => 'recovery'
 		else
 			respond_to do |format|
-				format.html { redirect_to root_path, notice: 'Délais dépassé' }
+				format.html { redirect_to recovery_path, notice: 'Session expirée' }
 			end
 		end
 
@@ -608,7 +610,8 @@ class UsersController < ApplicationController
 
 		    # Use callbacks to share common setup or constraints between actions.
 		    def set_user
-		    	@user =(params[:user_id] ?  User.find(params[:user_id]) : current_user)
+					id=params[:user_id]||params[:id]
+		    	@user =(id ?  User.find(id) : current_user)
 		    end
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def user_params_pub

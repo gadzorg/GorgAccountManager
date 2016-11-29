@@ -125,9 +125,6 @@ group :development, :test do
   
   gem "letter_opener"
 
-
-
-
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
 
@@ -161,7 +158,10 @@ end
 
 
 group :test do
+  gem 'cucumber-rails', :require => false
   gem 'capybara'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.0'
+  gem 'database_cleaner'
+  gem 'webmock'
 end
