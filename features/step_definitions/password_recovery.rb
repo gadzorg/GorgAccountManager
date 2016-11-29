@@ -16,7 +16,7 @@ Then(/^he is redirected to choose his recovering method$/) do
   expect(page).to have_current_path(/recovery_step1\/(.*)/)
 end
 
-When(/^he visit step 1 of the recovery session(?: "([^"]*)")?$/) do |token|
+When(/^he visits step 1 of the recovery session(?: "([^"]*)")?$/) do |token|
   token||=@recovery_session.token
   visit(recovery_step1_path(:token_session => token))
 end
@@ -42,4 +42,17 @@ end
 
 And(/^he is visiting his recovery session recovering link$/) do
   visit(password_change_path(token: @uniq_link.token))
+end
+
+
+And(/^he visits SMS confirmation page$/) do
+  visit("/recovery_sms?token_session=#{@recovery_session.token}")
+end
+
+Then(/^he is redirected to the SMS confirmation page$/) do
+  expect(page).to have_current_path("/recovery_sms?token_session=#{@recovery_session.token}")
+end
+
+And(/^he is redirected to his recovery link$/) do
+  expect(page).to have_current_path(password_change_path(token: @uniq_link.token))
 end

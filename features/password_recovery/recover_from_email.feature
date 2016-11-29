@@ -6,14 +6,14 @@ Feature: Password recovery - Recover with email
 
   Scenario: Blaked sees his emails address
     And he has initiated a recovery session
-    When he visit step 1 of the recovery session
+    When he visits step 1 of the recovery session
     Then the page has button "Envoie-moi un mail"
     And he see his email addresses
 
   @email
   Scenario: Blaked receives a mail
     And he has initiated a recovery session
-    When he visit step 1 of the recovery session
+    When he visits step 1 of the recovery session
     And he clicks "Envoie-moi un mail" button
     Then he receives an email entitled "Recupération de mot de passe" from "support@gadz.org"
     And this emails contains a link to recover its session

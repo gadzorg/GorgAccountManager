@@ -173,6 +173,7 @@ class UsersController < ApplicationController
       user_from_gram = GramV2Client::Account.find(uuid)
       hruid = user_from_gram.hruid
 
+
       #on recupere l'utilisateur dans le site soce
 			soce_user = Soce::User.where(hruid: hruid).take
 

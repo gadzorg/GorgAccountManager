@@ -163,4 +163,5 @@ group :test do
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.0'
   gem 'database_cleaner'
+  gem 'webmock'
 end
