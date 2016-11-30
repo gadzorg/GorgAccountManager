@@ -19,5 +19,18 @@ class Recoverysession < ActiveRecord::Base
 		sms.map{|s| s.check_count +=1; s.save}
 	end
 
+  def self.initialize_for(uuid,opts={})
+    s=self.new
+    s.uuid = uuid
+    if opts[:token]
+      s.token=opts[:token]
+    else
+      s.generate_token
+    end
+    opts[:expire_date]||= DateTime.now + 15.minute # on definit la durée de vie par défaut d'un token à 15 minutes
+    s.expire_date = opts[:expire_date]
+    s.save
+    return s
+  end
 
 end

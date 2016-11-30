@@ -16,8 +16,8 @@
         .mtm 
           =form_for  [@user], :url=> create_recovery_session_path()  do |f|
             .group-m-form
-              =f.text_field :hruid, value: @hruid, :placeholder => "", :class => "w100 login", :autofocus => true, :required => true
-              =f.label :hruid, "Entre ici ton identifiant OU email OU n° de sociétaire,..."
+              =f.text_field :recovery_query, value: @query, :placeholder => "", :class => "w100 login", :autofocus => true, :required => true
+              =f.label :recovery_query, "Entre ici ton identifiant OU email OU n° de sociétaire..."
               .span.highlight.w100
               .span.bar.w100
             -if @help == true

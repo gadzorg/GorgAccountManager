@@ -11,7 +11,7 @@ class Soce::User < Soce::Base
 
 	def emails_valides
 		email_list = Array.new
-		email_list.push(self.email) if email_valide = "1"
+		email_list.push(self.email) if email_valide == "1"
 		email_list.push(self.email_secondaire) if !email_secondaire.nil?
 
 		return email_list
