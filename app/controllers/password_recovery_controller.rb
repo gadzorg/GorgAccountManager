@@ -4,6 +4,9 @@ class PasswordRecoveryController < ApplicationController
   before_action :set_session, only: [:recovery_step1, :recovery_step2, :create_sms, :recovery_sms, :validate_sms]
 
 
+  #GET /recovery
+  #POST /recovery
+  #Asks user for a way to be identified
   def recovery
     @user = User.new
     @first_attempt = !params[:retry] #true si on vient d'échouer. la page est appellée en POST
@@ -11,6 +14,10 @@ class PasswordRecoveryController < ApplicationController
     @query = params[:recovery_query] #Used to pre-filled field with previous value
   end
 
+  #POST /create_recovery_session
+  # Try to identify the User
+  # Initialize a recovery session if successful
+  # Redirect to Step 1  to choose a way to recover password
   def create_recovery_session
     # on elimine les espaces en debut/fin du mot recherché
     query = params[:user][:recovery_query].to_s.strip.downcase
@@ -40,12 +47,19 @@ class PasswordRecoveryController < ApplicationController
     redirect_to recovery_step1_path(:token_session => session.token)
   end
 
+  #GET /recovery_step1/:token_session
+  # Check if session exists
+  # If so, ask user which method to use to recover the password (email or SMS)
   def recovery_step1
     @phone_hidden=@recovery_service.hidden_phone_number
     @list_emails_to_display = @recovery_service.hidden_emails
   end
 
 
+  #POST /recovery_step2
+  # Check if session exists
+  # If so send an email on each adresses of user
+  # User mays switch to SMS recovery
   def recovery_step2
     @phone_hidden=@recovery_service.hidden_phone_number
     @list_emails_to_display = @recovery_service.hidden_emails
@@ -59,11 +73,15 @@ class PasswordRecoveryController < ApplicationController
     end
   end
 
+  #POST /create_sms
+  # Check if session exists
+  # If User can send an SMS (max: 3), send a SMS with 6 digits token
+  # Redirect to /recovery_sms to send the 6 digits token
   def create_sms
     phone = @recovery_service.phone_number
 
     unless @session.sms_count.to_i < 2 #3 sms max
-      return redirect_to recovery_path, notice: 'Nombre maximun de sms atteint pour cette session'
+      return redirect_to recovery_sms_path(:token_session => @session.token), notice: 'Nombre maximun de sms atteint pour cette session'
     end
 
     #on genere un code pour le sms
@@ -78,6 +96,11 @@ class PasswordRecoveryController < ApplicationController
     redirect_to recovery_sms_path(:token_session => @session.token)
   end
 
+  #POST /create_sms
+  # Check if session exists
+  # Check if SMS token match Session UUID
+  # If so, create a passwordchange link and redirect user to it
+  # Max 5 attempts per session, session expires on 6th
   def validate_sms
     #on récupere le mini token du sms et si il est bon,
     #on prend le token du mail pour aller à la page de changement de mdp
@@ -97,10 +120,16 @@ class PasswordRecoveryController < ApplicationController
     end
   end
 
+  #GET /recovery_sms
+  # Check if session exists
+  # Ask user for a 6 digits token
   def recovery_sms
     @phone_hidden = @recovery_service.hidden_phone_number
   end
 
+  #GET password_reset/:token
+  # Check if password change link exists
+  # Asks User for a new password
   def password_reset
     check_link_token
 
@@ -108,6 +137,11 @@ class PasswordRecoveryController < ApplicationController
     @user = User.new
   end
 
+  #POST password_reset/:token
+  # Check if password change link exists
+  # Check if password validates rules
+  # Send hashed password to GrAM and Soce (if exists)
+  # Redirect to confirmation page
   def password_change
     check_link_token
 
@@ -134,6 +168,8 @@ class PasswordRecoveryController < ApplicationController
     end
   end
 
+  #GET recovery_final
+  # Confirms that password have been changed
   def recovery_final
   end
 
@@ -159,21 +195,25 @@ class PasswordRecoveryController < ApplicationController
 
   private
 
-    def check_link_token
+  #Set session from :token_session pram
+  #Redirect to GET /recovery if session expired
+  def set_session
+    session_token = params[:token_session]
+    @session = Recoverysession.find_by(token: session_token)
+
+    #Redirect to recovery entry_point if invalid session
+    redirect_to(recovery_path, notice: 'Session expirée') unless @session && @session.usable?
+    @recovery_service=RecoveryService.new(@session)
+  end
+
+  #Check if recovery_link :token is valid
+  #Redirecy to GET /recovery otherwise
+  def check_link_token
       @token = params[:token]
       @recovery_link = Uniqlink.find_by(token: @token)
       unless @recovery_link && @recovery_link.usable?
         redirect_to recovery_path, notice: 'Ce lien a déjà été utilisé ou a expiré'
       end
-    end
-
-    def set_session
-      session_token = params[:token_session]
-      @session = Recoverysession.find_by(token: session_token)
-
-      #Redirect to recovery entry_point if invalid session
-      redirect_to(recovery_path, notice: 'Session expirée') unless @session && @session.usable?
-      @recovery_service=RecoveryService.new(@session)
     end
 
 end
