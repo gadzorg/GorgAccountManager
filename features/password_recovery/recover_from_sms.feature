@@ -2,8 +2,8 @@
 Feature: Password recovery - Recover with SMS
 
   Background:
-    Given Blaked has a Gram Account with email "blaked@gadz.org", password "toto01", hruid "blaked.84.2011"
-    And Blaked has a Soce Account with tel_mobile "+33623456789", hruid "blaked.84.2011"
+    Given Blaked has a Gram Account with email "blaked@gadz.org", password "toto01", uuid "559bb0aa-ddac-4607-ad41-7e520ee40819"
+    And Blaked has a Soce Account with tel_mobile "+33623456789", uuid "559bb0aa-ddac-4607-ad41-7e520ee40819"
 
   Scenario: Blaked sees his phone number
     Given he has initiated a recovery session

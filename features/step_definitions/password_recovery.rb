@@ -48,7 +48,12 @@ Then(/^he is redirected to the SMS confirmation page$/) do
 end
 
 And(/^he is redirected to his recovery link$/) do
-  expect(page).to have_current_path(password_change_path(token: @uniq_link.token))
+
+  regex=/\/password_reset\/([a-zA-Z0-9_-]+)/
+  expect(page).to have_current_path(regex) #On vérifie qu'on est sur la bonne page
+
+  token=regex.match(page.current_path)[1]
+  expect(Uniqlink.find_by(token: token).uuid).to eq(@uuid) #On vérifie qu'il correspond bien au user
 end
 
 Then(/^he is redirected to recovery entry\-point$/) do

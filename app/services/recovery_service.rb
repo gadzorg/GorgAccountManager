@@ -1,23 +1,53 @@
 
 class RecoveryService
 
-  def self.get_emails(user_from_gram,soce_user)
-    list_emails = Array.new
-    list_emails.push(user_from_gram.mail_forwarding) if user_from_gram.respond_to?(:mail_forwarding)
+  attr_reader :session
 
-    #@list_emails.push(user_from_gram.mail_alias)
-    list_emails.push(user_from_gram.email) if user_from_gram.email.present? && user_from_gram.respond_to?(:email)
-    #list_emails.push(user_from_gram.email_forge) if user_from_gram.email_forge.present? && user_from_gram.respond_to?(:email_forge)
-    #email du site soce
-    list_emails.push(soce_user.emails_valides) unless soce_user.blank?
-
-    list_emails = list_emails.flatten.uniq
-    list_emails = list_emails.reject(&:blank?) #on supprime les emails vides
-
-    # on supprime les adresses en gadz.org pour éviter d'avoir des doublons
-    # je l'ai commenté parce que les emails du gram ne sont pas forcement à jour
-    # @list_emails = @list_emails.drop_while{|e| /gadz.org/.match(e)}
-
-    #@list_emails_to_display = @list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": c[0]+c.gsub(/[A-Za-z0-9]/,"*")[1..c.length-3]+c[c.length-2..c.length-1]}
+  def initialize(session)
+    @session=session
   end
+
+  def gram_account
+    @gram_account||=GramV2Client::Account.find(session.uuid)
+  end
+
+  def soce_user
+    @soce_user||=Soce::User.find_by(uuid: session.uuid)
+  end
+
+  def phone_number
+    soce_user&&soce_user.tel_mobile
+  end
+
+  def hidden_phone_number
+    phone_number&&hide_phone(phone_number)
+  end
+
+  def emails
+    unless @emails
+      list_emails = Array.new
+
+      #Emails from Gram
+      list_emails << gram_account.email if gram_account.respond_to?(:email)
+      list_emails << gram_account.mail_forwarding if gram_account.respond_to?(:mail_forwarding)
+      #Emails from Soce
+      list_emails << soce_user.emails_valides if soce_user
+
+      @emails=list_emails.flatten.uniq.reject(&:blank?)
+    end
+    @emails
+  end
+
+  def hidden_emails
+    emails.delete_if{|e| e.include?("gadz.fr")}.map{|c|  /gadz.org/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
+  end
+
+  private
+
+    def hide_phone(phone)
+      internat_phone = SmsService.phone_parse(phone)
+      return false if internat_phone == false #on quite la fonction si le numéro de télephone n'est pas reconnu ou parsable
+      "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
+    end
+
 end

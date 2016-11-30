@@ -1,6 +1,7 @@
 
 class SmsService
 
+  #On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
   def self.phone_parse(phone)
     if phone[0] == "+"
       internat_phone = phone.gsub("+","00")
@@ -14,7 +15,10 @@ class SmsService
     return internat_phone
   end
 
-  def self.send_sms(phone_number,code)
+  def self.send_sms(phone,code)
+
+    phone_number=phone_parse(phone).to_s
+
     base_url = "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?"
     account = Rails.application.secrets.ovh_sms_account
     login = Rails.application.secrets.ovh_sms_login

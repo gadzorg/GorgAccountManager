@@ -44,7 +44,7 @@ class Uniqlink < ActiveRecord::Base
 	end
 
 	def self.generate_for_uuid(uuid)
-		new_link = Uniqlink.new(
+		new_link = self.new(
 			uuid: uuid,
 			used: false,
 			inscription: false,

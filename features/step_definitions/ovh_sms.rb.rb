@@ -9,8 +9,6 @@ Given(/^he received the recovery code "([^"]*)"$/) do |code|
   @recovery_sms.uuid = @uuid
   @recovery_sms.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
   @recovery_sms.save
-
-  @uniq_link=Uniqlink.generate_for_uuid(@uuid)
 end
 
 And(/^this SMS is sent from "([^"]*)"$/) do |arg|
