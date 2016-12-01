@@ -88,15 +88,17 @@ class PasswordRecoveryController < ApplicationController
     recovery_sms = Uniqsms.generate_for_uuid(@session.uuid)
 
     #ici code envoi sms
-    SmsService.send_sms(phone,recovery_sms.token.to_s)
+    if SmsService.new(phone).send_recovery_message(recovery_sms.token.to_s)
+      # ou ajoute un au compteur
+      @session.add_sms_count
+      redirect_to recovery_sms_path(:token_session => @session.token)
+    else
+      redirect_to recovery_sms_path(:token_session => @session.token, sending_error: true)
+    end
 
-    # ou ajoute un au compteur
-    @session.add_sms_count
-
-    redirect_to recovery_sms_path(:token_session => @session.token)
   end
 
-  #POST /create_sms
+  #POST /validate_sms
   # Check if session exists
   # Check if SMS token match Session UUID
   # If so, create a passwordchange link and redirect user to it
@@ -125,6 +127,8 @@ class PasswordRecoveryController < ApplicationController
   # Ask user for a 6 digits token
   def recovery_sms
     @phone_hidden = @recovery_service.hidden_phone_number
+    @sending_error=params[:sending_error]
+    #TODO : Afficher un message d'erreur à l'utilisateur
   end
 
   #GET password_reset/:token

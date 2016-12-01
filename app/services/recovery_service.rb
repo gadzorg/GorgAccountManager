@@ -45,9 +45,10 @@ class RecoveryService
   private
 
     def hide_phone(phone)
-      internat_phone = SmsService.phone_parse(phone)
-      return false if internat_phone == false #on quite la fonction si le numéro de télephone n'est pas reconnu ou parsable
-      "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
+      Phonelib.default_country = "FR"
+      p=Phonelib.parse(phone)
+      temp=p.e164.gsub(/(\d{4})(\d+)(\d{2})/,'\1:middle:\3')
+      middle=p.e164.gsub(/(\d{4})(\d+)(\d{2})/,'\2')
+      temp.gsub(':middle:',"x"*middle.length)
     end
-
 end

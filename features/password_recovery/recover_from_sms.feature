@@ -9,7 +9,7 @@ Feature: Password recovery - Recover with SMS
     Given he has initiated a recovery session
     When he visits step 1 of the recovery session
     Then the page has button "Envoie-moi un sms"
-    And he sees "+336 xx xx xx 89"
+    And he sees "+3362xxxxxx89"
 
   Scenario: Blaked receives a SMS
     Given he has initiated a recovery session

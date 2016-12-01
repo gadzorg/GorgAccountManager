@@ -1,46 +1,63 @@
+require 'phonelib'
 
 class SmsService
 
-  #On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
-  def self.phone_parse(phone)
-    if phone[0] == "+"
-      internat_phone = phone.gsub("+","00")
-    elsif phone.length == 14 || phone.length == 10 #10 et les points ou sans
-      internat_phone = "0033"+phone.gsub(".","").split(//).join[1..9]
-    elsif phone.length > 15 # pour les numeros de tel étranger 0033.123.456.789 avec la possibilité d'avoir un indicatif à 3 chiffres et des point tous les 2 chiffre
-      internat_phone = phone.gsub(".","")
+  attr_reader :recipient, :error
+  attr_accessor :from
+
+
+  BASE_URL="https://www.ovh.com/cgi-bin/sms/http2sms.cgi"
+  DEFAULT_FROM=Rails.application.secrets.ovh_sms_from
+  OVH_ACCOUNT=Rails.application.secrets.ovh_sms_account
+  OVH_LOGIN=Rails.application.secrets.ovh_sms_login
+  OVH_PASSWORD=Rails.application.secrets.ovh_sms_password
+
+  def initialize(recipient, opts={})
+    @recipient=parse_phone_number(recipient)
+    @from=opts[:from]||DEFAULT_FROM
+  end
+
+  def send_recovery_message(code)
+    send_message("Ton code de validation Gadz.org est: #{code.to_s}")
+  end
+
+  def send_message(message)
+    uri=uri_for_message(message)
+    Rails.logger.info("Send SMS : '#{message}' to #{recipient.to_s}")
+
+    res=JSON.parse(Net::HTTP.get_response(uri).body)
+    #http://guides.ovh.com/Http2Sms for responses examples
+
+    Rails.logger.info("OVH API response : #{res.to_json}")
+    if res['status'] >= 100 && res['status'] < 200
+      true
     else
-      return false
-    end
-    return internat_phone
-  end
-
-  def self.send_sms(phone,code)
-
-    phone_number=phone_parse(phone).to_s
-
-    base_url = "https://www.ovh.com/cgi-bin/sms/http2sms.cgi?"
-    account = Rails.application.secrets.ovh_sms_account
-    login = Rails.application.secrets.ovh_sms_login
-    password = Rails.application.secrets.ovh_sms_password
-    from = Rails.application.secrets.ovh_sms_from
-    message = "Ton code de validation Gadz.org est: " + code
-
-    full_url = base_url + "account=" + account + "&login=" + login + "&password=" + password + "&from=" + from + "&to=" + phone_number + "&message=" + message + "&noStop=1"
-
-    # on envoie la requete get en https
-    # TODO il serait bien de regarder le code de réponse
-    encoded_url = URI.encode(full_url)
-    uri = URI.parse(encoded_url)
-
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = true if uri.scheme == 'https'
-
-    http.start do |h|
-      h.request Net::HTTP::Get.new(uri.request_uri)
-      Rails.logger.info "#--------------------------------------------------------------------URL"
-      Rails.logger.info(h)
+      @error=res['message']
+      false
     end
   end
+
+  private
+
+  def parse_phone_number(number)
+    Phonelib.default_country = "FR"
+    Phonelib.parse(number).e164.gsub('+','00')
+  end
+
+  def uri_for_message(message)
+    uri=URI.parse(BASE_URL)
+    uri.query={
+        account:OVH_ACCOUNT,
+        login:OVH_LOGIN,
+        password:OVH_PASSWORD,
+        from:from,
+        to:@recipient,
+        message:message.to_s,
+        noStop: 1,
+        contentType:'text/json'
+    }.to_query
+    uri
+  end
+
 
 end
