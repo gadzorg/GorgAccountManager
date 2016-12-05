@@ -61,7 +61,8 @@ end
 And(/^There is no gram account with email address "([^"]*)"$/) do |email_address|
   ActiveResource::HttpMock.respond_to do |mock|
     mock.get "/api/v2/accounts.json?email=#{URI.escape(email_address,"@")}", {"Authorization"=>"Basic cmF0YXRvc2s6dGVzdF9wYXNz",'Accept' => 'application/json'}, [].to_json, 200
-
+    mock.get "/api/v2/accounts.json?hruid=#{URI.escape(email_address,"@")}", {"Authorization"=>"Basic cmF0YXRvc2s6dGVzdF9wYXNz",'Accept' => 'application/json'}, [].to_json, 200
+    mock.get "/api/v2/accounts.json?id_soce=", {"Authorization"=>"Basic cmF0YXRvc2s6dGVzdF9wYXNz",'Accept' => 'application/json'}, [].to_json, 200
   end
 end
 

@@ -1,14 +1,8 @@
-When(/^he search "([^"]*)" in password recovery$/) do |arg|
-  fill_in('user_hruid', with: 'blaked@gadz.org')
-  click_button('Recuperer')
-end
-
 When(/^he connect to the password recovery entry-point$/) do
   visit('/recovery')
 end
 
 Then(/^he is asked to try again$/) do
-  expect(page).to have_current_path("/recovery?retry=true")
   expect(page).to have_content("Nous n'avons pas pu t'identifier")
 end
 
@@ -54,5 +48,14 @@ Then(/^he is redirected to the SMS confirmation page$/) do
 end
 
 And(/^he is redirected to his recovery link$/) do
-  expect(page).to have_current_path(password_change_path(token: @uniq_link.token))
+
+  regex=/\/password_reset\/([a-zA-Z0-9_-]+)/
+  expect(page).to have_current_path(regex) #On vérifie qu'on est sur la bonne page
+
+  token=regex.match(page.current_path)[1]
+  expect(Uniqlink.find_by(token: token).uuid).to eq(@uuid) #On vérifie qu'il correspond bien au user
+end
+
+Then(/^he is redirected to recovery entry\-point$/) do
+  expect(page).to have_current_path(/\/recovery(\?.*)?/)
 end

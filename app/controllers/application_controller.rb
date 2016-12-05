@@ -8,15 +8,15 @@ class ApplicationController < ActionController::Base
   after_filter :prepare_unobtrusive_flash
   private
 
-  def after_sign_out_path_for(resource_or_scope)
-    Rails.application.secrets.cas_provider_url ? "https://#{Rails.application.secrets.cas_provider_url}/cas/logout?service=#{root_url}" : root_url
+  def after_sign_out_path_for(_resource_or_scope)
+    Rails.application.secrets.cas_provider_url ? URI::join('https://',Rails.application.secrets.cas_provider_url,"/cas/logout?service=#{root_url}").to_s : root_url
   end
   
   rescue_from CanCan::AccessDenied, with: :access_denied
 
   private
 
-    def access_denied(exception)
+    def access_denied(_exception)
       respond_to do |format|
         format.json { render nothing: true, status: :forbidden }
         format.html {

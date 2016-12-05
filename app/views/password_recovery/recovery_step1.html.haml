@@ -10,18 +10,18 @@
             %li=e.to_s
         %p.small.grey Les "*" sont là pour ne pas rendre publiques tes adresses mails.
         %p
-          =link_to recovery_step2_path(:token_session => @session_token), :method=> :post, title: "Envoie-moi un mail", :class => "bouton bouton_bleu", :id => "button_loading" do
+          =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "bouton bouton_bleu", :id => "button_loading" do
             Envoie-moi un mail
 
           %span#loading
             =image_tag "Preloader_3.gif"
             Envoi en cours...
 
-        -if @have_phone
+        -if @phone_hidden
           %p.mtm 
             Si tu n'y as plus accès, nous pouvons t'envoyer un SMS au numéro #{@phone_hidden}
           %p  
-            = link_to create_sms_path(:token_session => @session_token) , :method=> :post, title: "Envoie-moi un sms", :class => "bouton bouton_bleu" do
+            = link_to create_sms_path(:token_session => @session.token) , :method=> :post, title: "Envoie-moi un sms", :class => "bouton bouton_bleu" do
               Envoie-moi un sms
           / %p
           /   = form_tag(validate_sms_path(), :method => 'post') do
@@ -33,5 +33,5 @@
 
         %p.small.mtm
           Si tu n'as plus accès à ces adresses email ou à ce numéro de téléphone, tu peux 
-          = link_to recovery_support_path(), title: "contacter le support" do
+          = link_to recovery_support_path, title: "contacter le support" do
             contacter le support.

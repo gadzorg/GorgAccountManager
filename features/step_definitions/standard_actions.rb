@@ -14,3 +14,7 @@ end
 And(/^he sees "([^"]*)"$/) do |arg|
   expect(page).to have_content(arg)
 end
+
+And(/^field "([^"]*)" is filled with "([^"]*)"$/) do |field, value|
+  expect(page).to have_field(field, :with => value)
+end

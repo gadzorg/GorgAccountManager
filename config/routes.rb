@@ -5,26 +5,28 @@ Rails.application.routes.draw do
     :omniauth_callbacks => "users/omniauth_callbacks",
     :sessions => "users/sessions"
     }
-  
+
   get 'static_pages/index'
-  get 'recovery' => 'users#recovery'
-  post 'recovery' => 'users#recovery'
-  post 'recovery_step2' => 'users#recovery_step2'
-  post 'create_recovery_session' => 'users#create_recovery_session'
-  get 'recovery_step1/:token_session', to: "users#recovery_step1", as: :recovery_step1
-  get 'password_reset/:token', to: "users#password_reset", as: :password_change
-  post 'password_reset/:token'=>"users#password_change"
+
+  ## password recovery
+  get 'recovery' => 'password_recovery#recovery'
+  post 'recovery' => 'password_recovery#recovery'
+  post 'create_recovery_session' => 'password_recovery#create_recovery_session'
+  get 'recovery_step1/:token_session', to: "password_recovery#recovery_step1", as: :recovery_step1
+  post 'recovery_step2' => 'password_recovery#recovery_step2'
+  post 'create_sms' => 'password_recovery#create_sms'
+  get 'recovery_sms' => "password_recovery#recovery_sms"
+  post 'validate_sms' => 'password_recovery#validate_sms'
+  get 'password_reset/:token', to: "password_recovery#password_reset", as: :password_change
+  post 'password_reset/:token'=>"password_recovery#password_change"
+  get 'recovery_final' => "password_recovery#recovery_final"
+
+  get 'recovery_support' => "password_recovery#recovery_support"
+  post 'recovery_support_final' => "password_recovery#recovery_support_final"
 
   get 'password_change_u', to: "users#password_change_logged", as: :password_change_u
-  post 'create_sms' => 'users#create_sms'
-  #get 'validate_sms/:token', to: 'users#validate_sms', as: :validate_sms
-  post 'validate_sms' => 'users#validate_sms'
-  get 'recovery_final' => "users#recovery_final"
   get 'recovery_inscription_final' => "users#recovery_inscription_final"
-  get 'recovery_support' => "users#recovery_support"
-  post 'recovery_support_final' => "users#recovery_support_final"
-  get 'recovery_sms' => "users#recovery_sms"
-  
+
   get 'recovery_inscription/:token', to: "users#recovery_inscription", as: :user_recovery_inscription
   post 'password_change_inscription/:token', to: "users#password_change_inscription", as: :password_change_inscription
 

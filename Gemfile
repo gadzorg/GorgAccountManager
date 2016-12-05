@@ -125,9 +125,6 @@ group :development, :test do
   
   gem "letter_opener"
 
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
-
 
   #pour les diagramme UML
   gem 'rails-erd' 
@@ -138,6 +135,7 @@ group :development, :test do
   # export db en yaml
   gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
 
+  gem 'bogus'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
