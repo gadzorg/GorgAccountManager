@@ -24,6 +24,38 @@ class JiraService
         "\n\n" + desc )
   end
 
+  def self.error_during_soce_fusion(user,email,sync_state,error)
+    title="#{user.hruid} - La fusion de vos compte a échoué"
+    message=message_for_user(user,"
+    Bonjour #{user.firstname},
+
+    Une erreur est survenue lors de la fusion de tes comptes Gadz.org et Soce. Cela signifie que tes données Gadz.org n'ont pas pu être entièrement transférées sur le site Soce.
+    Un membre de l'équipe support interviendra bientot pour rétablir la situation et te tenir au courant.
+
+    h3. Instructions à destination de l'équipe support
+    Developeur référent: @ratatosk
+
+    Etat des fusions :
+    | Fusion des infos de base | #{sync_state[:user_infos] ? "OK" : "Erreur"} |
+    | Fusion des adresses | #{sync_state[:addresses] ? "OK" : "Erreur"} |
+    | Fusion des réseaux sociaux | #{sync_state[:social_links] ? "OK" : "Erreur"} |
+    | Fusion des diplomes | #{sync_state[:diploma] ? "OK" : "Erreur"} |
+
+    Message d'erreur :
+    #{error.message}
+    ")
+
+    JiraIssue.new(
+        fields: {
+            project: { id: "10001" },
+            summary: title,
+            description: message,
+            customfield_10000: email ,
+            issuetype: { id: "1" },
+            labels: [ "fusion", "synchro" ]
+        }).save
+  end
+
   def self.gaccount_not_synced_fusion(user, email)
     title="#{user.hruid} - La synchronisation avec votre compte GrAM a échoué"
     message=message_for_user(user,"
