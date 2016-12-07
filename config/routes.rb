@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     post 'merge/update_soce_user/:hruid', to: "merge#update_soce_user", as: :merge_update_soce_user, :constraints => {:hruid => /[^\/]+/}
     get 'merge/address/:hruid', to: "merge#address", as: :merge_address, :constraints => {:hruid => /[^\/]+/}
     get 'merge/platal_account_not_found', to: "merge#platal_account_not_found", as: :merge_platal_account_not_found
+    get 'merge/fusion_error', to: "merge#fusion_error", as: :merge_fusion_error
   end
 
   #get 'info_user/:hruid', to: "admin#info_user", as: :admin_info_user, :constraints => {:hruid => /[^\/]+/}
