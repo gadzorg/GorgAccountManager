@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Role, type: :service do
+RSpec.describe PasswordService, type: :service do
 
   describe "password validation" do
 

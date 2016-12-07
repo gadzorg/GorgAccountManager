@@ -15,3 +15,9 @@ test:
   database: myapp_test
   username: travis
   encoding: utf8
+
+soce_test:
+  adapter: mysql2
+  database: soce_test # defined in db/soce_test_db_schema.sql
+  username: travis
+  encoding: utf8

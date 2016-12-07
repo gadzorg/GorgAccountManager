@@ -32,4 +32,15 @@ class Uniqsms < ActiveRecord::Base
 		end
 	end
 
+	def self.generate_for_uuid(uuid)
+		new_link = self.new(
+				uuid: uuid,
+				used: false,
+				expire_date: DateTime.now + 10.minutes # on definit la durée de vie d'un token à 1 jour
+		)
+		new_link.generate_token
+		new_link.save
+		return new_link
+	end
+
 end

@@ -110,17 +110,20 @@ gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'phonelib'
+
+group :production do
+  #HEROKU
+  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
+  gem 'rails_12factor'
+  gem 'puma'
+end
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger consolep
   gem 'byebug'
   
   gem "letter_opener"
-
-
-
-
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
 
 
   #pour les diagramme UML
@@ -132,6 +135,7 @@ group :development, :test do
   # export db en yaml
   gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
 
+  gem 'bogus'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'faker'
@@ -152,7 +156,10 @@ end
 
 
 group :test do
+  gem 'cucumber-rails', :require => false
   gem 'capybara'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.0'
+  gem 'database_cleaner'
+  gem 'webmock'
 end

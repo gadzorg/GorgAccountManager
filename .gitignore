@@ -46,3 +46,4 @@ db/schema.rb
 lib/assets/*.csv
 
 
+/.byebug_history

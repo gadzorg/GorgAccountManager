@@ -7,7 +7,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
   	@users = User.accessible_by(current_ability)
-  	authorize! :read, User
+  	authorize! :update, @users
   end
 
   # GET /users/1
@@ -83,221 +83,7 @@ class UsersController < ApplicationController
   	redirect_to user_path(params[:id])
   end
 
-  def recovery
-  	@user = User.new
-		re_try = params[:retry] #true si on vient d'échoucher. la page est appellée en POST
-		help = params[:help]
-		if !re_try.nil? || re_try == true
-			@first_attempt = false
-		else
-			@first_attempt = true
-		end
-		if help.nil? || help == false
-			@help = false
-		else
-			@help = true
-		end
-		@hruid = params[:hruid]
-	render :layout => 'recovery'
-	end
 
-	def create_recovery_session
-		# on elimine les espaces en dùebut/fin du mot recherché 
-		a = params[:user][:hruid].to_s.strip
-		#on enregistre les recherches pour les stats
-		search = Search.new(term: a)
-		respond_to do |format|
-
-			if !a.nil? && a != "" # on verifie si la recherche n'est pas vide
-				if verify_recaptcha
-				#on cherche si ce qui est rentré dans le formulaire est un email, hrui ou num soce via l'api GrAM
-				begin
-					@uuid = GramV2Client::Account.where(email: a).first.uuid
-					search.term_type = "Email GrAM"
-					search.save
-				rescue #ArgumentError ||  ActiveResource::ResourceNotFound
-					begin
-						@uuid = GramV2Client::Account.where(hruid: a).first.uuid
-						search.term_type = "Hruid"
-						search.save
-					rescue #ActiveResource::ResourceNotFound || ArgumentError
-						begin
-							id_soce = Integer(a.gsub(/[a-zA-Z]/,''))
-							@uuid = GramV2Client::Account.where(id_soce: id_soce).first.uuid
-							search.term_type = "idSoce"
-							search.save
-						rescue #ActiveResource::ServerError
-							#@hruid = "on t'as pas trouvé :-("
-
-							#Si on ne trouve rien, on cherche dans platal l'adresse mail
-					    		# format.html { redirect_to recovery_support_path() }
-					    		search.term_type = "Non trouvé"
-							search.save
-							format.html { redirect_to recovery_path(:retry => true) }
-					    		
-					    	end
-					    end
-
-					end
-				else
-					format.html { redirect_to recovery_path(help: true), notice: 'As-tu bien coché la case "je ne suis pas un robot?"'}
-
-				end
-
-				#on genere ici un token de session pour povoir tranmettre les info d'un page à une autre sans exposer l'hrui à l'utilisateur
-				session = Recoverysession.new
-				session.generate_token
-				session.uuid = @uuid
-				session.expire_date = DateTime.now + 15.minute # on definit la durée de vie d'un token à 15 minutes
-				session.save
-
-				format.html { redirect_to recovery_step1_path(:token_session => session.token) }
-			else
-				search.term_type = "Recherche vide"
-				search.save
-				format.html { redirect_to recovery_path, notice: "Tu dois rentrer un identifiant, email ou numéro de sociétaire pour que nous puissions t'identifier!"}
-			end
-		end
-
-	end
-
-
-
-	def recovery_step1
-		@session_token = params[:token_session]
-		session = Recoverysession.find_by(token: @session_token)
-		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
-		uuid = session.uuid
-		user_from_gram = GramV2Client::Account.find(uuid)
-		hruid = user_from_gram.hruid
-
-		if !session.nil? && session.usable?
-			#on recupere l'utilisateur dans le site soce
-			soce_user = Soce::User.where(hruid: hruid).take
-
-			# cherche le numéro de téléhpone sur le site soce
-			!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
-			if phone.present?
-				@phone_hidden = hide_phone(phone)
-				!@phone_hidden == false ? @have_phone = true : @have_phone = false
-			else
-				@have_phone = false
-			end
-
-		
-		list_emails = RecoveryService.get_emails(user_from_gram,soce_user)
-		@list_emails_to_display = list_emails.map{|c|  /gadz/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
-
-
-
-
-			render :layout => 'recovery'
-		else
-			respond_to do |format|
-				format.html { redirect_to root_path, notice: 'Délais dépassé' }
-			end
-		end
-
-
-
-	end
-
-
-	def recovery_step2
-		@session_token = params[:token_session]
-		# on recupère l'hruid à partir du token de session
-		session = Recoverysession.find_by(token: @session_token)
-		@uuid = session.uuid
-
-		#ok bon on l'a trouvé, maintenant on liste ses adresses mail
-		user_from_gram = GramV2Client::Account.find(@uuid)
-		@hruid = user_from_gram.hruid
-
-		#on recupere l'utilisateur dans le site soce
-		soce_user = Soce::User.where(hruid: @hruid).take
-
-		!soce_user.nil? ?  phone = soce_user.tel_mobile : phone = nil
-		if phone.present?
-			@phone_hidden = hide_phone(phone)
-			!@phone_hidden == false ? @have_phone = true : @have_phone = false
-		else
-			@have_phone = false
-		end
-
-		# TODO mettres des if not nil
-		#emails du gram
-		
-		@list_emails = RecoveryService.get_emails(user_from_gram,soce_user)
-
-		@list_emails_to_display = @list_emails.delete_if{|e| e.include?("gadz.fr")}.map{|c|  /gadz.org/.match(c)? "Adresse @gadz.org": (c.split(".").first c.split(".").size-1).join(".").split("@").map{|a| a.split(".").map{|e| e[0]+e.gsub(/[A-Za-z0-9]/,"*")[1..e.length+1]}.join(".")}.join("@")+"."+c.split(".").last}
-
-
-		#generation d'un token
-		recovery_link = Uniqlink.generate_for_uuid(@uuid)
-
-
-		@r= recovery_link.get_url
-
-		# on envoir les mails
-		@list_emails.each do |email|	
-			Recoverymailer.recovery_email(email, recovery_link.get_url, @hruid ).deliver_now
-		end
-
-		render :layout => 'recovery'
-
-	end
-
-	def password_reset
-		@token = params[:token]
-		recovery_link = Uniqlink.find_by(token: @token)
-		if !recovery_link.nil? && recovery_link.usable?
-			@hruid = recovery_link.hruid
-			@user = User.new
-			render :layout => 'recovery'
-		else
-			respond_to do |format|
-				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
-			end
-		end
-	end
-
-	def password_change
-		token = params[:token]
-		recovery_link = Uniqlink.find_by(token: token)
-		if recovery_link.usable?
-			respond_to do |format|
-
-				# on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
-				if params[:user][:password] != params[:user][:password_confirmation] 
-					format.html { redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas' }
-        else
-          ps=PasswordService.new(params[:user][:password])
-          if ps.validate
-            uuid = recovery_link.uuid
-
-            user_from_gram_saved, user_from_soce_saved = ps.update_soce_and_gram_password(uuid)
-            if user_from_gram_saved && user_from_soce_saved
-              # si on a reussi à changer le mdp, on mraue le lien comme utilisé
-              recovery_link.set_used
-              format.html { redirect_to recovery_final_path, notice: 'mot de passe changé' }
-            elsif user_from_gram_saved && !user_from_soce_saved
-              recovery_link.set_used
-              format.html { redirect_to recovery_final_path, notice: 'mot de passe changé mais compte SOCE introuvable' }
-            else
-              format.html { redirect_to password_change_path(:token => token), notice: 'erreur lors de la maj du mot de passe', :layout => 'recovery'}
-            end
-          else
-            flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(", ")}"
-            format.html { redirect_to password_change_path(token) }
-          end
-        end
-      end
-		else
-			respond_to do |format|
-				format.html { redirect_to root_path, notice: 'Ce lien a déjà été utilisé ou a expiré' }
-			end
-		end
-	end
 
 	def password_change_logged
 		authorize! :update_password, @user
@@ -456,124 +242,7 @@ class UsersController < ApplicationController
 		end
 	end
 
-	def create_sms
-		session_token = params[:token_session]
-		# on recupère l'uuid à partir du token de session
-		session = Recoverysession.find_by(token: session_token)
-		uuid = session.uuid
-		user_from_gram = GramV2Client::Account.find(uuid)
-		hruid = user_from_gram.hruid
-
-		soce_user = Soce::User.where(hruid: hruid).take
-		phone = soce_user.tel_mobile
-
-		respond_to do |format|
-			if session.sms_count.nil? || session.sms_count < 3
-
-				#on genere un code pour le sms
-				recovery_sms = Uniqsms.new
-				recovery_sms.generate_token
-				recovery_sms.hruid = hruid
-				recovery_sms.uuid = uuid
-				recovery_sms.used = false
-				recovery_sms.expire_date = DateTime.now + 10.minute # on definit la durée de vie d'un token à 10 minutes
-				recovery_sms.save
-
-				#generation d'un token parce qu'on va en avoir besoin 
-				# quand on sera redirigé sur la pase de changement de mdp
-				recovery_link = Uniqlink.generate_for_uuid(uuid)
-
-				#ici code envoi sms
-				#On parse le numéro de téléhpone pour qu'il soit du type 0033 612345678
-				internat_phone = SmsService.phone_parse(phone)
-				SmsService.send_sms(internat_phone.to_s,recovery_sms.token.to_s)
-
-				# ou ajoute un au compteur
-				session.sms_count.nil? ? session.sms_count = 1 : session.sms_count +=1
-				session.save
-
-				format.html { redirect_to recovery_sms_path(:token_session => session_token) }
-			else
-				format.html { redirect_to recovery_path, notice: 'Nombre maximun de sms atteint pour cette session' }
-
-			end
-		end
-	end
-
-	def validate_sms
-		#on récupere le mini token du sms et si il est bon, 
-		#on prend le token du mail pour aller à la page de changement de mdp
-		token_sms = params[:token]
-		token_session = params[:token_session]
-		sms_uniq = Uniqsms.find_by(token: token_sms)
-		session = Recoverysession.find_by(token: token_session)
-
-		respond_to do |format|
-			if !sms_uniq.nil? && sms_uniq.usable? && !session.nil? && session.usable? && session.uuid == sms_uniq.uuid
-				if sms_uniq.check_count < 4 #nombre max de verifications add_check ajoute et renvoie le nombre de verif
-					uuid = sms_uniq.uuid
-					token = Uniqlink.where(uuid: uuid).where(used: false).last.token
-					sms_uniq.set_used
-					sms_uniq.save
-
-
-					format.html { redirect_to password_change_path(:token => token) }
-				else
-		    		# nombre max de verif atteint
-		    		format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
-		    	end
-		    else
-		    	session.add_sms_check
-		    	# code invalide
-		    	format.html { redirect_to recovery_sms_path(:token_session => token_session), alert: 'Code invalide' }
-		    end
-		end
-
-
-	end
-	def recovery_sms
-		@session_token = params[:token_session]
-		# on recupère l'hruid à partir du token de session
-		session = Recoverysession.find_by(token: @session_token)
-		uuid = session.uuid
-		user_from_gram = GramV2Client::Account.find(uuid)
-		hruid = user_from_gram.hruid
-
-		#on recupere l'utilisateur dans le site soce
-		soce_user = Soce::User.where(hruid: hruid).take
-		phone = soce_user.tel_mobile
-		@phone_hidden = hide_phone(phone)
-
-		render :layout => 'recovery'
-	end
-
-	def recovery_final
-		render :layout => 'recovery'
-	end
-
 	def recovery_inscription_final
-		render :layout => 'recovery'
-	end
-
-	def recovery_support
-		@user = User.new
-		render :layout => 'recovery'
-	end
-
-	def recovery_support_final
-		# TODO recuperer les params du port et les mettre dans les mailer
-		name  = params[:nom]
-		firstname = params[:prenom]
-		email = params[:email]
-		birthdate = params[:ddn][:day] + "/" + params[:ddn][:month] + "/" + params[:ddn][:year]
-		phone = params[:telephone]
-		desc = params[:issue]
-
-				    		#format.html { redirect_to recovery_path(), alert: 'Nombre maximum de tentatives atteint ' }
-
-		#Supportmailer.support_email(name,firstname,email,birthdate,phone,desc).deliver_now
-		message = JiraService.support_message(name,firstname,email,birthdate,phone,desc)
-		JiraService.create_recovery_ticket(email,message,email)
 		render :layout => 'recovery'
 	end
 
@@ -608,19 +277,13 @@ class UsersController < ApplicationController
 
 		    # Use callbacks to share common setup or constraints between actions.
 		    def set_user
-		    	@user =(params[:user_id] ?  User.find(params[:user_id]) : current_user)
+					id=params[:user_id]||params[:id]
+		    	@user =(id ?  User.find(id) : current_user)
 		    end
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def user_params_pub
 	    	params[:user].permit(:hruid)
 	    end
-
-	    def hide_phone(phone)
-	    	internat_phone = SmsService.phone_parse(phone)
-	    	return false if internat_phone == false #on quite la fonction si le numéro de télephone n'est pas reconnu ou parsable
-	    	hiden_phone = "+" + internat_phone.gsub("."," ").split(//)[2..4].join + " xx xx xx " + internat_phone.gsub("."," ").split(//).last(2).join
-	    end
-
 
 	    # retourne true si valide
 	    def validate_alpha_accent str
@@ -629,7 +292,7 @@ class UsersController < ApplicationController
 
 		# autorise uniquement les chiffre,-,! et µ
 		def validate_fams str
-			(ActiveSupport::Inflector.transliterate(str.gsub("µ","")) =~ /^[0-9\!\-\s]*$/ ) == nil ? false : true		
+			(ActiveSupport::Inflector.transliterate(str.gsub("µ","")) =~ /^[0-9\!\-\s]*$/ ) == nil ? false : true
 		end
 
 

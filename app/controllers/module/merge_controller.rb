@@ -152,21 +152,35 @@ class Module::MergeController < ApplicationController
 
     params_user=params["user_soce"]
 
-    Soce::Base.transaction do
-      Rails.logger.debug "=== Start SQL transaction"
-      update_soce_user_infos(params_user,soce_user)
-      update_adresses(params,soce_user)
-      update_social_links(params,soce_user)
-      update_diploma(params,soce_user)
-      #update_medals(params,soce_user)
-      begin
-        update_gram(soce_user)
-      rescue => e
-        JiraService.gaccount_not_synced_fusion(@user, soce_user.email)
-        raise e
+    sync_state=Hash.new(false)
+    begin
+      Soce::Base.transaction do
+        Rails.logger.debug "=== Start SQL transaction"
+        sync_state[:user_infos] = update_soce_user_infos(params_user,soce_user)
+        sync_state[:addresses] = update_adresses(params,soce_user)
+        sync_state[:social_links] = update_social_links(params,soce_user)
+        sync_state[:diploma] = update_diploma(params,soce_user)
+        #update_medals(params,soce_user)
+        update_soce_user_infos_to_migrated(soce_user)
+        begin
+          update_gram(soce_user)
+        rescue => e
+          JiraService.gaccount_not_synced_fusion(@user, soce_user.email)
+          raise e
+        end
       end
+      Rails.logger.debug "=== SQL transaction finished"
+    rescue StandardError => e
+      raise unless e.class.to_s.start_with?("ActiveRecord::")
+      JiraService.error_during_soce_fusion(@user, soce_user.email,sync_state,e)
+
+      redirect_to module_merge_fusion_error_path(hruid: params[:hruid])
     end
-    Rails.logger.debug "=== SQL transaction finished"
+  end
+
+  def fusion_error
+    set_user_and_hruid
+    @soce_user=Soce::User.find_by(hruid: @hruid)
   end
 
   def platal_account_not_found
@@ -186,6 +200,13 @@ class Module::MergeController < ApplicationController
       end
     end
 
+    def update_soce_user_infos_to_migrated(soce_user)
+      soce_user.update_attributes!(
+        :migration_platal => 1,
+        :date_migration_platal => Date.today.strftime
+      )
+    end
+
     def update_soce_user_infos(params_user,soce_user)
       Rails.logger.debug "= Start update soce user info"
       Rails.logger.debug "Retrieve platal info"
@@ -201,8 +222,6 @@ class Module::MergeController < ApplicationController
       user_attr[:famille_zaloeil] = info_platal['gadz_fams_display'] if params_user["famille1zal"] == 'platal'
       user_attr[:date_declaration_deces] = info_platal['deathdate'] if params_user["date_declaration_deces"] == 'platal'
       user_attr[:date_naissance] = info_platal['birthdate'].nil? ? nil : info_platal['birthdate'].strftime  if params_user["date_naissance"] == 'platal'
-      user_attr[:migration_platal]=1
-      user_attr[:date_migration_platal]=Date.today.strftime
       if params_user["centre1"] == 'platal'
         user_attr[:centre1] = case info_platal['tbk']
                                 when "ch"; 1
@@ -239,7 +258,8 @@ class Module::MergeController < ApplicationController
               id_pays: Soce::Address.get_pays_id_from_name(ad_h["Pays"]),
               id_etat_validation: -4,
           )
-
+        else
+          true
         end
       end
     end
@@ -254,6 +274,8 @@ class Module::MergeController < ApplicationController
               id_reseau_social: list_reseau && list_reseau.id || 0,
               adresse: s_h['link'] || s_h['address']
           )
+        else
+          true
         end
       end
     end
@@ -265,12 +287,15 @@ class Module::MergeController < ApplicationController
           libelle=d_h['name']
           libelle+=" - #{d_h['program']}" if d_h['program'].present?
           Rails.logger.debug "Create diploma"
+          byebug
           soce_user.diploma.create!(
-              libelle: libelle,
-              annee: d_h['grad_year']||0,
+              libelle: libelle.first(100),
+              annee: d_h['grad_year'].blank? ? 0 : d_h['grad_year'],
               id_etat_validation: -4,
               ordre: 0, filiere: 0, sous_filiere: 0, niveau: 0,
           )
+        else
+          true
         end
       end
     end
@@ -286,7 +311,8 @@ class Module::MergeController < ApplicationController
                 id_etat_validation: -4,
             )
           end
-
+        else
+          true
         end
       end
     end
@@ -309,11 +335,13 @@ class Module::MergeController < ApplicationController
     end
 
     def loop_through_h_key(params,key_prefix,&block)
+      success=true
       i=0
       while h=params["#{key_prefix}_#{i}"]
-        yield(h)
+        success=success && !!block.call(h)
         i+=1
       end
+      success
     end
 
     def get_info_from_platal(hruid)
