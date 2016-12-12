@@ -16,7 +16,10 @@ class RecoveryService
   end
 
   def phone_number
-    soce_user&&soce_user.tel_mobile
+    if soce_user&&soce_user.tel_mobile
+      Phonelib.default_country = "FR"
+      Phonelib.parse(soce_user.tel_mobile).e164
+    end
   end
 
   def hidden_phone_number
