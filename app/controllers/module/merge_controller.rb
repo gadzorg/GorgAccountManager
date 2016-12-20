@@ -355,7 +355,7 @@ class Module::MergeController < ApplicationController
         left join groups on group_members.asso_id = groups.id
         left join profile_phones on (p.pid = profile_phones.pid and profile_phones.tel_type = 'mobile' and profile_phones.link_type = 'user')
         left join profile_campus_enum on p.campus = profile_campus_enum.id
-        where groups.cat = 'Promotions'
+        where (groups.cat = 'Promotions' OR groups.cat IS NULL)
         and hruid = '#{hruid}'"
       custom_sql_query(sql,PlatalDatabaseConnection)
     end
