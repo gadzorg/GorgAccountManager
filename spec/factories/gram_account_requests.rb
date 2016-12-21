@@ -33,7 +33,8 @@ class GramAccountMocker
   end
 
   def self.for(hash={})
-    self.new(DEFAULT_GRAM_ACCOUNT.merge(hash))
+    string_hash=hash.inject({}){|memo,(k,v)| memo[k.to_s] = v; memo}
+    self.new(DEFAULT_GRAM_ACCOUNT.merge(string_hash))
   end
 
   def mock_get_request

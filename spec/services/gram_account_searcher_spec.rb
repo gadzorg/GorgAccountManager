@@ -85,49 +85,72 @@ RSpec.describe  GramAccountSearcher, type: :service do
 
   end
 
-  shared_examples_for "return values" do |uuid|
-    it "returns the uuid" do
-      expect(gas.uuid).to eq(uuid)
+  describe "search attributes" do
+    shared_examples_for "return values" do |uuid|
+      it "returns the uuid" do
+        expect(gas.uuid).to eq(uuid)
+      end
+
+      it "returns the gram account" do
+        expect(gas.gram_account).to be_a(GramV2Client::Account)
+        expect(gas.gram_account.uuid).to eq(uuid)
+      end
     end
 
-    it "returns the gram account" do
-      expect(gas.gram_account).to be_a(GramV2Client::Account)
-      expect(gas.gram_account.uuid).to eq(uuid)
+    context "search email" do
+      let(:query) {"some.adress@example.com"}
+      before(:each) do
+        gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",email: query)
+        gam.mock_search_request_for(:email,query)
+        gam.mock_search_request_for(:hruid,query,[])
+        gam.mock_search_request_for(:id_soce,"",[])
+        GorgmailApiMocker.new.mock_search_query(query,nil)
+      end
+      include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
+    end
+
+    context "search hruid" do
+      let(:query) {"some.hruid.ext"}
+      before(:each) do
+        gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",hruid: query)
+        gam.mock_search_request_for(:email,query,[])
+        gam.mock_search_request_for(:hruid,query)
+        gam.mock_search_request_for(:id_soce,"",[])
+        GorgmailApiMocker.new.mock_search_query(query,nil)
+      end
+      include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
+    end
+
+    context "search id_soce" do
+      let(:query) {"123456A"}
+      before(:each) do
+        gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",id_soce: 123456)
+        gam.mock_search_request_for(:email,query,[])
+        gam.mock_search_request_for(:hruid,query,[])
+        gam.mock_search_request_for(:id_soce,123456)
+        GorgmailApiMocker.new.mock_search_query(query,nil)
+      end
+      include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
+    end
+
+
+    context "search gorgmail mail address" do
+      let(:query) {"some.adress@gorgmail.com"}
+      before(:each) do
+        gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",id_soce: 123456)
+        gam.mock_get_request
+        gam.mock_search_request_for(:email,query,[])
+        gam.mock_search_request_for(:hruid,query,[])
+        gam.mock_search_request_for(:id_soce,"",[])
+        GorgmailApiMocker.new.mock_search_query(query,"9c5b8bd7-fce8-4790-b246-61b753c063e9")
+      end
+      include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
+
+      it 'handle unavailable API' do
+        GorgmailApiMocker.new.mock_unavailable_search_query(query)
+        expect(gas.uuid).to be_nil
+      end
     end
   end
-
-  context "search email" do
-    let(:query) {"some.adress@example.com"}
-    before(:each) do
-      gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",email: query)
-      gam.mock_search_request_for(:email,query)
-      gam.mock_search_request_for(:hruid,query,[])
-      gam.mock_search_request_for(:id_soce,"",[])
-    end
-    include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
-  end
-
-  context "search hruid" do
-    let(:query) {"some.hruid.ext"}
-    before(:each) do
-      gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",hruid: query)
-      gam.mock_search_request_for(:email,query,[])
-      gam.mock_search_request_for(:hruid,query)
-      gam.mock_search_request_for(:id_soce,"",[])
-    end
-    include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
-  end
-
-  context "search id_soce" do
-    let(:query) {"123456A"}
-    before(:each) do
-      gam=GramAccountMocker.for(uuid: "9c5b8bd7-fce8-4790-b246-61b753c063e9",id_soce: 123456)
-      gam.mock_search_request_for(:email,query,[])
-      gam.mock_search_request_for(:hruid,query,[])
-      gam.mock_search_request_for(:id_soce,123456)
-    end
-    include_examples "return values", "9c5b8bd7-fce8-4790-b246-61b753c063e9"
-  end
-
 
 end
