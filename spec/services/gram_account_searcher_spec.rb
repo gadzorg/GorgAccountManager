@@ -50,11 +50,13 @@ RSpec.describe  GramAccountSearcher, type: :service do
   describe "perform" do
 
     it "update its performed? status" do
+      GorgmailApiMocker.new.mock_search_query(query,nil)
       gas.perform
       expect(gas.performed?).to be true
     end
 
     it "log the search" do
+      GorgmailApiMocker.new.mock_search_query(query,nil)
       gas=GramAccountSearcher.new(query, search_logger: search_logger)
       gas.perform
       expect(search_logger).to have_received.log(query,"Non trouvé")
@@ -63,10 +65,12 @@ RSpec.describe  GramAccountSearcher, type: :service do
 
   context "not found" do
     it "return a nil uuid" do
+      GorgmailApiMocker.new.mock_search_query(query,nil)
       expect(gas.uuid).to be_nil
     end
 
     it "return a nil gram_account" do
+      GorgmailApiMocker.new.mock_search_query(query,nil)
       expect(gas.gram_account).to be_nil
     end
   end
@@ -74,11 +78,13 @@ RSpec.describe  GramAccountSearcher, type: :service do
   describe "perform when return value" do
 
     it "when request uuid" do
+      GorgmailApiMocker.new.mock_search_query(query,nil)
       gas.uuid
       expect(gas.performed?).to be true
     end
 
     it "when request gram_account" do
+      GorgmailApiMocker.new.mock_search_query(query,nil)
       gas.gram_account
       expect(gas.performed?).to be true
     end
