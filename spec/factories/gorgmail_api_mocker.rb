@@ -26,11 +26,11 @@ class GorgmailApiMocker
           :headers => {}
       }
     end
-    WebMock.stub_request(:get, url(["/search/", request])).to_return(response)
+    WebMock.stub_request(:get, url(["search/", request])).to_return(response)
   end
 
   def mock_unavailable_search_query(request)
-    WebMock.stub_request(:get, url(["/search/", request])).to_timeout
+    WebMock.stub_request(:get, url(["search/", request])).to_timeout
   end
 
 end
