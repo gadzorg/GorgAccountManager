@@ -287,7 +287,6 @@ class Module::MergeController < ApplicationController
           libelle=d_h['name']
           libelle+=" - #{d_h['program']}" if d_h['program'].present?
           Rails.logger.debug "Create diploma"
-          byebug
           soce_user.diploma.create!(
               libelle: libelle.first(100),
               annee: d_h['grad_year'].blank? ? 0 : d_h['grad_year'],
