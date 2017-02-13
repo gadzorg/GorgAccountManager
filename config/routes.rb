@@ -72,7 +72,7 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#index'
   get 'roles' => 'roles#index'
 
-  resources :users do
+  resources :users, constraints: { id: /[^\/]+/ } do
 
     resources :roles, only: [:create,:destroy]
 

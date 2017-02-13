@@ -278,7 +278,7 @@ class UsersController < ApplicationController
 		    # Use callbacks to share common setup or constraints between actions.
 		    def set_user
 					id=params[:user_id]||params[:id]
-		    	@user =(id ?  User.find(id) : current_user)
+		    	@user =(id ?  User.find_by_id_or_hruid_or_uuid(id) : current_user)
 		    end
 	    # Never trust parameters from the scary internet, only allow the white list through.
 	    def user_params_pub
