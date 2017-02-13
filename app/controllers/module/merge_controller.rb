@@ -284,8 +284,8 @@ class Module::MergeController < ApplicationController
       Rails.logger.debug "= Start update diploma"
       loop_through_h_key(params,"diploma") do |d_h|
         if d_h['recuperer']=="oui"
-          libelle=d_h['name']
-          libelle+=" - #{d_h['program']}" if d_h['program'].present?
+          libelle= d_h['program'].present? ? "#{d_h['program']} - " : ""
+          libelle+= d_h['name']
           Rails.logger.debug "Create diploma"
           soce_user.diploma.create!(
               libelle: libelle.first(100),
