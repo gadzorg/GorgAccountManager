@@ -5,7 +5,9 @@
       .circle.big= "#{current_user.firstname.first.upcase}"
       = @user.fullname
       -if can? :update, @user
-        = link_to t('users.forms.buttons.edit'), edit_user_path(@user), class:"bouton fr bouton-light box"
+        = link_to t('users.forms.buttons.edit'), edit_user_path(@user), class:"bouton fr bouton-primary box"
+      -if can? :masquerade, @user
+        = link_to t('users.forms.buttons.masquerade'), masquerade_path(@user), class:"bouton fr bouton-primary box mrm"
     .box-bottom.pam
       .fr
         #info-tech.pam.mam.box.box-light.bggrey

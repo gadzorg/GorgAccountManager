@@ -14,13 +14,12 @@
 
       
   %body
-    %header
-      %nav
-        = render 'layouts/menu'
+    = render 'layouts/menu'
 
-      / - flash.each do |key, value|
-      / #notif
-      /   %div{:class => "#{key} notif"}= value
+
+    / - flash.each do |key, value|
+    / #notif
+    /   %div{:class => "#{key} notif"}= value
 
 
     -if slack_chat?
