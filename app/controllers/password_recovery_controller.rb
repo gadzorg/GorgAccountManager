@@ -151,7 +151,7 @@ class PasswordRecoveryController < ApplicationController
 
     # on verifie que les mdp correspondent. Fait dans le modèle car semple impossible dans le model avec Active ressource
     if params[:user][:password] != params[:user][:password_confirmation]
-      redirect_to password_change_path(:token => token), notice: 'Les mots de passe ne correspondents pas'
+      redirect_to password_change_path(:token => @token), alert: 'Les mots de passe ne correspondents pas'
     else
       ps=PasswordService.new(params[:user][:password])
       if ps.validate
@@ -163,11 +163,11 @@ class PasswordRecoveryController < ApplicationController
           message=user_from_soce_saved ? 'mot de passe changé' : 'mot de passe changé mais compte SOCE introuvable'
           redirect_to recovery_final_path, notice: message
         else
-          redirect_to password_change_path(:token => token), alert: 'erreur lors de la maj du mot de passe'
+          redirect_to password_change_path(:token => @token), alert: 'erreur lors de la maj du mot de passe'
         end
       else
         flash[:error] = "Le mot de passe n'est pas valide car il : #{ps.errors.join(", ")}"
-        redirect_to password_change_path(token)
+        redirect_to password_change_path(@token)
       end
     end
   end

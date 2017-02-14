@@ -25,3 +25,12 @@ Feature: Password recovery - Recover with email
     And he fills "Confirme le mot de passe" with "G0rguP0wer"
     And he clicks "Change mon mot de passe" button
     Then the hashed password "6b60dbe969d518f99bfaea4d308fb77a6cb56de5" is sent on his GrAM Account
+
+  Scenario: Blaked change his password with an invalid one
+    And he has a recovery session recovering link
+    And he is visiting his recovery session recovering link
+    When he fills "Nouveau mot de passe" with "G0rgù_P0wer"
+    And he fills "Confirme le mot de passe" with "G0rgù_P0wer"
+    And he clicks "Change mon mot de passe" button
+    Then he is redirected to his recovery session recovering link
+    And a "error" message containing "contient des charactères non autorisés" appears
