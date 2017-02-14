@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   private
 
   def after_sign_out_path_for(_resource_or_scope)
-    Rails.application.secrets.cas_provider_url ? URI::join('https://',Rails.application.secrets.cas_provider_url,"/cas/logout?service=#{root_url}").to_s : root_url
+    Rails.application.secrets.cas_provider_url ? URI::HTTPS.build(host: Rails.application.secrets.cas_provider_host, path:"/cas/logout", query: "service=#{root_url}").to_s : root_url
   end
   
   rescue_from CanCan::AccessDenied, with: :access_denied
