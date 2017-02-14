@@ -40,7 +40,7 @@ class PasswordService
     #validate characters
     rejected_chars=@password.split("").reject{|e| e==" "||e=~ACCEPTED_CHARS}
     if rejected_chars.any?
-      errors << I18n.t('password_service.errors.illegal_chars', chars: rejected_chars.join(" "))
+      errors << I18n.t('password_service.errors.illegal_chars', chars: rejected_chars.uniq.join(" "))
     end
 
     # Password length > 8
