@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   include ConfigurableEngine::ConfigurablesController
 
   after_filter :prepare_unobtrusive_flash
+  before_action :masquerade_user!
+
   private
 
   def after_sign_out_path_for(_resource_or_scope)

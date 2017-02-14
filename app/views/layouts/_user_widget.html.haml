@@ -4,7 +4,11 @@
     .circle= "#{current_user.firstname.first.upcase}"
     %ul.userblock
       =link_to t('layout.menu.profile'), user_path(current_user)
-      =link_to t('layout.menu.disconnect'), destroy_user_session_path, :method => :delete
+      - if user_masquerade?
+        = link_to t('layout.menu.reverse_masquerade'), back_masquerade_path(current_user)
+      -else
+        =link_to t('layout.menu.disconnect'), destroy_user_session_path, :method => :delete
+
 - else
   %li.with_button
     = link_to t('layout.menu.connect'), new_user_session_path, :class =>"bouton bouton_bleu vertical-center" 

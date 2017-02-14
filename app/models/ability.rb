@@ -33,10 +33,14 @@ class Ability
     if user.has_role? :admin
       can :manage, :all
       can :manage, Role
+      can :masquerade, User
+      cannot :masquerade, User, :role_id => [1,2]
     elsif user.has_role? :support
       can :read, :admin
       can :manage, User
+      can :masquerade, User
       cannot [:update, :delete, :create], User, :role_id => 1
+      cannot :masquerade, User, :role_id => [1,2]
       can :manage, Role
       cannot :manage, Role, :name => 'admin'
       can :read, Role
