@@ -41,6 +41,7 @@ $(document).ready(function () {
              if ($('#new_user').valid()) {
              loadingmessage.show();
              button.hide();
+             button.disable(true);
              };
            }
     );

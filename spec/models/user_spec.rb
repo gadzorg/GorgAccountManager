@@ -31,5 +31,20 @@ RSpec.describe User, type: :model do
     expect(FactoryGirl.build(:user)).to be_valid
   end
 
+  describe 'find by id or hruid' do
+    let!(:user) {FactoryGirl.create(:user)}
+
+    it "find by id" do
+      expect(User.find_by_id_or_hruid_or_uuid(user.id)).to eq(user)
+    end
+
+    it "find by uuid" do
+      expect(User.find_by_id_or_hruid_or_uuid(user.uuid)).to eq(user)
+    end
+
+    it "find by hruid" do
+      expect(User.find_by_id_or_hruid_or_uuid(user.hruid)).to eq(user)
+    end
+  end
 
 end

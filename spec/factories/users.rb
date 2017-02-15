@@ -32,11 +32,15 @@ FactoryGirl.define do
     hruid { firstname.downcase.gsub(/[^a-z ]/, '')+'.'+lastname.downcase.gsub(/[^a-z ]/, '')+"."+["1950","2015","ext","soce","associe"].sample+["",".2",".3"].sample}
     password Devise.friendly_token[0,20]
     password_confirmation {password}
+    uuid {SecureRandom.uuid}
 
 	  factory :admin do   
 	    	role {FactoryGirl.create(:role, name:"admin")}
-        email "admin@poubs.org"
-	  end
+    end
+
+    factory :support do
+      role {FactoryGirl.create(:role, name:"support")}
+    end
 
     factory :invalid_user do
       email nil

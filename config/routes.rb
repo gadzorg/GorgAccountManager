@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   
   devise_for :users, :controllers => {
     :omniauth_callbacks => "users/omniauth_callbacks",
-    :sessions => "users/sessions"
+    :sessions => "users/sessions",
+    masquerades: "admin/masquerades"
     }
 
   get 'static_pages/index'
@@ -72,7 +73,7 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#index'
   get 'roles' => 'roles#index'
 
-  resources :users do
+  resources :users, constraints: { id: /[^\/]+/ } do
 
     resources :roles, only: [:create,:destroy]
 

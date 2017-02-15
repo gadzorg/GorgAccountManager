@@ -10,6 +10,7 @@ Feature: Password recovery - Find a user
   Scenario: Blaked try to recover its account with the wrong email address
     Given Blaked has a Gram Account with email "blaked@gadz.org"
     And There is no gram account with email address "blacked@gadz.org"
+    And There is no gorgmail account with email address "blacked@gadz.org"
     When he connect to the password recovery entry-point
     And he fills "Entre ici ton identifiant OU email OU n° de sociétaire..." with "blacked@gadz.org"
     And he clicks "Recuperer" button

@@ -59,3 +59,7 @@ end
 Then(/^he is redirected to recovery entry\-point$/) do
   expect(page).to have_current_path(/\/recovery(\?.*)?/)
 end
+
+Then(/^he is redirected to his recovery session recovering link$/) do
+  expect(page).to have_current_path(password_change_path(token: @uniq_link.token))
+end

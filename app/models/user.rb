@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
-         :rememberable, :trackable, :validatable,
+         :rememberable, :trackable, :validatable, :masqueradable,
          :omniauthable, :omniauth_providers => [:GadzOrg]
 
   ##
@@ -165,6 +165,11 @@ class User < ActiveRecord::Base
 #######  FORK FUNCTIONS  ###################################################
 ############################################################################
 
+
+
+  def self.find_by_id_or_hruid_or_uuid(id)
+    find_by(id: id) || find_by(uuid: id) || find_by(hruid: id)
+  end
 
   private
 
