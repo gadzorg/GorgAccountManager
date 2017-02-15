@@ -25,7 +25,7 @@
           %td= user.hruid
           %td= user.uuid
           %td
-            = link_to t('users.forms.buttons.show'), user
+            = link_to t('users.forms.buttons.show'), user_path(user)
             -if can? :update, user
               = link_to t('users.forms.buttons.edit'), edit_user_path(user)
 
