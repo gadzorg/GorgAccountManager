@@ -1,13 +1,17 @@
 class UsersController < ApplicationController
 	require 'net/http'
 	before_action :set_user, only: [:show, :edit, :update, :destroy, :dashboard, :flag, :password_change_logged, :password_change_logged_step2 ]
-  	autocomplete :user, :hruid , :full => true, :display_value =>:hruid, extra_data: [:id, :firstname ] #, :scopes => [:search_by_name]
+  autocomplete :user, :hruid , :full => true, :display_value =>:hruid#, extra_data: [:id, :firstname ] #, :scopes => [:search_by_name]
 
 # GET /users
   # GET /users.json
   def index
-  	@users = User.accessible_by(current_ability)
-  	authorize! :update, @users
+    @query= params[:query]
+  	@users = User.accessible_by(current_ability).search(@query).paginate(:page => params[:page])
+    authorize! :update, @users
+    if @users.count==1
+      return redirect_to(user_path(@users.first.id))
+    end
   end
 
   # GET /users/1
@@ -77,13 +81,6 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
-
-
-  def search_by_id
-  	redirect_to user_path(params[:id])
-  end
-
-
 
 	def password_change_logged
 		authorize! :update_password, @user

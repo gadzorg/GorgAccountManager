@@ -2,10 +2,16 @@
   %h1 Utilisateurs
 
   Recherche par hruid
-  =form_tag  search_by_id_users_path,:method => :get, :user_id => :id_element do
-    =autocomplete_field_tag 'Hruid', '', autocomplete_user_hruid_users_path, :size => 30, :id_element => '#id', :placeholder => "nom.prenom.année"
+  =form_tag  users_path,:method => :get, id: "hruid_search_form" do
+    =autocomplete_field_tag 'Hruid', @query, autocomplete_user_hruid_users_path, :size => 30, :id => 'hruid_query', :id_element => '#query', name:"query", :placeholder => "nom.prenom.année"
     =hidden_field_tag "id"
     = submit_tag 'GO!', :class => ""
+
+  :javascript
+    $('#hruid_query').bind('railsAutocomplete.select', function(event, data){
+    /* Do something here */
+      $("#hruid_search_form")[0].submit()
+    });
 
   %table
     %thead
@@ -33,4 +39,5 @@
 
   %br
 
+  = will_paginate @users
   = link_to t('users.forms.buttons.new'), new_user_path

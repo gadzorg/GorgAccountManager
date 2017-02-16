@@ -78,9 +78,9 @@ include Devise::TestHelpers
   describe "GET #index" do
 
     before :each do
-      @alice = FactoryGirl.create(:user, firstname: 'Alice', email:'alice@hotmail.com')
-      @bob = FactoryGirl.create(:user, firstname: 'Bob', email:'bob@hotmail.com')
-      @charlie = FactoryGirl.create(:user, firstname: 'Charlie', email:'charlie@hotmail.com')
+      @alice = FactoryGirl.create(:user, firstname: 'Alice', hruid:'alice.alabama.2000', email:'alice@hotmail.com')
+      @bob = FactoryGirl.create(:user, firstname: 'Bob', hruid:'bob.beacon.2001', email:'bob@hotmail.com')
+      @charlie = FactoryGirl.create(:user, firstname: 'Charlie', hruid:'charlie.chaplin.2001', email:'charlie@hotmail.com')
     end
 
     it_should_behave_like "an admin only endpoint", :index
@@ -90,15 +90,50 @@ include Devise::TestHelpers
       before :each do
         @admin=FactoryGirl.create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
-        get :index
       end
 
-      it { is_expected.to respond_with :success }
-      it { is_expected.to render_with_layout :application }
-      it { is_expected.to render_template :index }
-      it "populate @users list with all users" do
-        expect(assigns(:users)).to eq([@alice, @bob, @charlie, @admin])
+      context "no query" do
+
+        before(:each) do
+          get :index
+        end
+
+        it { is_expected.to respond_with :success }
+        it { is_expected.to render_with_layout :application }
+        it { is_expected.to render_template :index }
+        it "populate @users list with all users" do
+          expect(assigns(:users)).to match_array([@alice, @bob, @charlie, @admin])
+        end
       end
+
+      describe "search" do
+
+        before :each do
+          get :index, query: query
+        end
+
+        context "multiple results" do
+          let(:query) {"2001"}
+
+          it { is_expected.to respond_with :success }
+          it { is_expected.to render_with_layout :application }
+          it { is_expected.to render_template :index }
+          it "populate @users list with results" do
+            expect(assigns(:users)).to match_array([@bob, @charlie])
+          end
+
+        end
+
+        context "one result" do
+          let(:query) {"alabama.2000"}
+
+          it { is_expected.to respond_with :redirect }
+          it {is_expected.to redirect_to user_path(@alice.id)}
+
+        end
+
+      end
+
     end    
   end
 

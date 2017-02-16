@@ -59,7 +59,7 @@ gem 'haml-rails'
 gem 'simple_form'
 
 # Pagination
-gem 'will_paginate', '~> 3.0.0'
+gem 'will_paginate', '~> 3.1.0'
 
 #Autocompletion pour les form de recherche
 gem 'rails4-autocomplete'
