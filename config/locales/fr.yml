@@ -212,3 +212,8 @@ fr:
   layout:
     menu:
       reverse_masquerade: "Redevenir Admin"
+
+  will_paginate:
+      previous_label: '&laquo; Pr&eacute;c&eacute;dent'
+      next_label: 'Suivant &raquo;'
+      page_gap: "..."
