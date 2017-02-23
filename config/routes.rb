@@ -44,11 +44,24 @@ Rails.application.routes.draw do
   post 'admin/search_user' => "admin#search_user"
   get 'admin/info_user' => "admin#info_user"
   get 'admin/recovery_sessions' => "admin#recovery_sessions"
-  resources :users do
-    get "dashboard"
-    get 'password_change_logged'
-    post 'password_change_logged_step2'
-    patch 'password_change_logged_step2'
+
+
+  #Regexs
+  # Be careful to use non-capturing groups `(?:...)`
+  ID_REGEX=/[0-9]+/
+  UUID_REGEX=/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/
+  HRUID_REGEX=/(?:[a-z\-]|m\.)*\.[a-z\-]*\.(?:[0-9]{4}|soce|ext|associe|pr2i|anakrys|flowgroup|ileo|presta)(?:\.(?:[0-9]+))?/
+  resources :users, constraints: { id: Regexp.union(ID_REGEX,UUID_REGEX,HRUID_REGEX)} do
+    resources :roles, only: [:create,:destroy]
+
+    get :autocomplete_user_hruid, :on => :collection
+    get :search_by_id, :on => :collection
+    get :sync, to: 'users#sync_with_gram', on: :member
+
+    get "dashboard", on: :member
+    get 'password_change_logged', on: :member
+    post 'password_change_logged_step2', on: :member
+    patch 'password_change_logged_step2', on: :member
   end
 
   namespace :module do
@@ -73,16 +86,7 @@ Rails.application.routes.draw do
   get 'admin' => 'admin#index'
   get 'roles' => 'roles#index'
 
-  resources :users, constraints: { id: /[^\/]+/ } do
 
-    resources :roles, only: [:create,:destroy]
-
-    get :autocomplete_user_hruid, :on => :collection
-    get :search_by_id, :on => :collection
-    get :sync, to: 'users#sync_with_gram', on: :member
-
-
-  end
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

@@ -166,6 +166,10 @@ class User < ActiveRecord::Base
 ############################################################################
 
 
+  def self.search(query)
+    self.where("LOWER(hruid) LIKE :query",query: "%#{query.to_s.downcase}%")
+  end
+
 
   def self.find_by_id_or_hruid_or_uuid(id)
     find_by(id: id) || find_by(uuid: id) || find_by(hruid: id)

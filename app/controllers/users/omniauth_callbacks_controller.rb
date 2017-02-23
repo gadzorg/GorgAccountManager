@@ -32,7 +32,6 @@ class Users::OmniauthCallbacksController < ApplicationController
     data = request.env['omniauth.auth']
         @user = User.omniauth(data)
     if @user&&@user.persisted?
-        flash[:notice] = I18n.t "devise.omniauth_callbacks.success"
         sign_in_and_redirect @user, :event => :authentication
     else
         flash[:error] = I18n.t 'omniauth.error'

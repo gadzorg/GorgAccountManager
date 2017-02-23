@@ -47,4 +47,28 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "search" do
+
+    let!(:alice) {FactoryGirl.create(:user, firstname: 'Alice', hruid:'alice.alabama.2000', email:'alice@hotmail.com')}
+    let!(:bob) {FactoryGirl.create(:user, firstname: 'Bob', hruid:'bob.beacon.2001', email:'bob@hotmail.com')}
+    let!(:charlie) {FactoryGirl.create(:user, firstname: 'Charlie', hruid:'charlie.chaplin.2001', email:'charlie@hotmail.com')}
+
+    it "returns all on nil query" do
+      expect(User.search(nil)).to match_array([alice,bob,charlie])
+    end
+
+
+    it "find one" do
+      expect(User.search("alice.alabama")).to match_array([alice])
+    end
+
+    it "is case incensitive" do
+      expect(User.search("Alice.AlAbAmA")).to match_array([alice])
+    end
+
+    it "find many" do
+      expect(User.search("2001")).to match_array([bob,charlie])
+    end
+  end
+
 end
