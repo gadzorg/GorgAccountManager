@@ -29,7 +29,7 @@ FactoryGirl.define do
     email { Faker::Internet.email }
     firstname { Faker::Name.first_name }
     lastname { Faker::Name.last_name }
-    hruid { firstname.downcase.gsub(/[^a-z ]/, '')+'.'+lastname.downcase.gsub(/[^a-z ]/, '')+"."+["1950","2015","ext","soce","associe"].sample+["",".2",".3"].sample}
+    hruid { firstname.downcase.gsub(/[^a-z]/, '-')+'.'+lastname.downcase.gsub(/[^a-z]/, '-')+"."+["1950","2015","ext","soce","associe"].sample+["",".2",".3"].sample}
     password Devise.friendly_token[0,20]
     password_confirmation {password}
     uuid {SecureRandom.uuid}

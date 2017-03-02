@@ -128,6 +128,8 @@ class Module::MergeController < ApplicationController
       ]
     end
 
+    @addresses_platal.select!{|a| Soce::Address.get_pays_id_from_name(a[0]["Pays"])}
+
     @phones_adresse_platal = @phones_platal.select{|n| (n["link_type"].include? "address")}
 
     @socials_platal = get_socials_from_platal(hruid)
@@ -150,7 +152,7 @@ class Module::MergeController < ApplicationController
 
     soce_user=Soce::User.find_by(hruid: @hruid)
 
-    params_user=params["user_soce"]
+    params_user=params["user_soce"].to_h
 
     sync_state=Hash.new(false)
     begin
@@ -246,18 +248,24 @@ class Module::MergeController < ApplicationController
       loop_through_h_key(params,"address") do |ad_h|
         if ad_h['recuperer']=="oui"
           Rails.logger.debug "Create new address"
-          soce_user.address.create!(
-              id_adresse_type: soce_user.address.count > 0 ? 3 : 1,
-              adresse_1: ad_h["Adresse 1"],
-              adresse_2: ad_h["Adresse 2"],
-              adresse_3: "",
-              modified_data:"",
-              code_postal: ad_h["Code postal"],
-              ville: ad_h["Ville"],
-              tel_fixe: ad_h["phone"] == "other" ? ad_h["phone_other"] : ad_h["phone"],
-              id_pays: Soce::Address.get_pays_id_from_name(ad_h["Pays"]),
-              id_etat_validation: -4,
-          )
+          id_pays=Soce::Address.get_pays_id_from_name(ad_h["Pays"])
+          if id_pays
+            soce_user.address.create!(
+                id_adresse_type: soce_user.address.count > 0 ? 3 : 1,
+                adresse_1: ad_h["Adresse 1"],
+                adresse_2: ad_h["Adresse 2"],
+                adresse_3: "",
+                modified_data:"",
+                code_postal: ad_h["Code postal"],
+                ville: ad_h["Ville"],
+                tel_fixe: ad_h["phone"] == "other" ? ad_h["phone_other"] : ad_h["phone"],
+                id_pays: id_pays,
+                id_etat_validation: -4,
+            )
+          else
+            Rails.logger.error "Unknown country for : '#{ad_h["Pays"]}'"
+          end
+
         else
           true
         end
