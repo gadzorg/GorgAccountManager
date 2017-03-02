@@ -17,7 +17,8 @@ class Soce::Address < Soce::Base
   def self.get_pays_id_from_name(name)
     safe_name=Mysql2::Client.escape(name)
     sql = "SELECT id_pays FROM pays WHERE pays.nom_iso = '#{safe_name}'"
-    SoceDatabaseConnection.custom_sql_query(sql,SoceDatabaseConnection).first["id_pays"]
+    record=SoceDatabaseConnection.custom_sql_query(sql,SoceDatabaseConnection).first
+    record&&record["id_pays"]
   end
 
 
