@@ -150,7 +150,7 @@ class Module::MergeController < ApplicationController
 
     soce_user=Soce::User.find_by(hruid: @hruid)
 
-    params_user=params["user_soce"]
+    params_user=params["user_soce"].to_h
 
     sync_state=Hash.new(false)
     begin
