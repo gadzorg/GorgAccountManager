@@ -10,14 +10,11 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree ./autoload
- *= require_tree .
- *= require_self
- *= require jquery-ui
- *= require bootstrap/bootstrap-tooltip
+
  */
 
 @import "autoload/colors";
+//@import "gorg_engine/application";
 
  /*-----------------------------MENU-------------------------*/
 header {
