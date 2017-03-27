@@ -50,7 +50,7 @@ $(document).ready(function () {
     messagenok.hide()
     messagenokshort.hide()
 
-    $('.box').on('change keyup', '#user_password_confirmation', function () {
+    $('#password-card').on('change keyup', '#user_password_confirmation', function () {
         clearTimeout(timeout_password);
         timeout_password = setTimeout(function() {
             checkPass();

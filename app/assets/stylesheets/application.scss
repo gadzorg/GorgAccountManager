@@ -19,7 +19,7 @@
  /*-----------------------------MENU-------------------------*/
 header {
   background: #fff;
-  height: 90px;
+  height: 64px;
   border-bottom: 1px solid #F2F2F2;
 }
 
@@ -28,7 +28,7 @@ header.masqueraded {
 }
 
 nav {
- height: 90px;
+ height: 64px;
 }
 
 .menu {
@@ -122,15 +122,6 @@ ul.userblock a{
     transform: translateY(-50%);
 }
 
-#logo{
-    display: inline;
-    height: 50px;
-    width: 210px;
-}
-#logo2{
-    display: block;
-    height: 50px;
-}
 body {
     /*background: #EEE none repeat scroll 0% 0%;*/
     background: #f7f7f7;
