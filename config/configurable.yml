@@ -26,3 +26,7 @@ legacy_auth_enabled:
 url_site_soce_admin_user:
   name: Url admin des user du site soce
   default: https://www.arts-et-metiers.asso.fr/index.php/adminMembres/index/id_user
+
+moncompte_url:
+  name: URL de moncompte.gadz.org ( avec un "/" à la fin )
+  default: https://moncompte.gadz.org/

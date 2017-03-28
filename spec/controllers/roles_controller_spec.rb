@@ -49,7 +49,7 @@ include Devise::TestHelpers
       end
 
       it { is_expected.to respond_with :success }
-      it { is_expected.to render_with_layout :application }
+      it { is_expected.to render_with_layout "gorg_engine/application" }
       it { is_expected.to render_template :index }
       it "populate @roles list with all roles" do
         expect(assigns(:roles)).to eq([@admin_role, @support_role])

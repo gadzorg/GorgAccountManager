@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~>4.2'
+gem 'rails', '~>4.2.8'
 
 #DATABASE
 # Use sqlite3 as the database for Active Record
@@ -29,8 +29,6 @@ gem 'therubyracer', :platforms => :ruby
 gem 'annotate', '~> 2.6.6'
 
 # Use jquery as the JavaScript library
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
 gem 'jquery-validation-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -39,10 +37,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Authentification
-gem 'devise', '~> 3.5.10'
-gem 'omniauth'
 gem "omniauth-cas", :git => "https://github.com/loocla/omniauth-cas.git", :branch => 'saml'
-gem 'devise_masquerade'
 
 # Authorisation
 gem 'cancancan'
@@ -58,9 +53,6 @@ gem 'haml-rails'
 # Forms
 gem 'simple_form'
 
-# Pagination
-gem 'will_paginate', '~> 3.1.0'
-
 #Autocompletion pour les form de recherche
 gem 'rails4-autocomplete'
 
@@ -70,8 +62,6 @@ gem 'i18n'
 # better flash messaages
 gem 'unobtrusive_flash', '>=3'
 
-# forconfiguration tables
-gem 'configurable_engine'
 
 # tooltips
 gem 'bootstrap-tooltip-rails'
@@ -112,6 +102,12 @@ gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git
 # gem 'capistrano-rails', group: :development
 
 gem 'phonelib'
+
+gem 'gorg_engine', '~> 0.0.6', github: 'gadzorg/GorgEngine'
+gem 'simple_form-materialize', github: 'patricklindsay/simple_form-materialize'
+gem 'configurable_engine', github: 'Blaked84/configurable_engine'
+
+gem "awesome_print", require:"ap"
 
 group :production do
   #HEROKU

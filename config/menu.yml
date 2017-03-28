@@ -1,0 +1,39 @@
+-  # Drop down admin menu
+   name: administration
+   title: Administration
+   ability_action: read
+   ability_object: admin
+   login_required: true
+   dropdown: true
+   items:
+     - # Title. if you dont set `url` or `path` a title is generated
+       name: general
+       title: Général
+       ability_action: read
+       ability_object: admin
+     -
+       name: configuration
+       title: Configuration
+       ability_action: read
+       ability_object: admin
+       path: 'admin_configurable_path'
+       login_required: true
+       dropdown: false
+     -
+       name: utilisateurs
+       title: Utilisateurs
+       ability_action: read
+       ability_object: user
+       path: 'users_path'
+       login_required: true
+       dropdown: false
+     -
+       name: roles
+       title: Roles
+       ability_action: read
+       ability_object: role
+       path: 'roles_path'
+       login_required: true
+       dropdown: false
+
+
