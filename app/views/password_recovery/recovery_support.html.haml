@@ -1,39 +1,37 @@
-%section.pam
-  .mw500p.center
-    .box.box-light.shadow-1.mtm
-      .box-top.box-top-color.pam
-        On va devoir faire ça à l'ancienne...
-      .box-bottom
-        .pam
-          %p.mtm Laisse-nous quelques informations pour t'identifier et décris-nous ton problème.
-          .mtm
-            = form_tag(recovery_support_final_path(), :method => :post) do
-              .group-m-form
-                = text_field_tag :nom,"", :class => "w100", :autofocus => true
-                = label_tag :nom
-                .span.highlight.w100
-                .span.bar.w100
-              .group-m-form
-                = text_field_tag :prenom,"", :class => "w100"
-                = label_tag :prenom
-                .span.highlight.w100
-                .span.bar.w100
-              .group-m-form
-                = text_field_tag :email,"", :class => "w100"
-                = label_tag :email, "Email où nous pourrons te contacter"
-                .span.highlight.w100
-                .span.bar.w100
-              .group-m-form
-                = text_field_tag :telephone,"", :class => "w100"
-                = label_tag :telephone
-                .span.highlight.w100
-                .span.bar.w100
-              .group-m-form
-                %p Date de naissance
-                -#= text_field_tag :ddn,"", :size => 30
-                = select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
-              .group-m-form
-                = text_area_tag :issue,"", :class => "w100"
-                = label_tag :issue, "Description du problème"
+.row
+  .col.s12.l6.offset-l3.m8.offset-m2
+    %h4.center
+      On va devoir faire ça à l'ancienne...
+    %p.center Laisse-nous quelques informations pour t'identifier et décris-nous ton problème.
 
-              %p.mtm= submit_tag 'Envoyer',:class => "bouton bouton_bleu"
+    .card-panel
+      = form_tag(recovery_support_final_path(), :method => :post) do
+        .input-field
+          = text_field_tag :nom,"", :class => "w100", :autofocus => true, :required => true
+          = label_tag :nom
+          .span.highlight.w100
+          .span.bar.w100
+        .input-field
+          = text_field_tag :prenom,"", :class => "w100", :required => true
+          = label_tag :prenom
+          .span.highlight.w100
+          .span.bar.w100
+        .input-field
+          = email_field_tag :email,"", :class => "w100", :required => true
+          = label_tag :email, "Email où nous pourrons te contacter"
+          .span.highlight.w100
+          .span.bar.w100
+        .input-field
+          = text_field_tag :telephone,"", :class => "w100", :required => true
+          = label_tag :telephone
+          .span.highlight.w100
+          .span.bar.w100
+        %div
+          = label_tag :ddn, "Date de naissance"
+          = text_field_tag :ddn,"", :size => 30, :class => "datepicker", type: "date", :required => true, :options => {start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}
+          -#"= select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
+        .input-field
+          = text_area_tag :issue,"", :class => "w100 materialize-textarea", :required => true
+          = label_tag :issue, "Description du problème"
+
+        %p.mtm= submit_tag 'Envoyer',:class => "waves-effect waves-light btn"
