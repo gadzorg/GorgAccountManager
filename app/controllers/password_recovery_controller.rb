@@ -186,7 +186,7 @@ class PasswordRecoveryController < ApplicationController
     name  = params[:nom]
     firstname = params[:prenom]
     email = params[:email]
-    birthdate = params[:ddn][:day] + "/" + params[:ddn][:month] + "/" + params[:ddn][:year]
+    birthdate = params[:ddn]
     phone = params[:telephone]
     desc = params[:issue]
 

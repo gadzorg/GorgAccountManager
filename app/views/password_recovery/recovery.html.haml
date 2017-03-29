@@ -8,7 +8,10 @@
     - if @first_attempt
       %p.center Tu as perdu ton mot de passe ou identifiant Gadz.org? Tu n'as plus accès à ton compte email Gadzmel?
     -else
-      %p.center Tu peux essayer à nouveau:
+      %p.center
+        Tu peux essayer à nouveau. Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux
+        = link_to recovery_support_path(), title: "contacter le support" do
+          contacter le support.
 
     .card
       .card-content
