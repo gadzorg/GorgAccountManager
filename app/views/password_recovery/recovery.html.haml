@@ -12,8 +12,9 @@
 
     .card
       .card-content
+
         %p Entre ton adresse @gadz.org, ton indentifiant, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org.
-        %p Ton identifiant est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
+
 
         =form_for  [@user], :url=> create_recovery_session_path()  do |f|
           .input-field
@@ -27,17 +28,24 @@
               %p Peux-tu cocher la case ci-dessous? C'est une mesure de sécurité pour éviter les abus sur ce site. Merci!
           .w100.pbm=recaptcha_tags
           .input-field
-            =f.submit 'Suivant',:class => "waves-effect waves-light btn", :id => "button_loading"
+            %span#button_loading
+              =f.submit 'Suivant',:class => "waves-effect waves-light btn"
+            .waves-effect.aves-light.btn.btn-flat.activator aide
           %span#loading
             =image_tag "Preloader_3.gif"
             Nous recherchons ton compte
 
+      .card-reveal
+        %span.card-title.grey-text.text-darken-4
+          Aide
+          %i.material-icons.right close
+        %p
+          Ton identifiant est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
+
 
 
     -unless @first_attempt
-      .box-bottom.border-top.bg-blue-dark-2
-        .pam
-          %p
-            Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux
-            = link_to recovery_support_path(), title: "contacter le support" do
-              contacter le support.
+      %p
+        Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux
+        = link_to recovery_support_path(), title: "contacter le support" do
+          contacter le support.
