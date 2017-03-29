@@ -1,22 +1,22 @@
-%section.pam
-  %h1 Recovery sessions
+%h4 Recovery sessions
 
-  .w100
-    .box.shadow-1.mtm.box-light
-      .box-bottom.pam
-        %table.alternate
-          %thead
-            %tr
-              %th HRUID
-              %th UUID
-              %th used ?
-              %th sms count
-              %th date
-            -@sessions.each do |t|
-              %tr
-                %td
-                  =link_to t.hruid, admin_info_user_path(:hruid => t.hruid) unless t.hruid.nil?
-                %td=t.uuid
-                %td=t.used.to_s
-                %td=t.sms_count
-                %td=t.created_at
+
+.card
+  .card-content
+    %table.striped
+      %thead
+        %tr
+          %th HRUID
+          %th UUID
+          %th used ?
+          %th sms count
+          %th date
+      %tbody
+        -@sessions.each do |t|
+          %tr
+            %td
+              =link_to t.hruid, admin_info_user_path(:hruid => t.hruid) unless t.hruid.nil?
+            %td=t.uuid
+            %td=t.used.to_s
+            %td=t.sms_count
+            %td=t.created_at
