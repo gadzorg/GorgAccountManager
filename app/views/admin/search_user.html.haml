@@ -1,17 +1,18 @@
-%section.pam
-  .mw500p.center
-    .box.box-light.shadow-1.mtm
-      .box-top.box-top-color.pam
-        Chercher un compte
-      .box-bottom.pam
+.row
+  .col.s12.l6.offset-l3.m8.offset-m2
+    .card
+      .card-content
+        %span.card-title
+          Chercher un compte
+        .box-bottom.pam
 
 
-        .mtm 
-          =form_tag admin_search_user_path, :method => :post do
-            =text_field_tag :hruid, nil, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
-            =submit_tag 'Chercher',:class => "bouton bouton_bleu mtm", :id => "button_loading"
-            %span#loading
-              =image_tag "Preloader_3.gif"
-              Recherche en cours...
+          .mtm
+            =form_tag admin_search_user_path, :method => :post do
+              =text_field_tag :hruid, nil, :placeholder => "Entre ici un identifiant OU email OU n° de sociétaire,...", :class => "w100 login", :autofocus => true
+              =submit_tag 'Chercher',:class => "waves-effect waves-light btn", :id => "button_loading"
+              %span#loading
+                =image_tag "Preloader_3.gif"
+                Recherche en cours...
 
-        %p.small Entre une adresse @gadz.org, un indentifiant, un numéro de sociétaire, un email soce ou un UUID
+          %p.small Entre une adresse @gadz.org, un indentifiant, un numéro de sociétaire, un email soce ou un UUID

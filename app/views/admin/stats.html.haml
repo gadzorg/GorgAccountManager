@@ -1,13 +1,11 @@
 = javascript_include_tag "//www.google.com/jsapi", "chartkick"
-%section.pam
-  %h1 Métriques
+%h4 Métriques
 
-
-  .grid-2-small-1
-    .box.shadow-1.mtm
-      .box-top.pam
-        General
-      .box-bottom.pam
+.row
+  .col.l6
+    .card
+      .card-content
+        %span.card-title General
         %p
           Nombre de liens de recup:
           =@links_count
@@ -17,12 +15,11 @@
         %p
           Nombre de sms envoyés:
           =@sms_count
-
-
-    .box.shadow-1.mtm
-      .box-top.pam
-        Utilisateurs
-      .box-bottom.pam
+  .col.l6
+    .card
+      .card-content
+        %span.card-title
+          Utilisateurs
         %p
           Top hruid
           %table.alternate
@@ -35,7 +32,7 @@
         %p
           Type de recheches
         %span= column_chart charts_term_type_path
-        
+
         %table.alternate
           %thead
 
@@ -43,14 +40,14 @@
               %tr
                 %td=t[0]
                 %td=t[1]
-    .box.shadow-1.mtm
-      .box-top.pam
-        Fréquence sessions
-      .box-bottom.pam
-        %span= column_chart charts_sessions_dates_path, stacked: true
+.card
+  .card-content
+    %span.card-title
+      Fréquence sessions
+    %span= column_chart charts_sessions_dates_path, stacked: true
 
-    / .box.shadow-1.mtm
-    /   .box-top.pam
-    /     Fréquence liens recup
-    /   .box-bottom.pam
-    /     %span= column_chart charts_used_link_path, stacked: true
+  / .box.shadow-1.mtm
+  /   .box-top.pam
+  /     Fréquence liens recup
+  /   .box-bottom.pam
+  /     %span= column_chart charts_used_link_path, stacked: true
