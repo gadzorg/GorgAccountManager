@@ -13,9 +13,9 @@ GIT
 
 GIT
   remote: git://github.com/gadzorg/GorgEngine.git
-  revision: 6b678f2b766401a8addd8a0c53edc47260064a45
+  revision: ebc75aac5398f076db44c9d752489784dc7d6ee7
   specs:
-    gorg_engine (0.0.8)
+    gorg_engine (0.0.9)
       cancancan
       devise (~> 4.1.1)
       devise_masquerade
@@ -439,7 +439,7 @@ DEPENDENCIES
   faker
   fuzzy-string-match
   geocoder (~> 1.3.7)
-  gorg_engine (~> 0.0.8)!
+  gorg_engine (~> 0.0.9)!
   gram_v2_client!
   haml-rails
   heroku_secrets!
