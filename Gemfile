@@ -81,7 +81,7 @@ gem "chartkick"
 # for inline css in mail
 gem "premailer-rails"
 
-gem "nokogiri"
+gem 'nokogiri', '~> 1.6', '>= 1.7'
 
 gem "geocoder", "~> 1.3.7"
 
@@ -103,7 +103,7 @@ gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git
 
 gem 'phonelib'
 
-gem 'gorg_engine', '~> 0.0.7', github: 'gadzorg/GorgEngine'
+gem 'gorg_engine', '~> 0.0.8', github: 'gadzorg/GorgEngine'
 gem 'simple_form-materialize', github: 'patricklindsay/simple_form-materialize'
 gem 'configurable_engine', github: 'Blaked84/configurable_engine'
 
