@@ -9,7 +9,7 @@
      -
        name: gram_title
        title: Gram
-       ability_action: read
+       ability_action: manage
        ability_object: admin
      -
        name: recherche_gram
@@ -22,7 +22,7 @@
      -
        name: recovery
        title: Recovery
-       ability_action: read
+       ability_action: manage
        ability_object: admin
      -
        name: stats
@@ -51,7 +51,7 @@
      - # Title. if you dont set `url` or `path` a title is generated
        name: general
        title: Général
-       ability_action: read
+       ability_action: manage
        ability_object: admin
      -
        name: utilisateurs
