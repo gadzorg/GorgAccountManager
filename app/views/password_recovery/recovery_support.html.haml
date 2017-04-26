@@ -29,7 +29,6 @@
         %div
           = label_tag :ddn, "Date de naissance"
           = text_field_tag :ddn,"", :size => 30, :class => "datepicker", type: "date", :required => true, :options => {start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}
-          -#"= select_date( date = Date.current, options = {order: [:day, :month, :year],prefix: 'ddn', start_year: 115.years.ago.year, end_year: Date.today.year, default: Date.today}, html_options = {})
         .input-field
           = text_area_tag :issue,"", :class => "w100 materialize-textarea", :required => true
           = label_tag :issue, "Description du problème"
