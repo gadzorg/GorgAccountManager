@@ -1,0 +1,81 @@
+-  # Drop down admin menu
+   name: administration
+   title: Administration
+   ability_action: read
+   ability_object: admin
+   login_required: true
+   dropdown: true
+   items:
+     -
+       name: gram_title
+       title: Gram
+       ability_action: manage
+       ability_object: admin
+     -
+       name: recherche_gram
+       title: Recherche Gram/SOCE/Gadz.org
+       ability_action: manage
+       ability_object: admin
+       path: 'admin_search_user_path'
+       login_required: true
+       dropdown: false
+     -
+       name: recovery
+       title: Recovery
+       ability_action: manage
+       ability_object: admin
+     -
+       name: stats
+       title: Stats
+       ability_action: manage
+       ability_object: admin
+       path: 'admin_stats_path'
+       login_required: true
+       dropdown: false
+     -
+       name: termes_de_recherches
+       title: Termes de recherches
+       ability_action: manage
+       ability_object: admin
+       path: 'admin_searches_path'
+       login_required: true
+       dropdown: false
+     -
+       name: sessions
+       title: Sessions
+       ability_action: manage
+       ability_object: admin
+       path: 'admin_recovery_sessions_path'
+       login_required: true
+       dropdown: false
+     - # Title. if you dont set `url` or `path` a title is generated
+       name: general
+       title: Général
+       ability_action: manage
+       ability_object: admin
+     -
+       name: utilisateurs
+       title: Utilisateurs
+       ability_action: read
+       ability_object: user
+       path: 'users_path'
+       login_required: true
+       dropdown: false
+     -
+       name: configuration
+       title: Configuration
+       ability_action: read
+       ability_object: admin
+       path: 'admin_configurable_path'
+       login_required: true
+       dropdown: false
+     -
+       name: roles
+       title: Roles
+       ability_action: read
+       ability_object: role
+       path: 'roles_path'
+       login_required: true
+       dropdown: false
+
+

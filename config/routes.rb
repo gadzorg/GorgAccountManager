@@ -1,11 +1,8 @@
 Rails.application.routes.draw do
+  mount GorgEngine::Engine => "gorg_engine"
+
+
   get 'admin/index'
-  
-  devise_for :users, :controllers => {
-    :omniauth_callbacks => "users/omniauth_callbacks",
-    :sessions => "users/sessions",
-    masquerades: "admin/masquerades"
-    }
 
   get 'static_pages/index'
 

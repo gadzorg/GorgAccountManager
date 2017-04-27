@@ -10,10 +10,6 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
-//= require jquery_ujs
-//= require bootstrap/bootstrap-tooltip
-//= require jquery-ui
 //= require jquery.validate
 //= require jquery.validate.additional-methods
 //= require autocomplete-rails
@@ -21,6 +17,7 @@
 //= require unobtrusive_flash_ui
 //= require admin
 //= require_tree ./autoload
+
 
 
 
@@ -45,5 +42,11 @@ $(document).ready(function () {
              };
            }
     );
+
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 115, // Creates a dropdown of 15 years to control year
+        max: Date.now()
+    });
 });
 

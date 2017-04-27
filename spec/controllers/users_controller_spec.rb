@@ -99,7 +99,7 @@ include Devise::TestHelpers
         end
 
         it { is_expected.to respond_with :success }
-        it { is_expected.to render_with_layout :application }
+        it { is_expected.to render_with_layout "gorg_engine/application" }
         it { is_expected.to render_template :index }
         it "populate @users list with all users" do
           expect(assigns(:users)).to match_array([@alice, @bob, @charlie, @admin])
@@ -116,7 +116,7 @@ include Devise::TestHelpers
           let(:query) {"2001"}
 
           it { is_expected.to respond_with :success }
-          it { is_expected.to render_with_layout :application }
+          it { is_expected.to render_with_layout "gorg_engine/application" }
           it { is_expected.to render_template :index }
           it "populate @users list with results" do
             expect(assigns(:users)).to match_array([@bob, @charlie])
@@ -158,7 +158,7 @@ include Devise::TestHelpers
           end
 
           it { is_expected.to respond_with :success }
-          it { is_expected.to render_with_layout :application }
+          it { is_expected.to render_with_layout "gorg_engine/application" }
           it { is_expected.to render_template :show }
           it "populate @user list with requested user" do
             expect(assigns(:user)).to eq(@user)
@@ -175,7 +175,7 @@ include Devise::TestHelpers
         end
 
         it { is_expected.to respond_with :success }
-        it { is_expected.to render_with_layout :application }
+        it { is_expected.to render_with_layout "gorg_engine/application" }
         it { is_expected.to render_template :show }
         it "populate @user list with requested user" do
           expect(assigns(:user)).to eq(@user)
@@ -192,7 +192,7 @@ include Devise::TestHelpers
         end
 
         it { is_expected.to respond_with :success }
-        it { is_expected.to render_with_layout :application }
+        it { is_expected.to render_with_layout "gorg_engine/application" }
         it { is_expected.to render_template :show }
         it "populate @user list with requested user" do
           expect(assigns(:user)).to eq(@user)
@@ -215,7 +215,7 @@ include Devise::TestHelpers
       end
 
       it { is_expected.to respond_with :success }
-      it { is_expected.to render_with_layout :application }
+      it { is_expected.to render_with_layout "gorg_engine/application" }
       it { is_expected.to render_template :new}
       it "populate @user list new user" do
         expect(assigns(:user)).to be_a_new(User)
@@ -278,7 +278,7 @@ include Devise::TestHelpers
       end
 
       it { is_expected.to respond_with :success }
-      it { is_expected.to render_with_layout :application }
+      it { is_expected.to render_with_layout "gorg_engine/application" }
       it { is_expected.to render_template :edit }
       it "populate @user list expected user" do
         expect(assigns(:user)).to eq(@user)

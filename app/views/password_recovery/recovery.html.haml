@@ -1,40 +1,62 @@
-%section.pam
-  .mw500p.center
-    .box.box-light.shadow-1.mtm
-      .box-top.box-top-color.pam
-        -if @first_attempt
-          Retrouve ton compte
-        -else
-          Nous n'avons pas pu t'identifier :-(
+.row
+  .col.s12.l6.offset-l3.m8.offset-m2
+    %h4.center
+      -if @first_attempt
+        Retrouve ton compte
+      -else
+        Nous n'avons pas pu t'identifier :-(
+    - if @first_attempt
+      %p.center Tu as perdu ton mot de passe ou identifiant Gadz.org? Tu n'as plus accès à ton compte email Gadzmel?
+    -else
+      %p.center
+        Tu peux essayer à nouveau. Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux
+        = link_to recovery_support_path(), title: "contacter le support" do
+          contacter le support.
 
-      .box-bottom.pam
+    .card
+      .card-content
 
-        - if @first_attempt
-          %p Tu as perdu ton mot de passe ou identifiant Gadz.org? Tu n'as plus accès à ton compte email Gadzmel?
-        -else
-          %p Tu peux essayer à nouveau:
-        .mtm 
-          =form_for  [@user], :url=> create_recovery_session_path()  do |f|
-            .group-m-form
-              =f.text_field :recovery_query, value: @query, :placeholder => "", :class => "w100 login", :autofocus => true, :required => true
-              =f.label :recovery_query, "Entre ici ton identifiant OU email OU n° de sociétaire..."
-              .span.highlight.w100
-              .span.bar.w100
-            -if @help == true
-              %p.small.red Peux-tu cocher la case ci-dessous? C'est une mesure de sécurité pour éviter les abus sur ce site. Merci!
-            .w100.pbm=recaptcha_tags
-            =f.submit 'Recuperer',:class => "bouton bouton_bleu", :id => "button_loading"
-            %span#loading
-              =image_tag "Preloader_3.gif"
-              Nous recherchons ton compte
+        %p Entre ton adresse @gadz.org, ton indentifiant, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org.
 
-        %p.small Entre ton adresse @gadz.org, ton indentifiant, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org.
-        %p.small Ton identifiant est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
 
-      -unless @first_attempt
-        .box-bottom.border-top.bg-blue-dark-2
-          .pam
-            %p 
-              Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux 
-              = link_to recovery_support_path(), title: "contacter le support" do
-                contacter le support.
+        =form_for  [@user], :url=> create_recovery_session_path()  do |f|
+          .input-field
+            =f.text_field :recovery_query, value: @query, :class => "validate", :autofocus => true, :required => "required"
+            =f.label :recovery_query, "Entre ici ton identifiant OU email OU n° de sociétaire...", "data-error"=>"Tu dois entrer ton adresse email au format email@domaine.fr", required: true
+
+            .span.highlight.w100
+            .span.bar.w100
+          -if @help == true
+            .card-panel.red.darken-2.white-text
+              %p Peux-tu cocher la case ci-dessous? C'est une mesure de sécurité pour éviter les abus sur ce site. Merci!
+          .w100.pbm=recaptcha_tags
+          .input-field
+            %span#button_loading
+              =f.submit 'Suivant',:class => "waves-effect waves-light btn"
+            .waves-effect.aves-light.btn.btn-flat.activator aide
+          %span#loading
+            =image_tag "Preloader_3.gif"
+            Nous recherchons ton compte
+
+      .card-reveal
+        %span.card-title.grey-text.text-darken-4
+          Aide
+          %i.material-icons.right close
+        %p
+          Ton
+          %b identifiant
+          est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
+        %p
+          Ton
+          %b numéro de sociétaire
+          est de la forme 123456A. Tu le trouveras sur ta carte de sociétaire. S'il commence par un "0" il ne faut pas le rentrer.
+
+
+
+
+
+    -unless @first_attempt
+      %p
+        Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux
+        = link_to recovery_support_path(), title: "contacter le support" do
+          contacter le support.

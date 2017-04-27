@@ -1,6 +1,5 @@
 class PasswordRecoveryController < ApplicationController
 
-  layout 'recovery'
   before_action :set_session, only: [:recovery_step1, :recovery_step2, :create_sms, :recovery_sms, :validate_sms]
 
 
@@ -186,7 +185,7 @@ class PasswordRecoveryController < ApplicationController
     name  = params[:nom]
     firstname = params[:prenom]
     email = params[:email]
-    birthdate = params[:ddn][:day] + "/" + params[:ddn][:month] + "/" + params[:ddn][:year]
+    birthdate = params[:ddn]
     phone = params[:telephone]
     desc = params[:issue]
 
