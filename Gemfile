@@ -40,7 +40,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem "omniauth-cas", :git => "https://github.com/loocla/omniauth-cas.git", :branch => 'saml'
 
 # Authorisation
-gem 'cancancan'
+gem 'cancancan', '~> 1.16'
 
 # API GRAM
 gem 'activeresource'
@@ -70,7 +70,7 @@ gem 'bootstrap-tooltip-rails'
 gem 'safe_attributes'
 
 # recapcha gem
-gem "recaptcha", :require => "recaptcha/rails"
+gem "recaptcha",'~> 3.3' ,:require => "recaptcha/rails"
 
 # pretty hash print in console
 gem 'awesome_print'
@@ -158,5 +158,5 @@ group :test do
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.0'
   gem 'database_cleaner'
-  gem 'webmock'
+  gem 'webmock', '~> 2.1'
 end
