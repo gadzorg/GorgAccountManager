@@ -111,7 +111,7 @@ GEM
       thor
     builder (3.2.3)
     byebug (9.0.6)
-    cancancan (2.0.0)
+    cancancan (1.17.0)
     capybara (2.14.3)
       addressable
       mime-types (>= 1.16)
@@ -327,7 +327,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rake (10.5.0)
     rdoc (4.3.0)
-    recaptcha (4.3.1)
+    recaptcha (3.4.0)
       json
     ref (2.0.0)
     request_store (1.3.2)
@@ -404,7 +404,7 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
-    webmock (3.0.1)
+    webmock (2.3.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff
@@ -423,7 +423,7 @@ DEPENDENCIES
   bogus
   bootstrap-tooltip-rails
   byebug
-  cancancan
+  cancancan (~> 1.16)
   capybara
   chartkick
   coffee-rails (~> 4.1.0)
@@ -458,7 +458,7 @@ DEPENDENCIES
   rails-erd
   rails4-autocomplete
   rails_12factor
-  recaptcha
+  recaptcha (~> 3.3)
   rspec-rails
   safe_attributes
   sass-rails (~> 5.0)
@@ -470,7 +470,7 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unobtrusive_flash (>= 3)
   web-console (~> 2.0)
-  webmock
+  webmock (~> 2.1)
   yaml_db!
 
 BUNDLED WITH
