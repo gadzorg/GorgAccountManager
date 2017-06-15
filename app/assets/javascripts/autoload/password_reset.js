@@ -1,3 +1,41 @@
+function checkPassRules(){
+    var pass= $('#user_password').val();
+
+    var ok=true;
+    ok=toggle_icon_for('password-rule-length',checkPassLength(pass))&&ok;
+    ok=toggle_icon_for('password-rule-spaces',checkPassSpaces(pass))&&ok;
+    ok=toggle_icon_for('password-rule-characters',checkPassCharacters(pass))&&ok;
+
+    return ok;
+}
+
+function toggle_icon_for(rule_id, is_ok) {
+    var target=$('#'+rule_id+' .icon-cell i');
+    if(is_ok){
+        target.text("check");
+        target.removeClass('red-text');
+        target.addClass('green-text');
+     }else{
+        target.text("clear");
+        target.removeClass('green-text');
+        target.addClass('red-text');
+    }
+    return is_ok;
+}
+
+
+function checkPassLength(pass){
+    return pass.length >= 8;
+}
+
+function checkPassSpaces(pass){
+    return pass[0]!=' ' && pass[pass.length-1]!=' ';
+}
+
+function checkPassCharacters(pass) {
+    return /^[a-zA-Z0-9!\"#$%&'‘()*+,\-.\/:;<=>?@\[\\\]^{|}~\s]+$/.test(pass);
+}
+
 function checkPass()
 {
     //Store the password field objects into variables ...
@@ -13,20 +51,11 @@ function checkPass()
     // passwd is blank ou pass2 to short
     if (pass1.val().length != 0 && pass2.val().length != 0) {
         if (pass1.val() == pass2.val()) {
-            if (pass1.val().length < 8) {
-                messagenokshort.show();
-                messageok.hide();
-                messagenok.hide();
-                // alert("ok...");
-
-            }
-            else {
                 messageok.show()
                 messagenok.hide()
                 messagenokshort.hide()
                 // alert("ok");
-
-            }
+                return true;
         }
         else {
             messagenok.show()
@@ -34,21 +63,27 @@ function checkPass()
             messagenokshort.hide()
             // alert("nop");
 
+            return false;
+
         }
     }
-    disable_or_not_button();
 }
 
 
 $(document).ready(function () {
+    checkPassRules();
     var timeout_password;
     var messageok = $('#confirmMessageOK');
     var messagenok = $('#confirmMessageNOK');
     var messagenokshort = $('#confirmMessageNOKSHORT');
 
-    messageok.hide()
-    messagenok.hide()
-    messagenokshort.hide()
+    messageok.hide();
+    messagenok.hide();
+    messagenokshort.hide();
+
+    $('#password-card').on('change keyup', '#user_password', function () {
+        checkPassRules();
+    });
 
     $('#password-card').on('change keyup', '#user_password_confirmation', function () {
         clearTimeout(timeout_password);
