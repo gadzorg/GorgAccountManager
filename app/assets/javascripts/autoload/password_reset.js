@@ -6,7 +6,15 @@ function checkPassRules(){
     ok=toggle_icon_for('password-rule-spaces',checkPassSpaces(pass))&&ok;
     ok=toggle_icon_for('password-rule-characters',checkPassCharacters(pass))&&ok;
 
+
+    toggle_submit_button(ok);
     return ok;
+}
+
+function toggle_submit_button(enabled){
+    var button=$('#change-password-button');
+    button.prop('disabled', !enabled).toggleClass( 'disabled', !enabled );
+    button.parent().toggleClass( 'disabled', !enabled );
 }
 
 function toggle_icon_for(rule_id, is_ok) {
@@ -71,7 +79,7 @@ function checkPass()
 
 
 $(document).ready(function () {
-    checkPassRules();
+
     var timeout_password;
     var messageok = $('#confirmMessageOK');
     var messagenok = $('#confirmMessageNOK');
@@ -80,6 +88,8 @@ $(document).ready(function () {
     messageok.hide();
     messagenok.hide();
     messagenokshort.hide();
+
+    checkPassRules();
 
     $('#password-card').on('change keyup', '#user_password', function () {
         checkPassRules();
