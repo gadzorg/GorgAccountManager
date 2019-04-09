@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.3.7'
+ruby '2.5.5'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~>4.2.8'
@@ -12,7 +12,7 @@ gem 'rails', '~>4.2.8'
 #gem 'mysql2'
 gem 'mysql2', '~> 0.3.20'
 
-# Use 'foreigner' to add foreign_key constraints on database layer !
+# Use 'foreigner' to add foreign_key constraints on database layer !
 # https://github.com/matthuhiggins/foreigner
 # gem 'foreigner'
 
@@ -74,7 +74,7 @@ gem 'safe_attributes'
 gem "recaptcha",'~> 3.3' ,:require => "recaptcha/rails"
 
 # pretty hash print in console
-gem 'awesome_print'
+#gem 'awesome_print'
 
 # charts
 gem "chartkick"
@@ -161,3 +161,4 @@ group :test do
   gem 'database_cleaner'
   gem 'webmock', '~> 2.1'
 end
+
