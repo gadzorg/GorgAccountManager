@@ -135,7 +135,7 @@ group :development, :test do
 
   gem 'bogus'
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
   gem 'rack-mini-profiler'
   # gem 'flamegraph'
