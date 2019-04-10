@@ -246,12 +246,12 @@ GEM
     haml (5.0.4)
       temple (>= 0.8.0)
       tilt
-    haml-rails (2.0.0)
-      actionpack (>= 5.1)
-      activesupport (>= 5.1)
+    haml-rails (1.0.0)
+      actionpack (>= 4.0.1)
+      activesupport (>= 4.0.1)
       haml (>= 4.0.6, < 6.0)
       html2haml (>= 1.0.1)
-      railties (>= 5.1)
+      railties (>= 4.0.1)
     hashdiff (0.3.8)
     hashie (2.1.2)
     hirb (0.7.3)
@@ -484,7 +484,7 @@ DEPENDENCIES
   geocoder (~> 1.3.7)
   gorg_engine!
   gram_v2_client!
-  haml-rails
+  haml-rails (= 1.0.0)
   heroku_secrets!
   hirb
   i18n

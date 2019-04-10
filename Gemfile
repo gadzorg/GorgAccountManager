@@ -49,7 +49,7 @@ gem 'activeresource'
 gem 'email_validator'
 
 # Templates
-gem 'haml-rails'
+gem 'haml-rails', '= 1.0.0'
 
 # Forms
 gem 'simple_form'
