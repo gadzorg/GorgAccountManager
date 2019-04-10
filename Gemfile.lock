@@ -515,6 +515,7 @@ DEPENDENCIES
   rspec-rails
   ruby-graphviz
   safe_attributes
+  sass-rails
   sassc!
   sdoc (~> 0.4.0)
   shoulda-matchers (~> 3.0)

@@ -17,7 +17,7 @@ gem 'mysql2', '>= 0.3.20'
 # gem 'foreigner'
 
 # Use SCSS for stylesheets
-#gem 'sass-rails'
+gem 'sass-rails'
 gem 'sassc', :git => "https://github.com/sass/sassc-ruby.git"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
