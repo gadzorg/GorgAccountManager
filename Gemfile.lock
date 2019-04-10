@@ -1,11 +1,4 @@
 GIT
-  remote: http://github.com/gadzorg/configurable_engine.git
-  revision: 9a57d216d59af3a76b95e947dec83487eadf7a02
-  specs:
-    configurable_engine (0.4.9.1)
-      rails (> 3.1.0)
-
-GIT
   remote: https://github.com/gadzorg/GorgEngine.git
   revision: b3a10f974c80ab9825e594c8dd0a35f67236e325
   specs:
@@ -27,6 +20,13 @@ GIT
       unobtrusive_flash
       virtus
       will_paginate (>= 3.0.0)
+
+GIT
+  remote: https://github.com/gadzorg/configurable_engine.git
+  revision: 9a57d216d59af3a76b95e947dec83487eadf7a02
+  specs:
+    configurable_engine (0.4.9.1)
+      rails (> 3.1.0)
 
 GIT
   remote: https://github.com/gadzorg/gram2_api_client_ruby.git
@@ -65,6 +65,14 @@ GIT
     yaml_db (0.7.0)
       rails (>= 3.0)
       rake (>= 0.8.7)
+
+GIT
+  remote: https://github.com/sass/sassc-ruby.git
+  revision: 58d09fe585633ac5b6f636ee506638c421b8aad8
+  specs:
+    sassc (2.0.1)
+      ffi (~> 1.9)
+      rake
 
 GEM
   remote: https://rubygems.org/
@@ -505,8 +513,9 @@ DEPENDENCIES
   rails_12factor
   recaptcha (~> 3.3)
   rspec-rails
+  ruby-graphviz
   safe_attributes
-  sass-rails
+  sassc!
   sdoc (~> 0.4.0)
   shoulda-matchers (~> 3.0)
   simple_form

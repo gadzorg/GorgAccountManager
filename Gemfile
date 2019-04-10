@@ -17,7 +17,8 @@ gem 'mysql2', '>= 0.3.20'
 # gem 'foreigner'
 
 # Use SCSS for stylesheets
-gem 'sass-rails'
+#gem 'sass-rails'
+gem 'sassc', :git => "https://github.com/sass/sassc-ruby.git"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
@@ -63,6 +64,7 @@ gem 'i18n'
 # better flash messaages
 gem 'unobtrusive_flash', '>=3'
 
+gem 'ruby-graphviz'
 
 # tooltips
 gem 'bootstrap-tooltip-rails'
@@ -106,7 +108,7 @@ gem 'phonelib'
 
 gem 'gorg_engine', git: 'https://github.com/gadzorg/GorgEngine.git'
 gem 'simple_form-materialize', git: 'https://github.com/gadzorg/simple_form-materialize.git'
-gem 'configurable_engine', git: 'http://github.com/gadzorg/configurable_engine.git'
+gem 'configurable_engine', git: 'https://github.com/gadzorg/configurable_engine.git'
 
 gem "awesome_print", require:"ap"
 
