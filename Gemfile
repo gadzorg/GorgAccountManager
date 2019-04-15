@@ -18,7 +18,7 @@ gem 'mysql2', '>= 0.3.20'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
-gem 'sassc', :git => "https://github.com/sass/sassc-ruby.git"
+#gem 'sassc', :git => "https://github.com/sass/sassc-ruby.git"
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
 # Use CoffeeScript for .coffee assets and views
