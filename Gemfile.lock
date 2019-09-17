@@ -105,8 +105,6 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.8.0)
       debug_inspector (>= 0.0.1)
-    bogus (0.1.6)
-      dependor (>= 0.0.4)
     bootstrap-tooltip-rails (0.1)
       rails (>= 3.1)
       thor
@@ -155,7 +153,6 @@ GEM
     cucumber-wire (0.0.1)
     database_cleaner (1.7.0)
     debug_inspector (0.0.3)
-    dependor (1.0.1)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     devise (4.1.1)
@@ -439,7 +436,6 @@ DEPENDENCIES
   annotate (~> 2.6.6)
   awesome_print
   better_errors
-  bogus
   bootstrap-tooltip-rails
   byebug
   cancancan (~> 1.16)
