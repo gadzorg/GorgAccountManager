@@ -111,7 +111,8 @@ end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger consolep
-  gem "byebug"
+  gem "pry-byebug"
+  gem "pry-rails"
 
   gem "letter_opener"
 
@@ -142,6 +143,7 @@ group :development do
   gem "web-console"
 
   gem "better_errors"
+  gem "binding_of_caller"
 end
 
 group :test do
