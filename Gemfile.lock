@@ -270,7 +270,7 @@ GEM
       hashie (>= 1.2, < 3)
       rack
     orm_adapter (0.5.0)
-    phonelib (0.6.23)
+    phonelib (0.6.37)
     premailer (1.11.1)
       addressable
       css_parser (>= 1.6.0)
