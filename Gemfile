@@ -108,8 +108,6 @@ gem 'gorg_engine', '~> 1.2'
 gem 'simple_form-materialize', github: 'patricklindsay/simple_form-materialize'
 gem 'configurable_engine', github: 'Blaked84/configurable_engine'
 
-gem "awesome_print", require:"ap"
-
 group :production do
   #HEROKU
   gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
