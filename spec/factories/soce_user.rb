@@ -41,7 +41,7 @@ FactoryBot.define do
     prenom { Faker::Name.first_name }
     nom_jeune_fille { Faker::Name.last_name }
     parente { nil }
-    date_naissance { Faker::Date.between(60.years.ago, 18.years.ago) }
+    date_naissance { Faker::Date.between(from: 60.years.ago, to: 18.years.ago) }
     login { "#{id_user}#{id_user_chksum}" }
     pass { "" }
     pass_crypt { Digest::SHA1.hexdigest Devise.friendly_token[0, 20] }
