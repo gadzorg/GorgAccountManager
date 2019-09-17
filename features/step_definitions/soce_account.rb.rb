@@ -7,5 +7,5 @@ And(/^([a-zA-Z]+) has a Soce Account with ((?:[a-zA-Z_]+ ["'][^"']*["'](?:, )?)*
     [match[1],match[2]]
   end.to_h
 
-  FactoryGirl.create(:soce_user,{id_user: @soce_id, prenom:firstname}.merge(attrs))
+  FactoryBot.create(:soce_user,{id_user: @soce_id, prenom:firstname}.merge(attrs))
 end

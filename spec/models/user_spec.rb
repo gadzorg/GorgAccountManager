@@ -28,11 +28,11 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   
   it "has a valid factory" do
-    expect(FactoryGirl.build(:user)).to be_valid
+    expect(FactoryBot.build(:user)).to be_valid
   end
 
   describe 'find by id or hruid' do
-    let!(:user) {FactoryGirl.create(:user)}
+    let!(:user) {FactoryBot.create(:user)}
 
     it "find by id" do
       expect(User.find_by_id_or_hruid_or_uuid(user.id)).to eq(user)
@@ -49,9 +49,9 @@ RSpec.describe User, type: :model do
 
   describe "search" do
 
-    let!(:alice) {FactoryGirl.create(:user, firstname: 'Alice', hruid:'alice.alabama.2000', email:'alice@hotmail.com')}
-    let!(:bob) {FactoryGirl.create(:user, firstname: 'Bob', hruid:'bob.beacon.2001', email:'bob@hotmail.com')}
-    let!(:charlie) {FactoryGirl.create(:user, firstname: 'Charlie', hruid:'charlie.chaplin.2001', email:'charlie@hotmail.com')}
+    let!(:alice) {FactoryBot.create(:user, firstname: 'Alice', hruid:'alice.alabama.2000', email:'alice@hotmail.com')}
+    let!(:bob) {FactoryBot.create(:user, firstname: 'Bob', hruid:'bob.beacon.2001', email:'bob@hotmail.com')}
+    let!(:charlie) {FactoryBot.create(:user, firstname: 'Charlie', hruid:'charlie.chaplin.2001', email:'charlie@hotmail.com')}
 
     it "returns all on nil query" do
       expect(User.search(nil)).to match_array([alice,bob,charlie])

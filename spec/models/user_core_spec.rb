@@ -76,12 +76,12 @@ RSpec.describe User, type: :model do
   end
   
   it "has a valid factory" do
-    expect(FactoryGirl.build(:user)).to be_valid
+    expect(FactoryBot.build(:user)).to be_valid
   end
 
   it "is invalid if hruid already exist" do
-    FactoryGirl.create(:user,hruid:"alexandre.narbonne.2011")
-    expect(FactoryGirl.build(:user,hruid:"alexandre.narbonne.2011")).not_to be_valid
+    FactoryBot.create(:user,hruid:"alexandre.narbonne.2011")
+    expect(FactoryBot.build(:user,hruid:"alexandre.narbonne.2011")).not_to be_valid
   end
 
 
@@ -90,7 +90,7 @@ RSpec.describe User, type: :model do
     context 'has a role' do
 
       before :each do
-        @user = FactoryGirl.create(:admin)
+        @user = FactoryBot.create(:admin)
       end
 
       it "confirms its role" do
@@ -127,7 +127,7 @@ RSpec.describe User, type: :model do
     context "hasn't a role" do
 
       before :each do
-        @user = FactoryGirl.create(:user, role_id: nil)
+        @user = FactoryBot.create(:user, role_id: nil)
       end
 
       it "respond false" do
@@ -138,12 +138,12 @@ RSpec.describe User, type: :model do
 
 
   it "has the attribute synced_with_gram" do
-    expect(FactoryGirl.create(:user,hruid:"alexandre.narbonne.2011", uuid: "559bb0aa-ddac-4607-ad41-7e520ee40819")).respond_to? :synced_with_gram
+    expect(FactoryBot.create(:user,hruid:"alexandre.narbonne.2011", uuid: "559bb0aa-ddac-4607-ad41-7e520ee40819")).respond_to? :synced_with_gram
   end
 
   describe "has default value when initialized" do
     it "is not sync with gram at init" do
-      expect(FactoryGirl.create(:user).synced_with_gram).to eq(false)
+      expect(FactoryBot.create(:user).synced_with_gram).to eq(false)
     end
   end
 
@@ -151,7 +151,7 @@ RSpec.describe User, type: :model do
     context "has an hruid" do
 
       before :each do
-        @user = FactoryGirl.create(:user,firstname:'Alex', lastname:'Narbon',email:'un.email@email.com',hruid:"alexandre.narbonne.2011", uuid:"559bb0aa-ddac-4607-ad41-7e520ee40819")
+        @user = FactoryBot.create(:user,firstname:'Alex', lastname:'Narbon',email:'un.email@email.com',hruid:"alexandre.narbonne.2011", uuid:"559bb0aa-ddac-4607-ad41-7e520ee40819")
       end
 
       context "can connect to gram" do
@@ -204,7 +204,7 @@ RSpec.describe User, type: :model do
 
     context "doesn't have an uuid" do
       before :each do
-        @user = FactoryGirl.create(:user,uuid:nil)
+        @user = FactoryBot.create(:user,uuid:nil)
         @user.update_from_gram
       end
 
@@ -231,7 +231,7 @@ RSpec.describe User, type: :model do
 
     context "and user already exist" do
       before :each do
-        @user = FactoryGirl.create(:user,
+        @user = FactoryBot.create(:user,
                                    uuid:"559bb0aa-ddac-4607-ad41-7e520ee40819",
                                    hruid:"alexandre.narbonne.2011",
                                    email:"coucou@text.com",
@@ -325,7 +325,7 @@ RSpec.describe User, type: :model do
   end
 
   it "return a fullname" do
-    user=FactoryGirl.build(:user, firstname: "Alexandre", lastname:"Narbonne")
+    user=FactoryBot.build(:user, firstname: "Alexandre", lastname:"Narbonne")
     expect(user.fullname).to eq("Alexandre Narbonne")
   end
 

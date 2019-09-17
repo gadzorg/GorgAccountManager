@@ -1,8 +1,7 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :gorgaccounttocreate do
-    hruid "MyString"
-email "MyString"
-wantsgoogleapps false
+    hruid { "MyString" }
+    email { "MyString" }
+    wantsgoogleapps { false }
   end
-
 end
