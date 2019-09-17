@@ -84,7 +84,7 @@ gem "fuzzy-string-match"
 
 # Gadz.org Gems Gram v2 client
 gem "gram_v2_client",
-    git: "https://github.com/gadzorg/gram2_api_client_ruby.git"
+    git: "https://github.com/gadzorg/gram2_api_client_ruby.git", ref: "7aa3cd20"
 
 #gem "linkedin-scraper"
 
@@ -100,7 +100,8 @@ gem "gram_v2_client",
 gem "phonelib"
 
 gem "gorg_engine"
-gem 'configurable_engine', git: 'https://github.com/gadzorg/configurable_engine', ref: 'v0.4.8'
+gem "configurable_engine",
+    git: "https://github.com/gadzorg/configurable_engine", ref: "v0.4.8"
 
 group :production do
   #HEROKU
@@ -123,7 +124,7 @@ group :development, :test do
   gem "hirb"
 
   # export db en yaml
-  gem 'yaml_db', git: "https://github.com/gadzorg/yaml_db"
+  gem "yaml_db", git: "https://github.com/gadzorg/yaml_db"
 
   gem "rspec-rails"
   gem "factory_bot_rails"

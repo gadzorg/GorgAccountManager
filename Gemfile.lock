@@ -14,10 +14,11 @@ GIT
 
 GIT
   remote: https://github.com/gadzorg/gram2_api_client_ruby.git
-  revision: 4b676127b330db5ed82d6f861493a91c92c46f90
+  revision: 7aa3cd2015c490ac864c1a694a92f146e737c410
+  ref: 7aa3cd20
   specs:
-    gram_v2_client (3.0.0)
-      activeresource (~> 4.0)
+    gram_v2_client (3.0.4)
+      activeresource (>= 4.0)
 
 GIT
   remote: https://github.com/gadzorg/yaml_db
