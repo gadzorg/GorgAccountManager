@@ -1,3 +1,4 @@
+require "simplecov" if ENV["NO_COVERAGE"].nil?
 require "capybara/rspec"
 require 'webmock/rspec'
 require 'bogus/rspec'
@@ -106,4 +107,3 @@ RSpec.configure do |config|
   end
 
 end
-

@@ -118,15 +118,15 @@ end
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger consolep
   gem 'byebug'
-  
+
   gem "letter_opener"
 
 
   #pour les diagramme UML
-  gem 'rails-erd' 
+  gem 'rails-erd'
 
   #better cli table view for db
-  gem 'hirb' 
+  gem 'hirb'
 
   # export db en yaml
   gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
@@ -146,7 +146,7 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
-  
+
   gem 'better_errors'
 end
 
@@ -158,4 +158,6 @@ group :test do
   gem 'shoulda-matchers', '~> 3.0'
   gem 'database_cleaner'
   gem 'webmock', '~> 2.1'
+
+  gem 'simplecov'
 end
