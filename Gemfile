@@ -15,31 +15,31 @@ gem "mysql2", "~> 0.4.10"
 # gem 'foreigner'
 
 # Use SCSS for stylesheets
-gem "sass-rails", "~> 5.0"
+gem "sass-rails"
 # Use Uglifier as compressor for JavaScript assets
-gem "uglifier", ">= 1.3.0"
+gem "uglifier"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "execjs"
 gem "therubyracer", platforms: :ruby
 
 #Documentation
-gem "annotate", "~> 2.6.6"
+gem "annotate"
 
 # Use jquery as the JavaScript library
 gem "jquery-validation-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem "jbuilder", "~> 2.0"
+gem "jbuilder"
 # bundle exec rake doc:rails generates the API under doc/api.
-gem "sdoc", "~> 0.4.0", group: :doc
+gem "sdoc", group: :doc
 
 # Authentification
 gem "omniauth-cas",
     git: "https://github.com/loocla/omniauth-cas.git", branch: "saml"
 
 # Authorisation
-gem "cancancan", "~> 1.16"
+gem "cancancan"
 
 # API GRAM
 gem "activeresource"
@@ -59,7 +59,7 @@ gem "rails4-autocomplete"
 gem "i18n"
 
 # better flash messaages
-gem "unobtrusive_flash", ">=3"
+gem "unobtrusive_flash"
 
 # tooltips
 gem "bootstrap-tooltip-rails"
@@ -68,7 +68,7 @@ gem "bootstrap-tooltip-rails"
 gem "safe_attributes"
 
 # recapcha gem
-gem "recaptcha", "~> 3.3", require: "recaptcha/rails"
+gem "recaptcha", require: "recaptcha/rails"
 
 # charts
 gem "chartkick"
@@ -76,9 +76,9 @@ gem "chartkick"
 # for inline css in mail
 gem "premailer-rails"
 
-gem "nokogiri", "~> 1.6", ">= 1.7"
+gem "nokogiri"
 
-gem "geocoder", "~> 1.3.7"
+gem "geocoder"
 
 gem "fuzzy-string-match"
 
@@ -99,7 +99,7 @@ gem "gram_v2_client",
 
 gem "phonelib"
 
-gem "gorg_engine", "~> 1.2"
+gem "gorg_engine"
 gem "simple_form-materialize",
     git: "https://github.com/patricklindsay/simple_form-materialize"
 gem "configurable_engine",
@@ -144,7 +144,7 @@ end
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
-  gem "web-console", "~> 2.0"
+  gem "web-console"
 
   gem "better_errors"
 end
@@ -153,9 +153,9 @@ group :test do
   gem "cucumber-rails", require: false
   gem "capybara"
   gem "launchy"
-  gem "shoulda-matchers", "~> 3.0"
+  gem "shoulda-matchers"
   gem "database_cleaner"
-  gem "webmock", "~> 2.1"
+  gem "webmock"
 
   gem "simplecov"
 end

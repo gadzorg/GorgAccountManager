@@ -433,12 +433,12 @@ PLATFORMS
 
 DEPENDENCIES
   activeresource
-  annotate (~> 2.6.6)
+  annotate
   awesome_print
   better_errors
   bootstrap-tooltip-rails
   byebug
-  cancancan (~> 1.16)
+  cancancan
   capybara
   chartkick
   configurable_engine!
@@ -449,19 +449,19 @@ DEPENDENCIES
   factory_bot_rails
   faker
   fuzzy-string-match
-  geocoder (~> 1.3.7)
-  gorg_engine (~> 1.2)
+  geocoder
+  gorg_engine
   gram_v2_client!
   haml-rails
   heroku_secrets!
   hirb
   i18n
-  jbuilder (~> 2.0)
+  jbuilder
   jquery-validation-rails
   launchy
   letter_opener
   mysql2 (~> 0.4.10)
-  nokogiri (~> 1.6, >= 1.7)
+  nokogiri
   omniauth-cas!
   phonelib
   premailer-rails
@@ -472,20 +472,20 @@ DEPENDENCIES
   rails-erd
   rails4-autocomplete
   rails_12factor
-  recaptcha (~> 3.3)
+  recaptcha
   rspec-rails
   safe_attributes
-  sass-rails (~> 5.0)
-  sdoc (~> 0.4.0)
-  shoulda-matchers (~> 3.0)
+  sass-rails
+  sdoc
+  shoulda-matchers
   simple_form
   simple_form-materialize!
   simplecov
   therubyracer
-  uglifier (>= 1.3.0)
-  unobtrusive_flash (>= 3)
-  web-console (~> 2.0)
-  webmock (~> 2.1)
+  uglifier
+  unobtrusive_flash
+  web-console
+  webmock
   yaml_db!
 
 RUBY VERSION
