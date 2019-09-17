@@ -100,8 +100,6 @@ gem "gram_v2_client",
 gem "phonelib"
 
 gem "gorg_engine"
-gem "simple_form-materialize",
-    git: "https://github.com/patricklindsay/simple_form-materialize"
 gem "configurable_engine",
     git: "https://github.com/Blaked84/configurable_engine"
 
