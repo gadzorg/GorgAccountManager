@@ -100,8 +100,7 @@ gem "gram_v2_client",
 gem "phonelib"
 
 gem "gorg_engine"
-gem "configurable_engine",
-    git: "https://github.com/Blaked84/configurable_engine"
+gem 'configurable_engine', git: 'https://github.com/gadzorg/configurable_engine', ref: 'v0.4.8'
 
 group :production do
   #HEROKU
