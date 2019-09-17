@@ -12,7 +12,7 @@ include Devise::TestHelpers
   shared_examples_for "an admin only endpoint" do |destination, params|
     context "user login as basic user" do
       before :each do
-        @user||=FactoryBot.create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
+        @user||=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
         login @user
         get destination, params
       end
@@ -22,7 +22,7 @@ include Devise::TestHelpers
 
     context "user not login" do
       before :each do
-        @user=FactoryBot.create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
+        @user=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
         get destination, params
       end
 
@@ -34,8 +34,8 @@ include Devise::TestHelpers
   describe "GET #index" do
 
     before :each do
-      @admin_role=FactoryBot.create(:role, name:"admin")
-      @support_role=FactoryBot.create(:role, name: 'support')
+      @admin_role=create(:role, name:"admin")
+      @support_role=create(:role, name: 'support')
     end
 
     it_should_behave_like "an admin only endpoint", :index
@@ -43,7 +43,7 @@ include Devise::TestHelpers
     context "user login as admin" do
       
       before :each do
-        @admin=FactoryBot.create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
+        @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
         get :index
       end

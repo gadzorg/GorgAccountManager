@@ -71,3 +71,5 @@ Around('@email') do |scenario, block|
   ActionMailer::Base.deliveries.clear
   block.call
 end
+
+World(FactoryBot::Syntax::Methods)

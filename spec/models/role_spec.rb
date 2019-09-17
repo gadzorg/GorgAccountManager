@@ -12,12 +12,12 @@ require 'rails_helper'
 
 RSpec.describe Role, type: :model do
   it "has a valid factory" do
-    expect(FactoryBot.build(:role)).to be_valid
+    expect(build(:role)).to be_valid
   end
 
   it "is invalid if name already exist" do
-    FactoryBot.create(:distinct_role,name:'admin')
-    expect(FactoryBot.build(:distinct_role,name:'admin')).not_to be_valid
+    create(:distinct_role,name:'admin')
+    expect(build(:distinct_role,name:'admin')).not_to be_valid
   end
 
 end
