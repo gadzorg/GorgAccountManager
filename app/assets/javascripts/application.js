@@ -15,7 +15,6 @@
 //= require autocomplete-rails
 //= require unobtrusive_flash
 //= require unobtrusive_flash_ui
-//= require admin
 //= require_tree ./autoload
 
 
@@ -49,4 +48,3 @@ $(document).ready(function () {
         max: Date.now()
     });
 });
-
