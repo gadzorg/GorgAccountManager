@@ -1,28 +1,27 @@
 source 'https://rubygems.org'
 
-ruby '2.5.5'
+ruby '2.3.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '>= 5.2.3'
+gem 'rails', '~>4.2.8'
 
 #DATABASE
 # Use sqlite3 as the database for Active Record
 #gem 'sqlite3'
 # Use mysql2 as the database for Active Record
 #gem 'mysql2'
-gem 'mysql2', '>= 0.3.20'
+gem 'mysql2', '~> 0.3.20'
 
-# Use 'foreigner' to add foreign_key constraints on database layer !
+# Use 'foreigner' to add foreign_key constraints on database layer !
 # https://github.com/matthuhiggins/foreigner
 # gem 'foreigner'
 
 # Use SCSS for stylesheets
-gem 'sass-rails'
-#gem 'sassc', :git => "https://github.com/sass/sassc-ruby.git"
+gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+gem 'uglifier', '>= 1.3.0'
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails'
+gem 'coffee-rails', '~> 4.1.0'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'execjs'
 gem 'therubyracer', :platforms => :ruby
@@ -39,10 +38,10 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Authentification
-gem "omniauth-cas", :git => "https://github.com/gadzorg/omniauth-cas.git", :branch => 'saml'
+gem "omniauth-cas", :git => "https://github.com/loocla/omniauth-cas.git", :branch => 'saml'
 
 # Authorisation
-gem 'cancancan', '>= 1.16'
+gem 'cancancan', '~> 1.16'
 
 # API GRAM
 gem 'activeresource'
@@ -50,7 +49,7 @@ gem 'activeresource'
 gem 'email_validator'
 
 # Templates
-gem 'haml-rails', '= 1.0.0'
+gem 'haml-rails'
 
 # Forms
 gem 'simple_form'
@@ -64,7 +63,6 @@ gem 'i18n'
 # better flash messaages
 gem 'unobtrusive_flash', '>=3'
 
-gem 'ruby-graphviz'
 
 # tooltips
 gem 'bootstrap-tooltip-rails'
@@ -76,7 +74,7 @@ gem 'safe_attributes'
 gem "recaptcha",'~> 3.3' ,:require => "recaptcha/rails"
 
 # pretty hash print in console
-#gem 'awesome_print'
+gem 'awesome_print'
 
 # charts
 gem "chartkick"
@@ -106,15 +104,15 @@ gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git
 
 gem 'phonelib'
 
-gem 'gorg_engine', git: 'https://github.com/gadzorg/GorgEngine.git'
-gem 'simple_form-materialize', git: 'https://github.com/gadzorg/simple_form-materialize.git'
-gem 'configurable_engine', git: 'https://github.com/gadzorg/configurable_engine.git'
+gem 'gorg_engine', '~> 1.2'
+gem 'simple_form-materialize', github: 'patricklindsay/simple_form-materialize'
+gem 'configurable_engine', github: 'Blaked84/configurable_engine'
 
 gem "awesome_print", require:"ap"
 
 group :production do
   #HEROKU
-  gem 'heroku_secrets', git: 'https://github.com/gadzorg/heroku_secrets.git'
+  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
   gem 'rails_12factor'
   gem 'puma'
 end
@@ -133,18 +131,17 @@ group :development, :test do
   gem 'hirb' 
 
   # export db en yaml
-  gem 'yaml_db', git: 'https://github.com/gadzorg/yaml_db.git'
+  gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
 
   gem 'bogus'
   gem 'rspec-rails'
-  gem 'factory_bot_rails'
+  gem 'factory_girl_rails'
   gem 'faker'
   gem 'rack-mini-profiler'
   # gem 'flamegraph'
   # gem 'stackprof' # ruby 2.1+ only
   # gem 'memory_profiler'
-  # quiet_assets depend railties<5
-  # gem 'quiet_assets'
+  gem 'quiet_assets'
 
 end
 
@@ -164,4 +161,3 @@ group :test do
   gem 'database_cleaner'
   gem 'webmock', '~> 2.1'
 end
-
