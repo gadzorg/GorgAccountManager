@@ -20,11 +20,12 @@ GIT
       activeresource (~> 4.0)
 
 GIT
-  remote: https://github.com/jetthoughts/yaml_db
-  revision: fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba
-  ref: fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba
+  remote: https://github.com/gadzorg/yaml_db
+  revision: 1954645c7f89c3a01d61a5d649c85775fd41270f
   specs:
-    yaml_db (0.2.3)
+    yaml_db (0.7.0)
+      rails (>= 3.0)
+      rake (>= 0.8.7)
 
 GIT
   remote: https://github.com/loocla/omniauth-cas.git

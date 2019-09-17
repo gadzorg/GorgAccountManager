@@ -122,9 +122,7 @@ group :development, :test do
   gem "hirb"
 
   # export db en yaml
-  gem "yaml_db",
-      git: "https://github.com/jetthoughts/yaml_db",
-      ref: "fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba"
+  gem 'yaml_db', git: "https://github.com/gadzorg/yaml_db"
 
   gem "rspec-rails"
   gem "factory_bot_rails"
