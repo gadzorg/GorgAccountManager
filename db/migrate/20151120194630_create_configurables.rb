@@ -4,7 +4,7 @@ class CreateConfigurables < ActiveRecord::Migration
       t.string :name
       t.string :value
 
-      t.timestamps
+      t.timestamps null: true
     end
     
     add_index :configurables, :name
