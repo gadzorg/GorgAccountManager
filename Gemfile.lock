@@ -1,29 +1,15 @@
 GIT
-  remote: git://github.com/Blaked84/configurable_engine.git
-  revision: b46977d916cc4627480ec8d9abd5d2e895823aad
+  remote: https://github.com/Blaked84/configurable_engine
+  revision: 42bb4203e0f6426f930c82149d91f5872ddf4f64
   specs:
     configurable_engine (0.4.9.1)
       rails (> 3.1.0)
 
 GIT
-  remote: git://github.com/alexpeattie/heroku_secrets.git
+  remote: https://github.com/alexpeattie/heroku_secrets
   revision: 717af8e0acf399bc88d2c8c1a7e230023942af0f
   specs:
     heroku_secrets (0.0.2)
-
-GIT
-  remote: git://github.com/jetthoughts/yaml_db.git
-  revision: fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba
-  ref: fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba
-  specs:
-    yaml_db (0.2.3)
-
-GIT
-  remote: git://github.com/patricklindsay/simple_form-materialize.git
-  revision: 6d2afdec6f0523946fb2221070f05b79739be12a
-  specs:
-    simple_form-materialize (0.0.1)
-      rails (~> 4.2)
 
 GIT
   remote: https://github.com/gadzorg/gram2_api_client_ruby.git
@@ -31,6 +17,13 @@ GIT
   specs:
     gram_v2_client (3.0.0)
       activeresource (~> 4.0)
+
+GIT
+  remote: https://github.com/jetthoughts/yaml_db
+  revision: fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba
+  ref: fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba
+  specs:
+    yaml_db (0.2.3)
 
 GIT
   remote: https://github.com/loocla/omniauth-cas.git
@@ -41,6 +34,13 @@ GIT
       addressable (~> 2.3)
       nokogiri (~> 1.5)
       omniauth (~> 1.1.0)
+
+GIT
+  remote: https://github.com/patricklindsay/simple_form-materialize
+  revision: 6d2afdec6f0523946fb2221070f05b79739be12a
+  specs:
+    simple_form-materialize (0.0.1)
+      rails (~> 4.2)
 
 GEM
   remote: https://rubygems.org/

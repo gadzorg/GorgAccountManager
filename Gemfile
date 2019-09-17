@@ -6,10 +6,8 @@ ruby "2.3.7"
 gem "rails", "4.2.11.1"
 
 #DATABASE
-# Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
+
 # Use mysql2 as the database for Active Record
-#gem 'mysql2'
 gem "mysql2", "~> 0.4.10"
 
 # Use 'foreigner' to add foreign_key constraints on database layer !
@@ -72,9 +70,6 @@ gem "safe_attributes"
 # recapcha gem
 gem "recaptcha", "~> 3.3", require: "recaptcha/rails"
 
-# pretty hash print in console
-gem "awesome_print"
-
 # charts
 gem "chartkick"
 
@@ -105,12 +100,14 @@ gem "gram_v2_client",
 gem "phonelib"
 
 gem "gorg_engine", "~> 1.2"
-gem "simple_form-materialize", github: "patricklindsay/simple_form-materialize"
-gem "configurable_engine", github: "Blaked84/configurable_engine"
+gem "simple_form-materialize",
+    git: "https://github.com/patricklindsay/simple_form-materialize"
+gem "configurable_engine",
+    git: "https://github.com/Blaked84/configurable_engine"
 
 group :production do
   #HEROKU
-  gem "heroku_secrets", github: "alexpeattie/heroku_secrets"
+  gem "heroku_secrets", git: "https://github.com/alexpeattie/heroku_secrets"
   gem "rails_12factor"
   gem "puma"
 end
@@ -129,7 +126,7 @@ group :development, :test do
 
   # export db en yaml
   gem "yaml_db",
-      github: "jetthoughts/yaml_db",
+      git: "https://github.com/jetthoughts/yaml_db",
       ref: "fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba"
 
   gem "bogus"
@@ -141,6 +138,9 @@ group :development, :test do
   # gem 'stackprof' # ruby 2.1+ only
   # gem 'memory_profiler'
   gem "quiet_assets"
+
+  # pretty hash print in console
+  gem "awesome_print"
 end
 
 group :development do
