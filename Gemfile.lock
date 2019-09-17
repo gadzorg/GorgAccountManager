@@ -275,7 +275,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     multi_test (0.1.2)
-    mysql2 (0.3.21)
+    mysql2 (0.4.10)
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     omniauth (1.1.4)
@@ -466,7 +466,7 @@ DEPENDENCIES
   jquery-validation-rails
   launchy
   letter_opener
-  mysql2 (~> 0.3.20)
+  mysql2 (~> 0.4.10)
   nokogiri (~> 1.6, >= 1.7)
   omniauth-cas!
   phonelib
@@ -497,4 +497,4 @@ RUBY VERSION
    ruby 2.3.7p456
 
 BUNDLED WITH
-   1.16.2
+   1.17.3
