@@ -466,6 +466,7 @@ DEPENDENCIES
   jquery-validation-rails
   launchy
   letter_opener
+  materialize-sass (< 1)
   mysql2 (~> 0.4.10)
   nokogiri
   omniauth-cas!

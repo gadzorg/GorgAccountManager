@@ -16,6 +16,8 @@ gem "mysql2", "~> 0.4.10"
 
 # Use SCSS for stylesheets
 gem "sass-rails"
+gem "materialize-sass", "< 1"
+
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier"
 
