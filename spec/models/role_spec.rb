@@ -8,7 +8,7 @@
 #  updated_at :datetime         not null
 #
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe Role, type: :model do
   it "has a valid factory" do
@@ -16,8 +16,7 @@ RSpec.describe Role, type: :model do
   end
 
   it "is invalid if name already exist" do
-    create(:distinct_role,name:'admin')
-    expect(build(:distinct_role,name:'admin')).not_to be_valid
+    create(:role, :distinct, name: "admin")
+    expect(build(:role, :distinct, name: "admin")).not_to be_valid
   end
-
 end

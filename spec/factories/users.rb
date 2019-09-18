@@ -40,15 +40,15 @@ FactoryBot.define do
     password_confirmation { password }
     uuid { SecureRandom.uuid }
 
-    factory :admin do
+    trait :admin do
       role { FactoryBot.create(:role, name: "admin") }
     end
 
-    factory :support do
+    trait :support do
       role { FactoryBot.create(:role, name: "support") }
     end
 
-    factory :invalid_user do
+    trait :invalid do
       email { nil }
     end
   end

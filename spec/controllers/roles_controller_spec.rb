@@ -40,7 +40,7 @@ RSpec.describe RolesController, type: :controller do
     context "user login as admin" do
 
       before :each do
-        @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
+        @admin=create(:user, :admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
         get :index
       end

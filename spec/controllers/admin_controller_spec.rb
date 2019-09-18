@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe AdminController, type: :controller do
   def login(user)
@@ -24,19 +24,18 @@ RSpec.describe AdminController, type: :controller do
         get destination, params
       end
 
-      it { is_expected.to respond_with :redirect}
-      it { is_expected.to redirect_to new_user_session_path}
+      it { is_expected.to respond_with :redirect }
+      it { is_expected.to redirect_to new_user_session_path }
     end
   end
-
 
   describe "GET #index" do
     it_should_behave_like "an admin only endpoint", :index
 
     context "user login as admin" do
-
       before :each do
-        @admin = create(:admin, firstname: "Admin", email: "admin@hotmail.com")
+        @admin =
+          create(:user, :admin, firstname: "Admin", email: "admin@hotmail.com")
         login @admin
         get :index
       end
