@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
-
-include Devise::TestHelpers
-
   def login(user)
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user

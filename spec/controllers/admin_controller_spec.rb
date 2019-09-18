@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe AdminController, type: :controller do
-
-include Devise::TestHelpers
-
   def login(user)
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user
@@ -37,7 +34,7 @@ include Devise::TestHelpers
     it_should_behave_like "an admin only endpoint", :index
 
     context "user login as admin" do
-      
+
       before :each do
         @admin = create(:admin, firstname: "Admin", email: "admin@hotmail.com")
         login @admin
@@ -46,7 +43,7 @@ include Devise::TestHelpers
 
       it { is_expected.to respond_with :success }
     end
-    
+
   end
 
 

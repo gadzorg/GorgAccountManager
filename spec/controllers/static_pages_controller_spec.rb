@@ -1,13 +1,9 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe StaticPagesController, type: :controller do
-  
- include Devise::TestHelpers
-  
-
   describe "GET #index" do
     before :each do
-        get :index
+      get :index
     end
     it { is_expected.to respond_with :success }
   end
