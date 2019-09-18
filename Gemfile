@@ -1,14 +1,14 @@
 source "https://rubygems.org"
 
-ruby "2.3.7"
+ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "4.2.11.1"
+gem "rails", "5.0.7.2"
 
 #DATABASE
 
 # Use mysql2 as the database for Active Record
-gem "mysql2", "~> 0.4.10"
+gem "mysql2"
 
 # Use 'foreigner' to add foreign_key constraints on database layer !
 # https://github.com/matthuhiggins/foreigner
@@ -16,12 +16,14 @@ gem "mysql2", "~> 0.4.10"
 
 # Use SCSS for stylesheets
 gem "sass-rails"
+gem "materialize-sass", "< 1"
+
 # Use Uglifier as compressor for JavaScript assets
 gem "uglifier"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "execjs"
-gem "therubyracer", platforms: :ruby
+gem "mini_racer"
 
 #Documentation
 gem "annotate"
@@ -35,6 +37,7 @@ gem "jbuilder"
 gem "sdoc", group: :doc
 
 # Authentification
+gem "devise"
 gem "omniauth-cas",
     git: "https://github.com/loocla/omniauth-cas.git", branch: "saml"
 
@@ -84,7 +87,7 @@ gem "fuzzy-string-match"
 
 # Gadz.org Gems Gram v2 client
 gem "gram_v2_client",
-    git: "https://github.com/gadzorg/gram2_api_client_ruby.git"
+    git: "https://github.com/gadzorg/gram2_api_client_ruby", ref: "4425fa6"
 
 #gem "linkedin-scraper"
 
@@ -99,8 +102,9 @@ gem "gram_v2_client",
 
 gem "phonelib"
 
-gem "gorg_engine"
-gem 'configurable_engine', git: 'https://github.com/gadzorg/configurable_engine', ref: 'v0.4.8'
+gem "gorg_engine", git: "https://github.com/gadzorg/GorgEngine", ref: "v2.0.0"
+gem "configurable_engine",
+    git: "https://github.com/gadzorg/configurable_engine"
 
 group :production do
   #HEROKU
@@ -123,7 +127,7 @@ group :development, :test do
   gem "hirb"
 
   # export db en yaml
-  gem 'yaml_db', git: "https://github.com/gadzorg/yaml_db"
+  gem "yaml_db", git: "https://github.com/gadzorg/yaml_db"
 
   gem "rspec-rails"
   gem "factory_bot_rails"
@@ -132,7 +136,6 @@ group :development, :test do
   # gem 'flamegraph'
   # gem 'stackprof' # ruby 2.1+ only
   # gem 'memory_profiler'
-  gem "quiet_assets"
 
   # pretty hash print in console
   gem "awesome_print"
@@ -155,4 +158,6 @@ group :test do
   gem "webmock"
 
   gem "simplecov"
+
+  gem "rails-controller-testing"
 end

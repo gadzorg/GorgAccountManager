@@ -41,7 +41,7 @@ FactoryBot.define do
     prenom { Faker::Name.first_name }
     nom_jeune_fille { Faker::Name.last_name }
     parente { nil }
-    date_naissance { Faker::Date.between(60.years.ago, 18.years.ago) }
+    date_naissance { Faker::Date.between(from: 60.years.ago, to: 18.years.ago) }
     login { "#{id_user}#{id_user_chksum}" }
     pass { "" }
     pass_crypt { Digest::SHA1.hexdigest Devise.friendly_token[0, 20] }
@@ -146,13 +146,19 @@ FactoryBot.define do
     date_rappel_maj_coordonnees { "2016-11-09" }
     date_limite_bloquage_relance_cotiz { nil }
     date_effacement_si_compte_temporaire { nil }
-    hruid { "alexandre.narbonne.2011" }
+    hruid do
+      prenom.downcase.gsub(/[^a-z]/, "-") + "." +
+        nom.downcase.gsub(/[^a-z]/, "-") +
+        "." +
+        %w[1950 2015 ext soce associe].sample +
+        ["", ".2", ".3"].sample
+    end
     linkedin { nil }
     id_bande { "0" }
     a_propos_de_moi { "" }
     figuration_annuaire_publique { "1" }
     is_gadzart { "1" }
-    uuid { "8046ee4d-2bce-4eec-bc57-c4146753298a" }
+    uuid { SecureRandom.uuid }
     migration_platal { "1" }
     date_migration_platal { "2016-11-18" }
   end

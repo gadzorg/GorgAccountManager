@@ -25,7 +25,7 @@
 ##
 # A User of the application
 #
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   
   # Load default behaviour of User class from GorgEngine
   require GorgEngine::Engine.config.root + 'app' + 'models' + self.name.underscore
@@ -42,7 +42,7 @@ class User < ActiveRecord::Base
   attr_accessor :synced_with_gram
 
   # Associations
-  belongs_to :role
+  belongs_to :role, optional: true
 
 
   after_initialize :set_default_values

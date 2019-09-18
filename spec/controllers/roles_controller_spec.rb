@@ -1,9 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe RolesController, type: :controller do
-
-include Devise::TestHelpers
-
   def login(user)
     @request.env["devise.mapping"] = Devise.mappings[:user]
     sign_in user
@@ -41,9 +38,9 @@ include Devise::TestHelpers
     it_should_behave_like "an admin only endpoint", :index
 
     context "user login as admin" do
-      
+
       before :each do
-        @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
+        @admin=create(:user, :admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
         get :index
       end
@@ -54,7 +51,7 @@ include Devise::TestHelpers
       it "populate @roles list with all roles" do
         expect(assigns(:roles)).to eq([@admin_role, @support_role])
       end
-    end    
+    end
   end
 
 end

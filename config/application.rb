@@ -1,4 +1,4 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
 require 'rails/all'
 require 'active_resource'
@@ -6,8 +6,6 @@ require 'active_resource'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-
-# ActiveResource::Base.logger = Logger.new(STDERR)
 
 module GorgAccount
   class Application < Rails::Application
@@ -23,8 +21,6 @@ module GorgAccount
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales','**', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :fr
 
-    # Do not swallow errors in after_commit/after_rollback callbacks.
-    config.active_record.raise_in_transactional_callbacks = true
     config.autoload_paths << Rails.root.join('lib')
 
     config.generators do |g|

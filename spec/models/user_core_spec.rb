@@ -90,7 +90,7 @@ RSpec.describe User, type: :model do
     context 'has a role' do
 
       before :each do
-        @user = create(:admin)
+        @user = create(:user, :admin)
       end
 
       it "confirms its role" do

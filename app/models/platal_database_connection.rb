@@ -1,4 +1,4 @@
-class PlatalDatabaseConnection < ActiveRecord::Base
+class PlatalDatabaseConnection < ApplicationRecord
 	establish_connection ENV['PLATAL_DATABASE_URL']||"platal_#{Rails.env}".to_sym
 
 	def self.abstract_class?
