@@ -25,7 +25,7 @@
 ##
 # A User of the application
 #
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   
   # Load default behaviour of User class from GorgEngine
   require GorgEngine::Engine.config.root + 'app' + 'models' + self.name.underscore
