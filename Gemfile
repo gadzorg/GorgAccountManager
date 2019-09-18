@@ -157,4 +157,6 @@ group :test do
   gem "webmock"
 
   gem "simplecov"
+
+  gem "rails-controller-testing"
 end
