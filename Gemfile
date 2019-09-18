@@ -37,6 +37,7 @@ gem "jbuilder"
 gem "sdoc", group: :doc
 
 # Authentification
+gem "devise"
 gem "omniauth-cas",
     git: "https://github.com/loocla/omniauth-cas.git", branch: "saml"
 
