@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   include ConfigurableEngine::ConfigurablesController
 
-  after_filter :prepare_unobtrusive_flash
+  after_action :prepare_unobtrusive_flash
   before_action :masquerade_user!
 
   private
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   def after_sign_out_path_for(_resource_or_scope)
     Rails.application.secrets.cas_provider_url ? URI::HTTPS.build(host: Rails.application.secrets.cas_provider_host, path:"/cas/logout", query: "service=#{root_url}").to_s : root_url
   end
-  
+
   rescue_from CanCan::AccessDenied, with: :access_denied
 
   private
@@ -34,6 +34,6 @@ class ApplicationController < ActionController::Base
       end
 
     end
-  
+
 
 end
