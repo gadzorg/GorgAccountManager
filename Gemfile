@@ -3,7 +3,7 @@ source "https://rubygems.org"
 ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "4.2.11.1"
+gem "rails", "5.0.7.2"
 
 #DATABASE
 
@@ -103,7 +103,7 @@ gem "phonelib"
 
 # gem "gorg_engine", git: "https://github.com/gadzorg/GorgEngine", ref: "caa7f9"
 gem "configurable_engine",
-    git: "https://github.com/gadzorg/configurable_engine", ref: "v0.4.8"
+    git: "https://github.com/gadzorg/configurable_engine"
 
 group :production do
   #HEROKU
