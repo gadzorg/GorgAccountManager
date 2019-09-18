@@ -102,7 +102,7 @@ gem "gram_v2_client",
 
 gem "phonelib"
 
-gem "gorg_engine", git: "https://github.com/gadzorg/GorgEngine", ref: "caa7f9"
+gem "gorg_engine", git: "https://github.com/gadzorg/GorgEngine", ref: "v2.0.0"
 gem "configurable_engine",
     git: "https://github.com/gadzorg/configurable_engine"
 
