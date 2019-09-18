@@ -44,6 +44,7 @@ RSpec.describe UsersController, type: :controller do
 
   shared_examples_for "an target user or admin only endpoint" do |destination|
     let! (:params) do
+      {}
     end
     context "user login as target user" do
       before :each do
