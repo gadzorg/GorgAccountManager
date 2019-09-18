@@ -397,7 +397,7 @@ GEM
     sdoc (1.0.0)
       rdoc (>= 5.0)
     sexp_processor (4.12.1)
-    shoulda-matchers (4.0.1)
+    shoulda-matchers (4.1.2)
       activesupport (>= 4.2.0)
     simple_form (4.0.0)
       actionpack (> 4)
