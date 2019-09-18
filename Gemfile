@@ -23,7 +23,7 @@ gem "uglifier"
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem "execjs"
-gem "therubyracer", platforms: :ruby
+gem "mini_racer"
 
 #Documentation
 gem "annotate"
