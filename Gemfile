@@ -135,7 +135,6 @@ group :development, :test do
   # gem 'flamegraph'
   # gem 'stackprof' # ruby 2.1+ only
   # gem 'memory_profiler'
-  gem "quiet_assets"
 
   # pretty hash print in console
   gem "awesome_print"
