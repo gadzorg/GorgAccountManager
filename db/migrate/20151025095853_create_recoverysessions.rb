@@ -1,4 +1,4 @@
-class CreateRecoverysessions < ActiveRecord::Migration
+class CreateRecoverysessions < ActiveRecord::Migration[4.2]
   def change
     create_table :recoverysessions do |t|
       t.string :hruid
