@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: https://github.com/gadzorg/GorgEngine
-  revision: b10359ce32f06db36075001edaba9d3a2a546337
+  revision: af6d23e8360c4e162e6d2d4adf43c7570036e08d
   ref: v2.0.0
   specs:
     gorg_engine (2.0.0)
