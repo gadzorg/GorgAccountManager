@@ -38,11 +38,11 @@ GIT
       rails (> 3.1.0)
 
 GIT
-  remote: https://github.com/gadzorg/gram2_api_client_ruby.git
-  revision: 7aa3cd2015c490ac864c1a694a92f146e737c410
-  ref: 7aa3cd20
+  remote: https://github.com/gadzorg/gram2_api_client_ruby
+  revision: 4425fa6c925ff7ae3064770b87801220597a6f9b
+  ref: 4425fa6
   specs:
-    gram_v2_client (3.0.4)
+    gram_v2_client (3.0.3)
       activeresource (>= 4.0)
 
 GIT

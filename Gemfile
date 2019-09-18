@@ -86,7 +86,7 @@ gem "fuzzy-string-match"
 
 # Gadz.org Gems Gram v2 client
 gem "gram_v2_client",
-    git: "https://github.com/gadzorg/gram2_api_client_ruby.git", ref: "7aa3cd20"
+    git: "https://github.com/gadzorg/gram2_api_client_ruby", ref: "4425fa6"
 
 #gem "linkedin-scraper"
 
