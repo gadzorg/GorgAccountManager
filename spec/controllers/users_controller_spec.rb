@@ -7,12 +7,12 @@ RSpec.describe UsersController, type: :controller do
   end
 
   shared_examples_for "an admin only endpoint" do |destination|
-    let! (:params) {}
+    let! (:params) { {} }
     context "user login as target user" do
       before :each do
         @user||=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
         login @user
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :forbidden }
@@ -22,7 +22,7 @@ RSpec.describe UsersController, type: :controller do
       before :each do
         @user2=create(:user, firstname: 'Didier', email:'Didier@hotmail.com')
         login @user2
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :forbidden }
@@ -31,7 +31,7 @@ RSpec.describe UsersController, type: :controller do
     context "user not login" do
       before :each do
         @user=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :redirect}
@@ -45,7 +45,7 @@ RSpec.describe UsersController, type: :controller do
       before :each do
         @user||=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
         login @user
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :success }
@@ -55,7 +55,7 @@ RSpec.describe UsersController, type: :controller do
       before :each do
         @user2=create(:user, firstname: 'Didier', email:'Didier@hotmail.com')
         login @user2
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :forbidden }
@@ -64,7 +64,7 @@ RSpec.describe UsersController, type: :controller do
     context "user not login" do
       before :each do
         @user=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :redirect}
@@ -83,7 +83,7 @@ RSpec.describe UsersController, type: :controller do
     it_should_behave_like "an admin only endpoint", :index
 
     context "user login as admin" do
-      
+
       before :each do
         @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
@@ -106,7 +106,7 @@ RSpec.describe UsersController, type: :controller do
       describe "search" do
 
         before :each do
-          get :index, query: query
+          get :index, params: { query: query }
         end
 
         context "multiple results" do
@@ -131,7 +131,7 @@ RSpec.describe UsersController, type: :controller do
 
       end
 
-    end    
+    end
   end
 
   describe "GET #show" do
@@ -151,7 +151,7 @@ RSpec.describe UsersController, type: :controller do
           before :each do
             @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
             login @admin
-            get :show, :id => id
+            get :show, params: { id: id }
           end
 
           it { is_expected.to respond_with :success }
@@ -168,7 +168,7 @@ RSpec.describe UsersController, type: :controller do
         before :each do
           @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
           login @admin
-          get :show, :id => id
+          get :show, params: { id: id }
         end
 
         it { is_expected.to respond_with :success }
@@ -185,7 +185,7 @@ RSpec.describe UsersController, type: :controller do
         before :each do
           @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
           login @admin
-          get :show, :id => id
+          get :show, params: { id: id }
         end
 
         it { is_expected.to respond_with :success }
@@ -196,7 +196,7 @@ RSpec.describe UsersController, type: :controller do
         end
       end
 
-    end    
+    end
   end
 
   describe "GET #new" do
@@ -204,7 +204,7 @@ RSpec.describe UsersController, type: :controller do
     it_should_behave_like "an admin only endpoint", :new
 
     context "user login as admin" do
-      
+
       before :each do
         @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
@@ -225,32 +225,32 @@ RSpec.describe UsersController, type: :controller do
     it_should_behave_like "an admin only endpoint", :new
 
     context "user login as admin" do
-      
+
       before :each do
         @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
       end
 
       context 'With valid data' do
-        it { expect{post :create, user: attributes_for(:user)}.to change{User.count}.by(1) }
+        it { expect{post :create, params: { user: attributes_for(:user) }}.to change{User.count}.by(1) }
         it "respond with 302" do
-          post :create, user: attributes_for(:user)
+          post :create, params: { user: attributes_for(:user) }
           is_expected.to respond_with :redirect
        end
        it "Redirect to create user #show" do
-          post :create, user: attributes_for(:user)
+          post :create, params: { user: attributes_for(:user) }
           is_expected.to redirect_to user_path(assigns(:user).id)
        end
       end
 
       context 'With invalid data' do
-        it {expect{post :create, user: attributes_for(:invalid_user)}.to_not change{User.count}}
+        it {expect{post :create, params: { user: attributes_for(:invalid_user) }}.to_not change{User.count}}
         it "respond with 422" do
-          post :create, user: attributes_for(:invalid_user)
+          post :create, params: { user: attributes_for(:invalid_user) }
           is_expected.to respond_with :unprocessable_entity
         end
         it "Redirect to create user #show" do
-          post :create, user: attributes_for(:invalid_user)
+          post :create, params: { user: attributes_for(:invalid_user) }
           is_expected.to render_template :new
         end
       end
@@ -267,11 +267,11 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context "user login as admin" do
-      
+
       before :each do
         @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
-        get :edit, :id => @user.id
+        get :edit, params: { id: @user.id }
       end
 
       it { is_expected.to respond_with :success }
@@ -293,7 +293,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context "user login as admin" do
-      
+
       before :each do
         @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
@@ -301,7 +301,7 @@ RSpec.describe UsersController, type: :controller do
 
       context 'With valid data' do
         before :each do
-          put :update, :id => @user.id, user: attributes_for(:user, firstname:'Bobby')
+          put :update, params: { id: @user.id, user: attributes_for(:user, firstname:'Bobby') }
         end
         it "update user data" do
           expect(User.find(@user.id).firstname).to eq('Bobby')
@@ -315,19 +315,19 @@ RSpec.describe UsersController, type: :controller do
 
       context 'With invalid data' do
         before :each do
-          put :update, :id => @user.id, user: attributes_for(:user, firstname:'Bobby', email:'')
+          put :update, params: { id: @user.id, user: attributes_for(:user, firstname:'Bobby', email:'') }
         end
 
         it "doesn't update user data" do
           expect(User.find(@user.id).email).to_not eq('')
           expect(User.find(@user.id).email).to eq('bob@hotmail.com')
-        end        
+        end
         it "respond with 422" do
-          post :create, user: attributes_for(:invalid_user)
+          post :create, params: { user: attributes_for(:invalid_user) }
           is_expected.to respond_with :unprocessable_entity
        end
        it "Redirect to create user #show" do
-          post :create, user: attributes_for(:invalid_user)
+          post :create, params: { user: attributes_for(:invalid_user) }
           is_expected.to render_template :new
        end
       end
@@ -344,22 +344,22 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context "user login as admin" do
-      
+
       before :each do
         @admin=create(:admin, firstname: 'Admin', email:'admin@hotmail.com')
         login @admin
       end
 
       it "deletes the contact" do
-        expect{delete :destroy, id: @user.id}.to change(User,:count).by(-1)
+        expect{delete :destroy, params: { id: @user.id }}.to change(User,:count).by(-1)
       end
 
       it "respond with 302" do
-          delete :destroy, id: @user.id
+          delete :destroy, params: { id: @user.id }
           is_expected.to respond_with :redirect
        end
        it "Redirect to create user #show" do
-          delete :destroy, id: @user.id
+          delete :destroy, params: { id: @user.id }
           is_expected.to redirect_to users_path
        end
 
