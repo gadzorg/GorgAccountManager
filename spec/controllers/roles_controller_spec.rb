@@ -6,12 +6,12 @@ RSpec.describe RolesController, type: :controller do
     sign_in user
   end
 
-  shared_examples_for "an admin only endpoint" do |destination, params|
+  shared_examples_for "an admin only endpoint" do |destination, params = {}|
     context "user login as basic user" do
       before :each do
         @user||=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
         login @user
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :forbidden }
@@ -20,7 +20,7 @@ RSpec.describe RolesController, type: :controller do
     context "user not login" do
       before :each do
         @user=create(:user, firstname: 'Ulysse', email:'Ulysse@hotmail.com')
-        get destination, params
+        get destination, params: params
       end
 
       it { is_expected.to respond_with :redirect}

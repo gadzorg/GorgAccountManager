@@ -6,7 +6,7 @@ RSpec.describe AdminController, type: :controller do
     sign_in user
   end
 
-  shared_examples_for "an admin only endpoint" do |destination, params|
+  shared_examples_for "an admin only endpoint" do |destination, params = {}|
     context "user login as basic user" do
       before :each do
         login create(:user, firstname: "Ulysse", email: "Ulysse@hotmail.com")
