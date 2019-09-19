@@ -50,13 +50,10 @@
     "_SECRET_OVH_SMS_PASSWORD": {
       "required": true
     },
-    "_SECRET_RECAPTCHA_PRIVATE_KEY": {
+    "_SECRET_RECAPTCHA_SECRET_KEY": {
       "required": true
     },
-    "_SECRET_RECAPTCHA_PUBLIC_KEY": {
-      "required": true
-    },
-    "_SECRET_SECRET_KEY_BASE": {
+    "_SECRET_RECAPTCHA_SITE_KEY": {
       "required": true
     },
     "_SECRET_SITE_SOCE_URL": {
@@ -113,9 +110,6 @@
   },
   "formation": {
     "web": {
-      "quantity": 1
-    },
-    "worker": {
       "quantity": 1
     }
   },
