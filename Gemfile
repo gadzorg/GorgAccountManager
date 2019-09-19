@@ -3,7 +3,8 @@ source "https://rubygems.org"
 ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem "rails", "5.1.7"
+gem "rails", "5.2.3"
+gem "bootsnap", require: false
 
 #DATABASE
 
