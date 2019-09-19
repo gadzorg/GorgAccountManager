@@ -1,0 +1,132 @@
+{
+  "name": "GorgAccountManager",
+  "scripts": {},
+  "env": {
+    "_SECRET_APP_NAME": {
+      "required": true
+    },
+    "_SECRET_CAS_PROVIDER_HOST": {
+      "required": true
+    },
+    "_SECRET_CAS_PROVIDER_URL": {
+      "required": true
+    },
+    "_SECRET_GORGMAIL_API_PASSWORD": {
+      "required": true
+    },
+    "_SECRET_GORGMAIL_API_URL": {
+      "required": true
+    },
+    "_SECRET_GORGMAIL_API_USER": {
+      "required": true
+    },
+    "_SECRET_GRAM_API_PASSWORD": {
+      "required": true
+    },
+    "_SECRET_GRAM_API_SITE": {
+      "required": true
+    },
+    "_SECRET_GRAM_API_USER": {
+      "required": true
+    },
+    "_SECRET_JIRA_PASSWORD": {
+      "required": true
+    },
+    "_SECRET_JIRA_URL": {
+      "required": true
+    },
+    "_SECRET_JIRA_USER": {
+      "required": true
+    },
+    "_SECRET_OVH_SMS_ACCOUNT": {
+      "required": true
+    },
+    "_SECRET_OVH_SMS_FROM": {
+      "required": true
+    },
+    "_SECRET_OVH_SMS_LOGIN": {
+      "required": true
+    },
+    "_SECRET_OVH_SMS_PASSWORD": {
+      "required": true
+    },
+    "_SECRET_RECAPTCHA_PRIVATE_KEY": {
+      "required": true
+    },
+    "_SECRET_RECAPTCHA_PUBLIC_KEY": {
+      "required": true
+    },
+    "_SECRET_SECRET_KEY_BASE": {
+      "required": true
+    },
+    "_SECRET_SITE_SOCE_URL": {
+      "required": true
+    },
+    "_SECRET_SLACK_CHAT_CHANNEL_ID": {
+      "required": true
+    },
+    "_SECRET_SLACK_CHAT_TOKEN": {
+      "required": true
+    },
+    "_SECRET_SMTP_ADRESS": {
+      "required": true
+    },
+    "_SECRET_SMTP_PASSWORD": {
+      "required": true
+    },
+    "_SECRET_SMTP_USER": {
+      "required": true
+    },
+    "DATABASE_URL": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "PLATAL_DATABASE_URL": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "SCOUT_KEY": {
+      "required": true
+    },
+    "SCOUT_LOG_LEVEL": {
+      "required": true
+    },
+    "SCOUT_MONITOR": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "required": true
+    },
+    "SOCE_DATABASE_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    },
+    "worker": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "logentries",
+    "scout"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "stack": "heroku-18"
+}
