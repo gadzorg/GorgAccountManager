@@ -6,10 +6,10 @@ GIT
 
 GIT
   remote: https://github.com/gadzorg/GorgEngine
-  revision: af6d23e8360c4e162e6d2d4adf43c7570036e08d
-  ref: v2.0.0
+  revision: 364606ccff7462b6da527f24b486c343ce9f75cb
+  ref: v2.0.1
   specs:
-    gorg_engine (2.0.0)
+    gorg_engine (2.0.1)
       cancancan
       devise
       devise_masquerade

@@ -26,10 +26,12 @@
 # A User of the application
 #
 class User < ApplicationRecord
-  
+
   # Load default behaviour of User class from GorgEngine
+  # NOTE: some base behavior could not be overrided in this class,
+  # like options of an association defined in the engine.
   require GorgEngine::Engine.config.root + 'app' + 'models' + self.name.underscore
-  
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable,
