@@ -104,6 +104,9 @@
     "SECRET_KEY_BASE": {
       "required": true
     },
+    "SKIP_RECAPTCHA": {
+      "value": "1"
+    },
     "SOCE_DATABASE_URL": {
       "required": true
     }

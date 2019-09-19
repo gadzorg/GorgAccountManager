@@ -21,7 +21,7 @@ class PasswordRecoveryController < ApplicationController
     # on elimine les espaces en debut/fin du mot recherché
     query = params[:user][:recovery_query].to_s.strip.downcase
 
-    unless verify_recaptcha
+    unless verify_recaptcha || ENV["SKIP_RECAPTCHA"].present?
       return redirect_to(recovery_path(help: true, recovery_query: query), notice: 'As-tu bien coché la case "je ne suis pas un robot?"')
     end
 
