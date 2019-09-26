@@ -12,13 +12,18 @@ namespace :db do
 
     Rake::Task['db:reset'].invoke
 
+    def generate_hruid
+      FactoryGirl.attributes_for(:user).fetch(:hruid)
+    end
+
     # Create admin_user account
     admin_user = User.create!(:email => "admin@poubs.org",
                               :firstname => Faker::Name.first_name,
                               :lastname => Faker::Name.last_name,
                               :password => "password",
                               :password_confirmation => "password",
-                              :role => Role.find_by_name(:admin)
+                              :role => Role.find_by_name(:admin),
+                              :hruid => generate_hruid,
                               )
 
 
@@ -31,7 +36,8 @@ namespace :db do
                               :lastname => Faker::Name.last_name,
                               :password => "password",
                               :password_confirmation => "password",
-                              :role => Role.find_by_name(:support)
+                              :role => Role.find_by_name(:support),
+                              :hruid => generate_hruid,
     )
 
 
@@ -46,7 +52,9 @@ namespace :db do
                       :lastname => Faker::Name.last_name,
                       :password => "password",
                       :password_confirmation => "password",
-                      :role => nil)
+                      :role => nil,
+                      :hruid => generate_hruid,
+        )
       end
 
     basic_users.each do |u|

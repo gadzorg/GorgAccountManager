@@ -1,21 +1,27 @@
-language: ruby
+language: ruby # version from .ruby-version
 
 cache:
-  bundler: true
-  directories:
-    - tmp/cache
-rvm:
-  - 2.5.5
-before_install: gem install bundler -v 1.14.5
-install: bundle install --jobs=3 --retry=3 --deployment --without development
+  - bundler
+
 services:
   - mysql
-before_script:
+
+before_install:
+  # don't use bundler 2 yet https://docs.travis-ci.com/user/languages/ruby/#bundler-20
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
+
   - mysql -e 'create database myapp_test;'
   - mysql < db/soce_test_db_schema.sql
   - cp config/database.travis.yml config/database.yml
   - cp config/secrets.travis.yml config/secrets.yml
-script:  
+
+  - env | sort
+
+install:
+    - bundle install --jobs=3 --retry=3 --deployment --without development
+
+script:
   - RAILS_ENV=test bundle exec rake db:migrate
-  - RAILS_ENV=test bundle exec rspec spec/
-  - RAILS_ENV=test bundle exec cucumber
+  - RAILS_ENV=test NO_COVERAGE=1 bundle exec rspec
+  - RAILS_ENV=test NO_COVERAGE=1 bundle exec cucumber
