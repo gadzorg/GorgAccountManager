@@ -82,7 +82,7 @@ gem "chartkick"
 # for inline css in mail
 gem "premailer-rails"
 
-gem 'nokogiri', '~> 1.6', '>= 1.7'
+gem 'nokogiri', '~> 1.10'
 
 gem "geocoder", "~> 1.3.7"
 
