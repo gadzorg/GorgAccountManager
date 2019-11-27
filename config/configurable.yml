@@ -1,6 +1,6 @@
 site_url:
   name: Site Url (avec un "/" à la fin)
-  default: https://rec-gorg-account-manager.herokuapp.com/
+  default: http://localhost:3000/
   type: string
 
 use_platal:
