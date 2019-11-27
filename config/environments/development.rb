@@ -42,7 +42,7 @@ Rails.application.configure do
   config.action_view.raise_on_missing_translations = true
 
   config.after_initialize do
-    Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+    Rails.application.routes.default_url_options[:host] = 'https://rec-gorg-account-manager.herokuapp.com/'
   end
 
   ActiveResource::Base.logger = Logger.new(STDERR)
