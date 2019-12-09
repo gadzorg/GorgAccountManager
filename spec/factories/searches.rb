@@ -1,6 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :search do
-    term "MyString"
+    term { "MyString" }
   end
-
 end

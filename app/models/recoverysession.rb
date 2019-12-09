@@ -1,4 +1,4 @@
-class Recoverysession < ActiveRecord::Base
+class Recoverysession < ApplicationRecord
 
   MAX_SMS_ATTEMPTS=5
   SESSION_TTL=15.minute

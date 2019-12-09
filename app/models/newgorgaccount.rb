@@ -1,2 +1,2 @@
-class Newgorgaccount < ActiveRecord::Base
+class Newgorgaccount < ApplicationRecord
 end

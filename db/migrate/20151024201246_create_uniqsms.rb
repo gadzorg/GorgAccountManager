@@ -1,4 +1,4 @@
-class CreateUniqsms < ActiveRecord::Migration
+class CreateUniqsms < ActiveRecord::Migration[4.2]
   def change
     create_table :uniqsms do |t|
       t.string :hruid

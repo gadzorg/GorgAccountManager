@@ -1,13 +1,6 @@
 {
-  "addons": [
-    "logentries",
-    "scout"
-  ],
-  "buildpacks": [
-    {
-      "url": "heroku/ruby"
-    }
-  ],
+  "name": "GorgAccountManager",
+  "scripts": {},
   "env": {
     "_SECRET_APP_NAME": {
       "required": true
@@ -57,13 +50,10 @@
     "_SECRET_OVH_SMS_PASSWORD": {
       "required": true
     },
-    "_SECRET_RECAPTCHA_PRIVATE_KEY": {
+    "_SECRET_RECAPTCHA_SECRET_KEY": {
       "required": true
     },
-    "_SECRET_RECAPTCHA_PUBLIC_KEY": {
-      "required": true
-    },
-    "_SECRET_SECRET_KEY_BASE": {
+    "_SECRET_RECAPTCHA_SITE_KEY": {
       "required": true
     },
     "_SECRET_SITE_SOCE_URL": {
@@ -114,6 +104,9 @@
     "SECRET_KEY_BASE": {
       "required": true
     },
+    "SKIP_RECAPTCHA": {
+      "value": "1"
+    },
     "SOCE_DATABASE_URL": {
       "required": true
     }
@@ -121,13 +114,16 @@
   "formation": {
     "web": {
       "quantity": 1
-    },
-    "worker": {
-      "quantity": 1
     }
   },
-  "name": "GorgAccountManager",
-  "scripts": {
-  },
+  "addons": [
+    "logentries",
+    "scout"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ],
   "stack": "heroku-18"
 }
