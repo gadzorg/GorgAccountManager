@@ -1,4 +1,4 @@
-class Uniqsms < ActiveRecord::Base
+class Uniqsms < ApplicationRecord
 	before_save :default_values
 	def default_values
 	    self.check_count ||= 0

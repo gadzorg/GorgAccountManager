@@ -1,5 +1,5 @@
-class SoceDatabaseConnection < ActiveRecord::Base
-	establish_connection ENV['SOCE_DATABASE_URL']||"soce_#{Rails.env}"
+class SoceDatabaseConnection < ApplicationRecord
+	establish_connection ENV['SOCE_DATABASE_URL']||"soce_#{Rails.env}".to_sym
 
 	def self.abstract_class?
 		true

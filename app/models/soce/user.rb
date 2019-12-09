@@ -1,5 +1,5 @@
 class Soce::User < Soce::Base
-	# establish_connection ENV['SOCE_DATABASE_URL']||"soce_#{Rails.env}"
+	# establish_connection ENV['SOCE_DATABASE_URL']||"soce_#{Rails.env}".to_sym
 	self.table_name = "users"
 
 	has_many :reseaux_sociaux, foreign_key: "id_user"

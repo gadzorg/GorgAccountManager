@@ -4,7 +4,7 @@ require 'rails_helper'
 RSpec.describe  GramAccountSearcher, type: :service do
 
   let(:query) {"test.query"}
-  fake(:search_logger)
+  let(:search_logger) { double("search_logger") }
 
   subject(:gas){GramAccountSearcher.new(query)}
 
@@ -58,8 +58,8 @@ RSpec.describe  GramAccountSearcher, type: :service do
     it "log the search" do
       GorgmailApiMocker.new.mock_search_query(query,nil)
       gas=GramAccountSearcher.new(query, search_logger: search_logger)
+      expect(search_logger).to receive(:log).with(query, "Non trouvé")
       gas.perform
-      expect(search_logger).to have_received.log(query,"Non trouvé")
     end
   end
 

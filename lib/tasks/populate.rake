@@ -13,7 +13,7 @@ namespace :db do
     Rake::Task['db:reset'].invoke
 
     def generate_hruid
-      FactoryGirl.attributes_for(:user).fetch(:hruid)
+      FactoryBot.attributes_for(:user).fetch(:hruid)
     end
 
     # Create admin_user account

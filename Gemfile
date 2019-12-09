@@ -1,80 +1,78 @@
-source 'https://rubygems.org'
+source "https://rubygems.org"
 
-ruby '2.3.7'
+ruby File.read(".ruby-version").strip
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~>4.2.8'
+gem "rails", "5.2.3"
+gem "bootsnap", require: false
 
 #DATABASE
-# Use sqlite3 as the database for Active Record
-#gem 'sqlite3'
+
 # Use mysql2 as the database for Active Record
-#gem 'mysql2'
-gem 'mysql2', '~> 0.4.10'
+gem "mysql2"
 
 # Use 'foreigner' to add foreign_key constraints on database layer !
 # https://github.com/matthuhiggins/foreigner
 # gem 'foreigner'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0'
+gem "sass-rails"
+gem "materialize-sass", "< 1"
+
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 4.1.0'
+gem "uglifier"
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
-gem 'execjs'
-gem 'therubyracer', :platforms => :ruby
+gem "execjs"
+gem "mini_racer"
 
 #Documentation
-gem 'annotate', '~> 2.6.6'
+gem "annotate"
 
 # Use jquery as the JavaScript library
-gem 'jquery-validation-rails'
+gem "jquery-validation-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem "jbuilder"
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem "sdoc", group: :doc
 
 # Authentification
-gem "omniauth-cas", :git => "https://github.com/loocla/omniauth-cas.git", :branch => 'saml'
+gem "devise"
+gem "omniauth-cas",
+    git: "https://github.com/loocla/omniauth-cas.git", branch: "saml"
 
 # Authorisation
-gem 'cancancan', '~> 1.16'
+gem "cancancan"
 
 # API GRAM
-gem 'activeresource'
+gem "activeresource"
 
-gem 'email_validator'
+gem "email_validator"
 
 # Templates
-gem 'haml-rails'
+gem "haml-rails"
 
 # Forms
-gem 'simple_form'
+gem "simple_form"
 
 #Autocompletion pour les form de recherche
-gem 'rails4-autocomplete'
+gem "rails4-autocomplete"
 
 # i18n pour les conversion d'accents
-gem 'i18n'
+gem "i18n"
 
 # better flash messaages
-gem 'unobtrusive_flash', '>=3'
-
+gem "unobtrusive_flash"
 
 # tooltips
-gem 'bootstrap-tooltip-rails'
+gem "bootstrap-tooltip-rails"
 
 # to avoid issue with protected attributes
-gem 'safe_attributes'
+gem "safe_attributes"
 
 # recapcha gem
-gem "recaptcha",'~> 3.3' ,:require => "recaptcha/rails"
-
-# pretty hash print in console
-gem 'awesome_print'
+gem "recaptcha", require: "recaptcha/rails"
 
 # charts
 gem "chartkick"
@@ -82,14 +80,15 @@ gem "chartkick"
 # for inline css in mail
 gem "premailer-rails"
 
-gem 'nokogiri', '~> 1.6', '>= 1.7'
+gem "nokogiri"
 
-gem "geocoder", "~> 1.3.7"
+gem "geocoder"
 
 gem "fuzzy-string-match"
 
 # Gadz.org Gems Gram v2 client
-gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git'
+gem "gram_v2_client",
+    git: "https://github.com/gadzorg/gram2_api_client_ruby"
 
 #gem "linkedin-scraper"
 
@@ -102,62 +101,67 @@ gem 'gram_v2_client', git: 'https://github.com/gadzorg/gram2_api_client_ruby.git
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
-gem 'phonelib'
+gem "phonelib"
 
-gem 'gorg_engine', '~> 1.2'
-gem 'simple_form-materialize', github: 'patricklindsay/simple_form-materialize'
-gem 'configurable_engine', github: 'Blaked84/configurable_engine'
+gem "gorg_engine", git: "https://github.com/gadzorg/GorgEngine", ref: "v2.0.2"
+gem "configurable_engine", git: "https://github.com/gadzorg/configurable_engine"
 
 group :production do
   #HEROKU
-  gem 'heroku_secrets', github: 'alexpeattie/heroku_secrets'
-  gem 'rails_12factor'
-  gem 'puma'
+  gem "heroku_secrets", git: "https://github.com/alexpeattie/heroku_secrets"
+  gem "rails_12factor"
+  gem "puma"
 end
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger consolep
-  gem 'byebug'
+  gem "pry-byebug"
+  gem "pry-rails"
 
   gem "letter_opener"
 
-
   #pour les diagramme UML
-  gem 'rails-erd'
+  gem "rails-erd"
 
   #better cli table view for db
-  gem 'hirb'
+  gem "hirb"
 
   # export db en yaml
-  gem 'yaml_db', github: 'jetthoughts/yaml_db', ref: 'fb4b6bd7e12de3cffa93e0a298a1e5253d7e92ba'
+  gem "yaml_db", git: "https://github.com/gadzorg/yaml_db"
 
-  gem 'bogus'
-  gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'faker'
-  gem 'rack-mini-profiler'
+  gem "rspec-rails"
+  gem "factory_bot_rails"
+  gem "faker"
+  gem "rack-mini-profiler", require: false
   # gem 'flamegraph'
   # gem 'stackprof' # ruby 2.1+ only
   # gem 'memory_profiler'
-  gem 'quiet_assets'
 
+  # pretty hash print in console
+  gem "awesome_print"
 end
 
 group :development do
-  # Access an IRB console on exception pages or by using <%= console %> in views
-  gem 'web-console', '~> 2.0'
+  gem "listen", require: false
+  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
+  gem 'spring'
 
-  gem 'better_errors'
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem "web-console"
+
+  gem "better_errors"
+  gem "binding_of_caller"
 end
 
-
 group :test do
-  gem 'cucumber-rails', :require => false
-  gem 'capybara'
-  gem 'launchy'
-  gem 'shoulda-matchers', '~> 3.0'
-  gem 'database_cleaner'
-  gem 'webmock', '~> 2.1'
+  gem "cucumber-rails", require: false
+  gem "capybara"
+  gem "launchy"
+  gem "shoulda-matchers"
+  gem "database_cleaner"
+  gem "webmock"
 
-  gem 'simplecov'
+  gem "simplecov"
+
+  gem "rails-controller-testing"
 end

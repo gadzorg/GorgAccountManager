@@ -1,4 +1,4 @@
-class CreateNewgorgaccounts < ActiveRecord::Migration
+class CreateNewgorgaccounts < ActiveRecord::Migration[4.2]
   def change
     create_table :newgorgaccounts do |t|
       t.string :hruid

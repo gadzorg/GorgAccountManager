@@ -1,4 +1,4 @@
-class AddPicUrlToUser < ActiveRecord::Migration
+class AddPicUrlToUser < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :avatar_url, :string
   end
