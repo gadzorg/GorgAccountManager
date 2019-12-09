@@ -71,6 +71,6 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.after_initialize do
-    Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+    Rails.application.routes.default_url_options[:host] = 'https://rec-gorg-account-manager.herokuapp.com/'
   end
 end
