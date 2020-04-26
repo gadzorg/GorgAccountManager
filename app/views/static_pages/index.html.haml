@@ -10,12 +10,11 @@
         .card-content
           %span.card-title
             %i.material-icons lock_outline
-            Connexion et sécurité
+            %p Connexion et sécurité
         .divider
         .card-content
           %p
-            Modifier le mot de passe du compte :
-            %i.material-icons fingerprint_outline 
+          Modifier le mot de passe du compte :
           %br
           %p
           -if true #@user.present?
@@ -23,6 +22,7 @@
               = link_to password_change_u_path(), title: "Modifier mon mot de passe"  do
                 Modifier mon mot de passe
           %br
+          %i.material-icons fingerprint_outline 
           %p.grey-text Le mot de passe sera synchronisé entre votre compte Arts & Métiers Alumni et votre compte Google Gadz.org si vous en possédez un (voir emails.gadz.org)
           
     .col.s12.l6
@@ -30,17 +30,17 @@
         .card-content
           %span.card-title
             %i.material-icons account_circle_outline
-            Identifiants ou mot de passe perdus
+            %p Identifiants
         .divider
         .card-content
           %p
             Retrouver les identifiants de connexion :
-            %i.material-icons mail_outline textsms_outline
           %br
           %p
             = link_to recovery_path(), title: "Récupérer mes identifiants" do
               Récupérer mes identifiants
           %br
+          %i.material-icons mail_outline textsms_outline
           %p.grey-text Récupération par mail (via un lien) et/ou SMS (via un code)                
           
     .col.s12.l6
@@ -48,7 +48,7 @@
         .card-content
           %span.card-title
             %i.material-icons help_outline
-            Assistance
+            %p Assistance
         .divider
         .card-content
           %p
