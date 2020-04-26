@@ -1,7 +1,7 @@
 %html
   %head
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    %title= Rails.application.secrets.app_name
+    %title= Mon compte Arts & Métiers Alumni
     = csrf_meta_tags
     = stylesheet_link_tag    "gorg_engine/gorg", media: "all"
     = stylesheet_link_tag    "application", media: "all"
