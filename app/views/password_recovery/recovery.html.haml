@@ -2,11 +2,11 @@
   .col.s12.l6.offset-l3.m8.offset-m2
     %h4.center
       -if @first_attempt
-        Retrouve ton compte
+        Retrouver mon compte
       -else
         Nous n'avons pas pu t'identifier :-(
     - if @first_attempt
-      %p.center Tu as perdu ton mot de passe ou identifiant Gadz.org? Tu n'as plus accès à ton compte email Gadzmel?
+      %p.center Tu as perdu ton mot de passe ou ton identifiant Arts & Métiers Alumni ? Tu n'as plus accès à ton compte email Google Gadz.org ?
     -else
       %p.center
         Tu peux essayer à nouveau. Si tu ne retrouves pas tes identifiants ou si le système ne te reconnait pas, tu peux
@@ -16,13 +16,13 @@
     .card
       .card-content
 
-        %p Entre ton adresse @gadz.org, ton indentifiant, ton numéro de sociétaire ou l'email où tu reçois les communications de la SOCE / Gadz.org.
+        %p Entre ton identifiant (prenom.nom.promo) ou ton numéro de sociétaire (voir l'aide) ou encore l'email où tu reçois les communications de la Société des Ingénieurs Arts & Métiers (l'adresse mail de contact renseignée sur ton profil).
 
 
         =form_for  [@user], :url=> create_recovery_session_path()  do |f|
           .input-field
             =f.text_field :recovery_query, value: @query, :class => "validate", :autofocus => true, :required => "required"
-            =f.label :recovery_query, "Entre ici ton identifiant OU email OU n° de sociétaire...", "data-error"=>"Tu dois entrer ton adresse email au format email@domaine.fr", required: true
+            =f.label :recovery_query, "Entre ici ton identifiant OU n° de sociétaire", "data-error"=>"Tu dois entrer ton adresse email au format email@domaine.fr", required: true
 
             .span.highlight.w100
             .span.bar.w100
