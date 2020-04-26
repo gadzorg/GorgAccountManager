@@ -18,6 +18,7 @@
           %br
           %p
           -if true #@user.present?
+            %br
             %p
               = link_to password_change_u_path(), title: "Modifier mon mot de passe"  do
                 Modifier mon mot de passe
