@@ -1,7 +1,7 @@
 
 
 %section.pam
-  %h1.center Gère et contrôle ton compte AgorAM depuis un même endroit
+  %h1.center Mon compte Arts & Métiers Alumni
   / %h3.txtcentersmall Modifie ton mot de passe,
 
   .row
@@ -14,27 +14,51 @@
         .divider
         .card-content
           %p
-            Contrôle ton mot de passe et l'accès à ton compte.
+            Modifier le mot de passe du compte :
           %br
           %p
-            = link_to recovery_path(), title: "Récupère ton mot de passe" do
-              Récupérer mon mot de passe
           -if true #@user.present?
             %p
-              = link_to password_change_u_path(), title: "Changer mon mot de passe"  do
-                Changer mon mot de passe
-          %p.grey-text Mes options de récupération (bientôt disponible)
+              = link_to password_change_u_path(), title: "Modifier mon mot de passe"  do
+                Modifier mon mot de passe
+          %br
+          %i.material-icons fingerprint_outline %p.grey-text Le mot de passe sera synchronisé entre votre compte Arts & Métiers Alumni et votre compte Google Gadz.org si vous en possédez un (voir emails.gadz.org)
+          
     .col.s12.l6
       .card
         .card-content
           %span.card-title
-            %i.material-icons info_outline
-            Site en bêta
+            %i.material-icons perm_identity_outline
+            Perte d'identifiants
         .divider
         .card-content
           %p
-            moncompte.gadz.org est encore
-            %b en cours de développement
-            et est régulièrement mis à jour.
-          %p Si tu veux nous faire part de bugs ou de remarques, tu peux envoyer un mail à support@gadz.org .
+            Récupérer mes identifiants :
+          %br
+          %p
+            = link_to recovery_path(), title: "Récupèrer mes identifiants" do
+              Récupérer mes identifiants
+          %br
+          %p.grey-text Récupération par mail %i.material-icons mail_outline (via un lien) et/ou SMS %i.material-icons textsms_outline (via un code)                
+          
+    .col.s12.l6
+      .card
+        .card-content
+          %span.card-title
+            %i.material-icons help_outline
+            Assistance
+        .divider
+        .card-content
+          %p
+            Aide en ligne
+            L'aide en ligne est accessible à l'adresse 
+            %b aide.gadz.org
+          %br
+            Demander une assitance
+            Les demandes de support informatique peuvent s'effectuer en ligne par ticket à l'adresse 
+            %b jira.gadz.org
+          %br  
+          %i.material-icons mail_outline %p Pour nous faire part de bugs ou de remarques, envoyer un mail à support@gadz.org
+          %br
+          %i.material-icons chat_outline p.grey-text Slack de l'équipe "IT" Gadz.org : slack.gadz.org
 
