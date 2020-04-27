@@ -67,7 +67,7 @@
       .card
         .card-content
           %span.card-title
-            %i.material-icons person_pin_circle_outline
+            %i.material-icons person_outline
             %p Informations personnelles
         .divider
         .card-content
@@ -77,10 +77,9 @@
           %p
             = link_to "Modifier mon profil", "https://www.arts-et-metiers.asso.fr/espaceMembre", target: "_blank", rel: "nofollow"
           %br
-          %i.material-icons contact_phone_outline 
+          %i.material-icons pan_tool_outline 
           %p.grey-text RGPD : l’utilisateur dispose d’un droit d’accès, d’opposition, de rectification et de suppression des données le concernant.
-          
-          
+                  
     .col.s12.l6
       .card
         .card-content
@@ -92,19 +91,36 @@
           %p
             Aide en ligne :
             %br
+            %br
             L'aide en ligne est accessible à l'adresse 
             = link_to "aide.gadz.org", "http://aide.gadz.org/", target: "_blank", rel: "nofollow"
           %br
             Ouvrir un ticket de support :
             %br
+            %br
             Les demandes de support informatique peuvent s'effectuer en ligne à l'adresse 
             = link_to "jira.gadz.org", "https://jira.gadz.org/", target: "_blank", rel: "nofollow"
+          %br  
+          
+    .col.s12.l6
+      .card
+        .card-content
+          %span.card-title
+            %i.material-icons settings_outline
+            %p A propos
+        .divider
+        .card-content
+          %p
+          %i.material-icons favorite_border_outline
+          %p Made with love
           %br  
           %i.material-icons mail_outline 
           %p Pour nous faire part de bugs ou de remarques : 
           %p envoyer un mail à support@gadz.org
           %br
           %i.material-icons chat_outline 
-          %p.grey-text Slack de l'équipe "IT" Gadz.org : 
+          %p Slack de l'équipe Gadz.org : 
           = link_to "slack.gadz.org", "http://slack.gadz.org/", target: "_blank", rel: "nofollow"
-
+          %br
+          %br
+          %p.grey-text Service offert par la Société des Ingénieurs Arts & Métiers
