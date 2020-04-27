@@ -30,3 +30,13 @@ url_site_soce_admin_user:
 moncompte_url:
   name: URL de moncompte.gadz.org ( avec un "/" à la fin )
   default: https://moncompte.gadz.org/
+
+site_title:
+  name: Mon Compte Arts & Métiers Alumni  # sets the edit label
+  default: Mon Compte          # sets the default value
+  type: string              # uses input type="text"
+
+site_description:
+  name: Gestion du compte Arts & Métiers Alumni # sets the edit label
+  default: Gestion du compte Arts & Métiers Alumni # sets the default value
+  type: text
