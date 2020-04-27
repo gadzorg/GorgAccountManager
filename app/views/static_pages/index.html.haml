@@ -24,7 +24,7 @@
                 Modifier mon mot de passe
           %br
           %i.material-icons fingerprint_outline 
-          %p.grey-text Le mot de passe sera synchronisé entre votre compte Arts & Métiers Alumni et votre compte Google Gadz.org si vous en possédez un (voir emails.gadz.org)
+          %p.grey-text Le mot de passe sera synchronisé entre votre compte Arts & Métiers Alumni et votre compte Google Gadz.org si vous en possédez un.
           
     .col.s12.l6
       .card
@@ -42,7 +42,24 @@
               Récupérer mes identifiants
           %br
           %i.material-icons mail_outline textsms_outline
-          %p.grey-text Récupération par mail (via un lien) et/ou SMS (via un code)                
+          %p.grey-text Récupération par mail (via un lien) et/ou SMS (via un code)
+                      
+    .col.s12.l6
+      .card
+        .card-content
+          %span.card-title
+            %i.material-icons email_outline
+            %p Adresse mail
+        .divider
+        .card-content
+          %p
+            Gérer mon adresse mail @gadz.org :
+          %br
+          %p
+            = link_to "Emails.gadz.org", "https://emails.gadz.org/", target: "_blank", rel: "nofollow"
+          %br
+          %i.material-icons move_to_inbox_outline
+          %p.grey-text Gestion des redirections mails et des comptes Google Gadz.org 
           
     .col.s12.l6
       .card
@@ -55,17 +72,21 @@
           %p
             Aide en ligne :
             %br
+            %br
             L'aide en ligne est accessible à l'adresse 
-            %b aide.gadz.org
+            = link_to "aide.gadz.org", "http://aide.gadz.org/", target: "_blank", rel: "nofollow"
           %br
             Ouvrir un ticket de support :
             %br
+            %br
             Les demandes de support informatique peuvent s'effectuer en ligne à l'adresse 
-            %b jira.gadz.org
+            = link_to "jira.gadz.org", "https://jira.gadz.org/", target: "_blank", rel: "nofollow"
           %br  
           %i.material-icons mail_outline 
-          %p Pour nous faire part de bugs ou de remarques : envoyer un mail à support@gadz.org
+          %p Pour nous faire part de bugs ou de remarques : 
+          %br envoyer un mail à support@gadz.org
           %br
           %i.material-icons chat_outline 
-          %p.grey-text Slack de l'équipe "IT" Gadz.org : slack.gadz.org
+          %p.grey-text Slack de l'équipe "IT" Gadz.org : 
+          = link_to "slack.gadz.org", "http://slack.gadz.org/", target: "_blank", rel: "nofollow"
 
