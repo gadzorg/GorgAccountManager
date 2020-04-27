@@ -41,14 +41,14 @@
             = link_to recovery_path(), title: "Récupérer mes identifiants" do
               Récupérer mes identifiants
           %br
-          %i.material-icons mail_outline textsms_outline
+          %i.material-icons smartphone_outline textsms_outline
           %p.grey-text Récupération par mail (via un lien) et/ou SMS (via un code)
                       
     .col.s12.l6
       .card
         .card-content
           %span.card-title
-            %i.material-icons email_outline
+            %i.material-icons mail_outline
             %p Adresse mail
         .divider
         .card-content
@@ -56,10 +56,28 @@
             Gérer mon adresse mail @gadz.org :
           %br
           %p
-            = link_to "Emails.gadz.org", "https://emails.gadz.org/", target: "_blank", rel: "nofollow"
+            = link_to "Piloter mon adresse mail gadz.org", "https://emails.gadz.org/", target: "_blank", rel: "nofollow"
           %br
-          %i.material-icons move_to_inbox_outline
-          %p.grey-text Gestion des redirections mails et des comptes Google Gadz.org 
+          %i.material-icons reply_all_outline
+          %p.grey-text Gestion des redirections mails et des comptes Google Gadz.org
+          
+    .col.s12.l6
+      .card
+        .card-content
+          %span.card-title
+            %i.material-icons person_pin_circle_outline
+            %p Informations personnelles
+        .divider
+        .card-content
+          %p
+          Gérer mes informations personnelles :
+          %br
+          %p
+            = link_to "Modifier mon profil", "https://www.arts-et-metiers.asso.fr/espaceMembre", target: "_blank", rel: "nofollow"
+          %br
+          %i.material-icons contact_phone_outline 
+          %p.grey-text RGPD : l’utilisateur dispose d’un droit d’accès, d’opposition, de rectification et de suppression des données le concernant.
+          
           
     .col.s12.l6
       .card
@@ -72,19 +90,17 @@
           %p
             Aide en ligne :
             %br
-            %br
             L'aide en ligne est accessible à l'adresse 
             = link_to "aide.gadz.org", "http://aide.gadz.org/", target: "_blank", rel: "nofollow"
           %br
             Ouvrir un ticket de support :
-            %br
             %br
             Les demandes de support informatique peuvent s'effectuer en ligne à l'adresse 
             = link_to "jira.gadz.org", "https://jira.gadz.org/", target: "_blank", rel: "nofollow"
           %br  
           %i.material-icons mail_outline 
           %p Pour nous faire part de bugs ou de remarques : 
-          %br envoyer un mail à support@gadz.org
+          %p envoyer un mail à support@gadz.org
           %br
           %i.material-icons chat_outline 
           %p.grey-text Slack de l'équipe "IT" Gadz.org : 
