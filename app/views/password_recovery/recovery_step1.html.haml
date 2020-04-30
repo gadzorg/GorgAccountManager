@@ -15,15 +15,14 @@
 
         %span#loading
           =image_tag "Preloader_3.gif"
-          Envoi en cours...
-           
+          Envoi en cours...  
+          
       -if @phone_hidden
         %p.mtm
           Si tu n'y as plus accès, nous pouvons t'envoyer un SMS au numéro #{@phone_hidden}
         %p
           = link_to create_sms_path(:token_session => @session.token) , :method=> :post, title: "Envoie-moi un sms", :class => "waves-effect waves-light btn" do
             Envoie-moi un sms
-            
         / %p
         /   = form_tag(validate_sms_path(), :method => 'post') do
         /     = label_tag :token, 'Code SMS:'
@@ -36,3 +35,4 @@
         Si tu n'as plus accès à ces adresses email ou à ce numéro de téléphone, tu peux
         = link_to recovery_support_path, title: "contacter le support" do
           contacter le support.
+         
