@@ -27,9 +27,9 @@
           = link_to create_sms_path(:token_session => @session.token) , :method=> :post, title: "Envoie-moi un sms", :class => "waves-effect waves-light btn" do
             Envoie-moi un sms
             
-         %span#loading
-          =image_tag "Preloader_3.gif"
-          Envoi en cours...
+       /  %span#loading
+       /   =image_tag "Preloader_3.gif"
+       /   Envoi en cours...
         / %p
         /   = form_tag(validate_sms_path(), :method => 'post') do
         /     = label_tag :token, 'Code SMS:'
