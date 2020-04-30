@@ -3,8 +3,7 @@
     %h4.center
       Nous avons retrouvé ton compte!
     .card-panel
-
-     -if @list_emails_to_display
+      -if @list_emails_to_display
       %p Nous pouvons t'envoyer un email avec les instructions de récupération aux adresses suivantes:
       %ul
         -@list_emails_to_display.each do |e|
