@@ -6,7 +6,7 @@
 
       %p Nous pouvons t'envoyer un email avec les instructions de récupération aux adresses suivantes:
       %ul
-      -@list_emails_to_display.each do |e|
+        -@list_emails_to_display.each do |e|
           %li=e.to_s
       %p.grey-text Les "*" sont là pour ne pas rendre publiques tes adresses mails.
       %p
