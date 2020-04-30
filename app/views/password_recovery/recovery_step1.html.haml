@@ -4,18 +4,21 @@
       Nous avons retrouvé ton compte!
     .card-panel
 
-      %p Nous pouvons t'envoyer un email avec les instructions de récupération aux adresses suivantes:
-      %ul
-        -@list_emails_to_display.each do |e|
-          %li=e.to_s
-      %p.grey-text Les "*" sont là pour ne pas rendre publiques tes adresses mails.
-      %p
-        =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn", :id => "button_loading" do
-          Envoie-moi un mail
+      -if @list_emails_to_display
+        %p Nous pouvons t'envoyer un email avec les instructions de récupération aux adresses suivantes:
+        %ul
+          -@list_emails_to_display.each do |e|
+            %li=e.to_s
+        %p.grey-text Les "*" sont là pour ne pas rendre publiques tes adresses mails.
+        %p
+          =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn", :id => "button_loading" do
+            Envoie-moi un mail
 
-        %span#loading
-          =image_tag "Preloader_3.gif"
-          Envoi en cours...    
+          %span#loading
+            =image_tag "Preloader_3.gif"
+            Envoi en cours...  
+      -else
+        %p Nous n'avons pas trouvé d'adresse mail renseignée sur ton compte Soce.  
      
       -if @phone_hidden
         %p.mtm
@@ -35,4 +38,3 @@
         Si tu n'as plus accès à ces adresses email ou à ce numéro de téléphone, tu peux
         = link_to recovery_support_path, title: "contacter le support" do
           contacter le support.
-         
