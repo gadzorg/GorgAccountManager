@@ -4,7 +4,7 @@
       Nous avons retrouvé ton compte!
     .card-panel
 
-  -if @list_emails_to_display
+      -if @list_emails_to_display
       %p Nous pouvons t'envoyer un email avec les instructions de récupération aux adresses suivantes:
       %ul
         -@list_emails_to_display.each do |e|
@@ -18,7 +18,7 @@
           =image_tag "Preloader_3.gif"
           Envoi en cours...  
           
-     -else
+      -else
        %p Tu n'as pas renseigné d'adresse mail    
      
       -if @phone_hidden
