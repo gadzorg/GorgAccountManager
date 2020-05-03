@@ -4,15 +4,16 @@
       Nous avons retrouvé ton compte!
     .card-panel
 
-      -if @list_emails_to_display.present?
+      -if @list_emails_to_display
         %p Nous pouvons t'envoyer un email avec les instructions de récupération aux adresses suivantes:
         %ul
           -@list_emails_to_display.each do |e|
             %li=e.to_s
         %p.grey-text Les "*" sont là pour ne pas rendre publiques tes adresses mails.
         %p
-          =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn, :id => "button_loading" do
+          =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn", :id => "button_loading" do
             Envoie-moi un mail
+
           %span#loading
             =image_tag "Preloader_3.gif"
             Envoi en cours...  
@@ -31,7 +32,7 @@
         /     = text_field_tag :token
         /     = submit_tag 'Vérifier',:class => "bouton bouton_bleu"
       -else
-        %p Nous n'avons pas trouvé ou alors tu n'as pas renseigné de numéro de téléphone mobile sur ton profil Soce, nous ne pouvons donc pas te proposer de récupérer ton compte par SMS.
+        %p Nous n'avons pas trouvé ton compte Soce ou alors tu n'as pas renseigné de numéro de téléphone portable, nous ne pouvons donc pas te proposer de récupérer ton compte par SMS.
 
       %p.small.mtm
         Si tu n'as plus accès à ces adresses email ou à ce numéro de téléphone, tu peux
