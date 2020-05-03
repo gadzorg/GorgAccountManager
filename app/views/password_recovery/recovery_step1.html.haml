@@ -11,9 +11,9 @@
             %li=e.to_s
         %p.grey-text Les "*" sont là pour ne pas rendre publiques tes adresses mails.
         %p
-          =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn" do
+          =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn, :id => "button_loading" do
             Envoie-moi un mail
-          /%span#loading
+          %span#loading
             =image_tag "Preloader_3.gif"
             Envoi en cours...  
       -else
