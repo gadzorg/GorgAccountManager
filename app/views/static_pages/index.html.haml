@@ -89,17 +89,16 @@
         .divider
         .card-content
           %p
-            Aide en ligne :
+            Aide en ligne : 
+            = link_to "aide.gadz.org", "https://aide.gadz.org/", target: "_blank", rel: "nofollow"
             %br
-            %br
-            L'aide en ligne est accessible à l'adresse 
-            = link_to "aide.gadz.org", "http://aide.gadz.org/", target: "_blank", rel: "nofollow"
           %br
-            Ouvrir un ticket de support :
-            %br
-            %br
-            Les demandes de support informatique peuvent s'effectuer en ligne à l'adresse 
+            Ouvrir un ticket de support : 
             = link_to "jira.gadz.org", "https://jira.gadz.org/", target: "_blank", rel: "nofollow"
+            %br
+          %br
+            Vérifier l'état actuel des services :  
+            = link_to "status.gadz.org", "https://status.gadz.org/", target: "_blank", rel: "nofollow"
           %br  
           
     .col.s12.l6
