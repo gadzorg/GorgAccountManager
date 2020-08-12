@@ -151,7 +151,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
-    chartkick (3.3.0)
+    chartkick (3.4.0)
     choice (0.2.0)
     coderay (1.1.2)
     coercible (1.0.0)
