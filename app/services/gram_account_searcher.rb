@@ -31,14 +31,23 @@ class GramAccountSearcher
 
     type="Non trouvé"
 
-    @gram_account||=search_gram_email(query)
+    @gram_account ||= search_gram_email(query)
     type="Email GrAM" if @gram_account
-    @gram_account||=search_gorgmail_email(query)
-    type="Email GorgMail" if @gram_account
-    @gram_account||=search_gram_hruid(query)
-    type="Hruid" if @gram_account
-    @gram_account||=search_gram_idsoce(id_soce)
-    type="idSoce" if @gram_account
+
+    if @gram_account.nil?
+      @gram_account = search_gorgmail_email(query)
+      type="Email GorgMail" if @gram_account
+    end
+
+    if @gram_account.nil?
+      @gram_account = search_gram_hruid(query)
+      type="Hruid" if @gram_account
+    end
+
+    if @gram_account.nil?
+      @gram_account = search_gram_idsoce(id_soce)
+      type="idSoce" if @gram_account
+    end
 
     @search_logger.log(query,type) if @search_logger
 
@@ -46,15 +55,15 @@ class GramAccountSearcher
   end
 
   def search_gram_email(query)
-    GramV2Client::Account.where(email: query).first
+    GramV2Client::Account.where(email: query)&.first
   end
 
   def search_gram_hruid(query)
-    GramV2Client::Account.where(hruid: query).first
+    GramV2Client::Account.where(hruid: query)&.first
   end
 
   def search_gram_idsoce(query)
-    GramV2Client::Account.where(id_soce: query).first
+    GramV2Client::Account.where(id_soce: query)&.first
   end
 
   def search_gorgmail_email(query)
@@ -78,7 +87,7 @@ class GramAccountSearcher
           raise GorgmailAuthentificationError
         else
           raise
-      end
+        end
     rescue SocketError, Timeout::Error => e
       Rails.logger.error "Gorgmail API unavailable. URL=#{uri}, Error = #{e}"
       return nil
