@@ -36,7 +36,7 @@ Given(/^([a-zA-Z]+) has a Gram Account with ((?:[a-zA-Z_]+ ["'][^"']*["'](?:, )?
   @mocked_gram_account=gram_account_mocked({'uuid'=>@uuid,'firstname' => firstname}.merge(attrs))
   ActiveResource::HttpMock.respond_to do |mock|
     if attrs["email"]
-      mock.get "/api/v2/accounts.json?email=#{URI.escape(attrs["email"],"@")}", authorization_header, [@mocked_gram_account].to_json, 200
+      mock.get "/api/v2/accounts.json?email=#{CGI.escape(attrs["email"])}", authorization_header, [@mocked_gram_account].to_json, 200
     end
     mock.get "/api/v2/accounts/559bb0aa-ddac-4607-ad41-7e520ee40819.json", authorization_header, @mocked_gram_account.to_json, 200
   end
@@ -62,8 +62,8 @@ And(/^There is no gram account with email address "([^"]*)"$/) do |email_address
   json_auth_headers = authorization_header.merge("Accept" => "application/json")
 
   ActiveResource::HttpMock.respond_to do |mock|
-    mock.get "/api/v2/accounts.json?email=#{URI.escape(email_address,"@")}", json_auth_headers, [].to_json, 200
-    mock.get "/api/v2/accounts.json?hruid=#{URI.escape(email_address,"@")}", json_auth_headers, [].to_json, 200
+    mock.get "/api/v2/accounts.json?email=#{CGI.escape(email_address)}", json_auth_headers, [].to_json, 200
+    mock.get "/api/v2/accounts.json?hruid=#{CGI.escape(email_address)}", json_auth_headers, [].to_json, 200
     mock.get "/api/v2/accounts.json?id_soce=", json_auth_headers, [].to_json, 200
   end
 end

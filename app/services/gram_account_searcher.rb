@@ -58,7 +58,7 @@ class GramAccountSearcher
   end
 
   def search_gorgmail_email(query)
-    uri=URI::join(Rails.application.secrets.gorgmail_api_url, "search/", query)
+    uri=URI::join(Rails.application.secrets.gorgmail_api_url, "search/", CGI.escape(query))
 
     req = Net::HTTP::Get.new(uri)
     req.basic_auth Rails.application.secrets.gorgmail_api_user, Rails.application.secrets.gorgmail_api_password
