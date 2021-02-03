@@ -10,7 +10,8 @@
           -@list_emails_to_display.each do |e|
             %li=e.to_s
         %p.grey-text Les "*" sont là pour ne pas rendre publiques tes adresses mails.
-        %p
+        / form tag required for UI loading support
+        %form
           =link_to recovery_step2_path(:token_session => @session.token), :method=> :post, title: "Envoie-moi un mail", :class => "waves-effect waves-light btn", :id => "button_loading" do
             Envoie-moi un mail
 

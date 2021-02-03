@@ -17,34 +17,28 @@
 //= require unobtrusive_flash_ui
 //= require_tree ./autoload
 
+UnobtrusiveFlash.flashOptions["timeout"] = 30000; // milliseconds
 
-
-
-UnobtrusiveFlash.flashOptions['timeout'] = 30000; // milliseconds
-
-$(function(){
+$(function () {
   $("a[rel='tooltip']").tooltip();
 });
 
 $(document).ready(function () {
-    var loadingmessage = $('#loading');
-    var button = $('#button_loading');
+  var loadingmessage = $("#loading");
+  var button = $("#button_loading");
 
-    loadingmessage.hide();
+  loadingmessage.hide();
 
-    button.click( function()
-           {
-             if ($('#new_user').valid()) {
-             loadingmessage.show();
-             button.hide();
-             button.disable(true);
-             };
-           }
-    );
+  button.click(function () {
+    if (button.parents("form").valid()) {
+      loadingmessage.show();
+      button.hide();
+    }
+  });
 
-    $('.datepicker').pickadate({
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 115, // Creates a dropdown of 15 years to control year
-        max: Date.now()
-    });
+  $(".datepicker").pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 115, // Creates a dropdown of 15 years to control year
+    max: Date.now(),
+  });
 });
