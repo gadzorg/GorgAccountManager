@@ -16,13 +16,13 @@
     .card
       .card-content
 
-        %p Entre ton identifiant (prenom.nom.promo) ou ton numéro de sociétaire (voir l'aide) ou encore l'email où tu reçois les communications de la Société des Ingénieurs Arts & Métiers (l'adresse mail de contact renseignée sur ton profil).
+        %p Entre ton identifiant (prenom.nom.promo exemple:charles.saint-gorgon.1859) ou ton numéro de sociétaire (voir l'aide) ou encore l'email où tu reçois les communications de la Société des Ingénieurs Arts & Métiers (l'adresse mail de contact renseignée sur ton profil).
 
 
         =form_for  [@user], :url=> create_recovery_session_path()  do |f|
           .input-field
             =f.text_field :recovery_query, value: @query, :class => "validate", :autofocus => true, :required => "required"
-            =f.label :recovery_query, "Entre ici ton identifiant OU n° de sociétaire", "data-error"=>"Tu dois entrer ton adresse email au format email@domaine.fr", required: true
+            =f.label :recovery_query, "Entre ici ton identifiant prenom.nom.XXXX OU n° de sociétaire", "data-error"=>"Tu dois entrer ton adresse email au format email@domaine.fr", required: true
 
             .span.highlight.w100
             .span.bar.w100
