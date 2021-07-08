@@ -4,7 +4,7 @@ class JiraService
   def self.create_recovery_ticket(user, description, sender)
     newjira = JiraIssue.new(
         fields: {
-            project: { id: "10001" },
+            project: { id: "11701" },
             summary: "L'utilisateur #{user} signale ne pas arriver à se connecter",
             description: description,
             customfield_10000: sender ,
