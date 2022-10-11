@@ -16,7 +16,7 @@
     .card
       .card-content
 
-        %p Entre ton identifiant (prenom.nom.promo exemple:charles.saint-gorgon.1859) ou ton numéro de sociétaire (voir l'aide) ou encore l'email où tu reçois les communications de la Société des Ingénieurs Arts & Métiers (l'adresse mail de contact renseignée sur ton profil).
+        %p Entre ton identifiant (prenom.nom.annéepromo4chiffres exemple:charles.saint-gorgon.1859) ou ton numéro de sociétaire (voir l'aide) ou encore l'email où tu reçois les communications de la Société des Ingénieurs Arts & Métiers (l'adresse mail de contact renseignée sur ton profil).
 
 
         =form_for  [@user], :url=> create_recovery_session_path()  do |f|
@@ -45,7 +45,7 @@
         %p
           Ton
           %b identifiant
-          est de la forme prenom.nom.promo, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
+          est de la forme prenom.nom.annéepromo4chiffres, par exemple: charles.saint-gorgon.1859 ou prenom.nom.ext si tu n'appartient pas à une promotion.
         %p
           Ton
           %b numéro de sociétaire
