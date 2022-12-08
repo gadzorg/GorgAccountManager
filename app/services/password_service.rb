@@ -43,8 +43,8 @@ class PasswordService
       errors << I18n.t('password_service.errors.illegal_chars', chars: rejected_chars.uniq.join(" "))
     end
 
-    # Password length > 8
-    if @password.length < 8
+    # Password length > 10
+    if @password.length < 10
       errors << I18n.t('password_service.errors.too_short')
     end
 
